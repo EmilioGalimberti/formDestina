@@ -184,7 +184,7 @@ export function WorldMap({ selected, onSelect }: WorldMapProps) {
     const dy = e.clientY - dragStart.current.y
     setRotation({
       lambda: dragStart.current.lambda + dx * factor,
-      phi: clamp(dragStart.current.phi + dy * factor, -PHI_CLAMP, PHI_CLAMP),
+      phi: clamp(dragStart.current.phi - dy * factor, -PHI_CLAMP, PHI_CLAMP),
     })
   }
 
