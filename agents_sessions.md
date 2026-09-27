@@ -80,3 +80,29 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - F3–F6: reemplazar placeholders por features completas.
 
 **Siguiente:** F2 — Destino (mundito).
+
+---
+
+## 2026-09-27 — F2 Destino (mundito) (opencode)
+
+**Hecho:**
+- Creado `src/data/destinations.ts` con 8 destinos reales (México, Brasil, Argentina, EE.UU., España, Italia, Francia, Japón) con `lat`, `lon` y `minBudget`.
+- Creado `src/lib/projection.ts` con proyección equirectangular `project()` e `inverseProject()` para el viewBox 1000x500.
+- Creado `public/maps/world.svg` con mapa estilizado tipo "juego".
+- Implementada feature completa en `src/features/destination/`:
+  - `WorldMap.tsx`: mapa interactivo con pan (pointer events), zoom con rueda y botones `+/-`, zoom animado con GSAP al seleccionar un destino, respeto a `prefers-reduced-motion`.
+  - `DestinationMarker.tsx`: marcadores clickeables/tocables con label del destino.
+  - `Plane.tsx`: avión que sigue al cursor en desktop (`pointer: fine`).
+  - `DestinationStep.tsx`: reemplaza el placeholder, muestra el mapa, tarjeta de destino seleccionado y botón para avanzar.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅ (1 warning aceptable por setState en `useLayoutEffect` necesario para centrar el mapa al montar).
+
+**Decisiones:**
+- Se usa `<img>` para el SVG del mundo y un `<svg>` overlay para los marcadores, ambos con `preserveAspectRatio="xMidYMid meet"`.
+- Zoom centrado en el contenedor; al seleccionar un marcador se anima escala y translate para centrarlo.
+- Los marcadores y botones de zoom usan `stopPropagation` en `pointerdown` para no interferir con el pan del contenedor.
+
+**Pendientes:**
+- Pinch-to-zoom nativo en mobile (opcional, se puede agregar en F7).
+- Ajustar fino del posicionamiento si el contenedor no es 2:1 (actualmente el letterbox se centra y es aceptable).
+
+**Siguiente:** F3 — Transporte.

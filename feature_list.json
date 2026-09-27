@@ -48,16 +48,19 @@
     {
       "id": "F2",
       "name": "Destino (mundito)",
-      "status": "pending",
+      "status": "done",
       "description": "SVG estilizado del mundo, avión que sigue al puntero (desktop), pan con un dedo + zoom + tap (mobile), marcadores de destinos, selección guarda destino en store.",
       "files": [
-        "src/features/destination/",
-        "src/lib/projection.ts",
         "src/data/destinations.ts",
-        "public/maps/world.svg"
+        "src/lib/projection.ts",
+        "public/maps/world.svg",
+        "src/features/destination/DestinationStep.tsx",
+        "src/features/destination/WorldMap.tsx",
+        "src/features/destination/DestinationMarker.tsx",
+        "src/features/destination/Plane.tsx"
       ],
       "acceptance": ["Seleccionar destino en mobile y desktop", "Zoom animado al marcador", "Destino persiste en store"],
-      "notes": "Feature más grande. Confirmado: mobile = arrastre ligero + zoom + tap para elegir."
+      "notes": "Feature más grande. Mapa responsive con pan, zoom +/-, wheel, avión en desktop, tap en marcadores y zoom animado al destino."
     },
     {
       "id": "F3",
