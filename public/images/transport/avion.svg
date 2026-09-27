@@ -1,1 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="currentColor">
+  <path d="M56 14c0-4.4-3.6-8-8-8H16c-4.4 0-8 3.6-8 8v28c0 4.4 3.6 8 8 8h32c4.4 0 8-3.6 8-8V14z"/>
+  <path d="M12 24h40v14H12z" opacity="0.3"/>
+  <path d="M18 50l-6 8h40l-6-8z"/>
+</svg>

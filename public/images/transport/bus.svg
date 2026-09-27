@@ -1,1 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="currentColor">
+  <path d="M52 28H42l-8-14H18l-4 14H8c-2.2 0-4 1.8-4 4v6h4l2 8h44l2-8h4v-6c0-2.2-1.8-4-4-4z"/>
+  <circle cx="16" cy="52" r="5"/>
+  <circle cx="48" cy="52" r="5"/>
+</svg>

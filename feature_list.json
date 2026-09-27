@@ -65,15 +65,20 @@
     {
       "id": "F3",
       "name": "Transporte",
-      "status": "pending",
+      "status": "done",
       "description": "Cards con imágenes (avión, bus, auto, tren) y micro-animaciones de selección.",
       "files": [
-        "src/features/transport/",
+        "src/state/types.ts",
         "src/data/transports.ts",
-        "public/images/transport/"
+        "src/features/transport/TransportStep.tsx",
+        "src/features/transport/TransportCard.tsx",
+        "public/images/transport/avion.svg",
+        "public/images/transport/bus.svg",
+        "public/images/transport/auto.svg",
+        "public/images/transport/tren.svg"
       ],
       "acceptance": ["Seleccionar transporte", "Animación de selección"],
-      "notes": ""
+      "notes": "Cada transporte tiene SVG ilustrativo; micro-animación elástica al hacer click y check visual en selección."
     },
     {
       "id": "F4",

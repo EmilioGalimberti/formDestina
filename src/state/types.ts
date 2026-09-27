@@ -9,6 +9,7 @@ export interface Destination {
 export interface Transport {
   id: string
   name: string
+  image: string
 }
 
 export interface Category {

@@ -106,3 +106,24 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ajustar fino del posicionamiento si el contenedor no es 2:1 (actualmente el letterbox se centra y es aceptable).
 
 **Siguiente:** F3 — Transporte.
+
+---
+
+## 2026-09-27 — F3 Transporte (opencode)
+
+**Hecho:**
+- Actualizado `src/state/types.ts`: agregado campo `image` a la interfaz `Transport`.
+- Creado `src/data/transports.ts` con Avión, Bus, Auto y Tren, cada uno con su SVG en `public/images/transport/`.
+- Dibujados 4 SVGs estilizados y simples: `avion.svg`, `bus.svg`, `auto.svg`, `tren.svg`.
+- Creado `src/features/transport/TransportCard.tsx`: card con imagen, nombre, check visual al seleccionar y micro-animación GSAP elástica (`elastic.out`) al hacer click, con respeto a `prefers-reduced-motion`.
+- Reemplazado `src/features/transport/TransportStep.tsx` por la implementación real usando `TransportCard` y `TRANSPORTS`.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅ (mantiene warning previo de F2).
+
+**Decisiones:**
+- Los SVGs se usan como `<img>` desde `public/`, por lo que el color es fijo; la selección se comunica con borde, fondo y check.
+- Hover con CSS transitions (`group-hover:scale-110`) y click con GSAP para el rebote.
+
+**Pendientes:**
+- Ninguno específico de F3.
+
+**Siguiente:** F4 — Personas + Categoría.

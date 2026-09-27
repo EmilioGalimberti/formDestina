@@ -1,32 +1,25 @@
 import { useStore } from '@/state/store'
-
-const DUMMY_TRANSPORTS = [
-  { id: 'plane', name: 'Avión' },
-  { id: 'bus', name: 'Bus' },
-  { id: 'car', name: 'Auto' },
-  { id: 'train', name: 'Tren' },
-]
+import { TRANSPORTS } from '@/data/transports'
+import { TransportCard } from '@/features/transport/TransportCard'
 
 export function TransportStep() {
   const { transport, setTransport } = useStore()
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-2xl font-semibold">¿Cómo querés viajar?</h2>
+      <div>
+        <h2 className="text-2xl font-semibold">¿Cómo querés viajar?</h2>
+        <p className="mt-1 text-muted-foreground">Elegí el transporte para tu viaje.</p>
+      </div>
+
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {DUMMY_TRANSPORTS.map((t) => (
-          <button
+        {TRANSPORTS.map((t) => (
+          <TransportCard
             key={t.id}
-            type="button"
-            onClick={() => setTransport(t)}
-            className={`rounded-2xl border-2 px-4 py-8 text-center transition-colors ${
-              transport?.id === t.id
-                ? 'border-primary bg-primary/10'
-                : 'border-border bg-card hover:border-primary/50'
-            }`}
-          >
-            <span className="font-medium">{t.name}</span>
-          </button>
+            transport={t}
+            selected={transport?.id === t.id}
+            onSelect={setTransport}
+          />
         ))}
       </div>
     </div>
