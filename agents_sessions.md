@@ -165,8 +165,8 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 ## 2026-09-27 — F2 v2 fix: sentido de arrastre y visibilidad de marcadores (opencode)
 
 **Hecho:**
-- Ajustado el sentido del drag en `WorldMap.tsx`: arrastrar hacia la izquierda mueve el globo hacia la derecha (rotación natural de esfera).
 - Corregida `isVisible` en `src/lib/projection.ts` para usar el centro de vista real de la proyección ortográfica (`-lambda`, `-phi`) mediante producto escalar en coordenadas esféricas. Así los marcadores detrás del globo nunca se muestran, evitando que aparezcan destinos del hemisferio opuesto al hacer zoom.
+- Ajustado el sentido del drag en `WorldMap.tsx`: ahora el contenido sigue al dedo (pan natural). Arrastrar hacia la izquierda mueve el globo hacia la izquierda.
 - Verificaciones: `bun run build` ✅ y `bun run lint` ✅ (sin warnings).
 
 **Siguiente:** F4 — Personas + Categoría.
