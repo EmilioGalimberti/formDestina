@@ -1,0 +1,114 @@
+{
+  "project": "formPrimerContacto",
+  "updated": "2026-09-27",
+  "feature_status": ["pending", "in_progress", "blocked", "done"],
+  "features": [
+    {
+      "id": "F0",
+      "name": "Harness inicial",
+      "status": "done",
+      "description": "Scaffold Vite+React+TS+Tailwind+GSAP+Zustand, alias @/, wrangler.toml, estructura de carpetas, App.tsx mínimo, design tokens.",
+      "files": [
+        "package.json",
+        "vite.config.ts",
+        "tsconfig.app.json",
+        "src/index.css",
+        "src/App.tsx",
+        "src/main.tsx",
+        "src/lib/gsap.ts",
+        "wrangler.toml"
+      ],
+      "acceptance": ["bun run dev levanta", "bun run build pasa typecheck y genera dist/"],
+      "notes": "Deploy a Pages pendiente de CLOUDFLARE_API_TOKEN (no bloquea)."
+    },
+    {
+      "id": "F1",
+      "name": "Store + Wizard shell",
+      "status": "pending",
+      "description": "Definir types.ts, store.ts (Zustand), pasos del wizard, barra de progreso, navegación next/back, transiciones entre pasos con GSAP, layout responsive.",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/features/wizard/"
+      ],
+      "acceptance": ["Navegar todos los pasos con placeholders", "Progreso visible", "Transiciones animadas"],
+      "notes": "Fuente de verdad del formulario. El resto de features dependen de esto."
+    },
+    {
+      "id": "F2",
+      "name": "Destino (mundito)",
+      "status": "pending",
+      "description": "SVG estilizado del mundo, avión que sigue al puntero (desktop), pan con un dedo + zoom + tap (mobile), marcadores de destinos, selección guarda destino en store.",
+      "files": [
+        "src/features/destination/",
+        "src/lib/projection.ts",
+        "src/data/destinations.ts",
+        "public/maps/world.svg"
+      ],
+      "acceptance": ["Seleccionar destino en mobile y desktop", "Zoom animado al marcador", "Destino persiste en store"],
+      "notes": "Feature más grande. Confirmado: mobile = arrastre ligero + zoom + tap para elegir."
+    },
+    {
+      "id": "F3",
+      "name": "Transporte",
+      "status": "pending",
+      "description": "Cards con imágenes (avión, bus, auto, tren) y micro-animaciones de selección.",
+      "files": [
+        "src/features/transport/",
+        "src/data/transports.ts",
+        "public/images/transport/"
+      ],
+      "acceptance": ["Seleccionar transporte", "Animación de selección"],
+      "notes": ""
+    },
+    {
+      "id": "F4",
+      "name": "Personas + Categoría",
+      "status": "pending",
+      "description": "Stepper de cantidad de personas y cards de categoría de viaje (fiesta, playas lindas, tranquilidad, aventura...).",
+      "files": [
+        "src/features/people/",
+        "src/features/category/",
+        "src/data/categories.ts"
+      ],
+      "acceptance": ["Ajustar cantidad de personas", "Seleccionar categoría"],
+      "notes": ""
+    },
+    {
+      "id": "F5",
+      "name": "Presupuesto",
+      "status": "pending",
+      "description": "Slider min/max: min derivado del destino (México → USD 500), usuario define max, display formateado en vivo.",
+      "files": [
+        "src/features/budget/"
+      ],
+      "acceptance": ["Min depende del destino elegido", "Max definido por el usuario", "Display en vivo"],
+      "notes": ""
+    },
+    {
+      "id": "F6",
+      "name": "Resultado + WhatsApp",
+      "status": "pending",
+      "description": "Formatear mensaje legible desde el store, link wa.me, CTA '¡A viajar!', preview antes de abrir.",
+      "files": [
+        "src/features/result/",
+        "src/lib/whatsapp.ts"
+      ],
+      "acceptance": ["Mensaje legible para Martina", "Abre wa.me con el mensaje"],
+      "notes": "Verificar número wa.me: 543804624385. Confirmar formato con Martina."
+    },
+    {
+      "id": "F7",
+      "name": "Polish",
+      "status": "pending",
+      "description": "Responsive + touch + polish: test 360px/1440px, prefers-reduced-motion, safe-area, touch targets, orientación, meta/OG, accesibilidad.",
+      "files": [
+        "src/features/*",
+        "src/ui/",
+        "index.html"
+      ],
+      "acceptance": ["Funciona bien en mobile y desktop", "Reduced motion respetado", "Accesible"],
+      "notes": ""
+    }
+  ]
+}
