@@ -21,7 +21,20 @@ categoría, presupuesto) que al final genera un mensaje de WhatsApp para Martina
 - Tailwind CSS v4 (mobile-first, import en `src/index.css`)
 - GSAP 3 (todos los plugins son gratis desde 2025) vía `src/lib/gsap.ts`
 - Zustand para estado global (`src/state/store.ts`)
-- Deploy: Cloudflare Pages (estático). Build: `bun run build`, output `dist/`.
+- Deploy: Cloudflare Pages (estático) vía integración Git con GitHub. Auto-deploy en
+  cada push a `main`.
+
+## Deploy (Cloudflare Pages)
+
+No hay `wrangler.toml` en el repo (rompía el deploy: Cloudflare lo interpretaba como
+Worker y corría `npx wrangler deploy` en vez de subir `dist`). La config vive en el
+dashboard del proyecto Pages:
+
+- Build command: `bun run build`
+- Build output directory: `dist`
+- Deploy command: **vacío**
+
+El deploy es automático en cada push a `main`. No hace falta `CLOUDFLARE_API_TOKEN`.
 
 ## Comandos
 
@@ -30,8 +43,13 @@ bun install          # instalar deps
 bun run dev          # dev server en http://localhost:5173
 bun run build        # typecheck (tsc -b) + build a dist/
 bun run lint         # oxlint
-bunx wrangler pages deploy dist   # deploy (requiere CLOUDFLARE_API_TOKEN)
 ```
+
+## Git
+
+- El agente **solo hace commits**, con un mensaje claro tipo `F<N>: descripción`.
+- **NO pushear.** El usuario hace el `git push` manualmente (y con eso Cloudflare
+  despliega). El agente puede sugerir el push pero no ejecutarlo.
 
 ## Convenciones de código
 
