@@ -39,11 +39,16 @@ export function inverseProject(x: number, y: number, rotation: Rotation, scale: 
   return { lat: coords[1], lon: coords[0] }
 }
 
-export function isVisible(lat: number, lon: number, rotation: Rotation, scale: number): boolean {
-  const projection = createProjection(rotation, scale)
-  const coords = projection([lon, lat])
-  if (!coords) return false
-  const dx = coords[0] - GLOBE_CENTER.x
-  const dy = coords[1] - GLOBE_CENTER.y
-  return dx * dx + dy * dy <= GLOBE_RADIUS * GLOBE_RADIUS * scale * scale
+export function isVisible(lat: number, lon: number, rotation: Rotation): boolean {
+  const centerLon = -rotation.lambda
+  const centerLat = -rotation.phi
+  const centerLonRad = (centerLon * Math.PI) / 180
+  const centerLatRad = (centerLat * Math.PI) / 180
+  const latRad = (lat * Math.PI) / 180
+  const lonRad = (lon * Math.PI) / 180
+  return (
+    Math.sin(latRad) * Math.sin(centerLatRad) +
+      Math.cos(latRad) * Math.cos(centerLatRad) * Math.cos(lonRad - centerLonRad) >=
+    0
+  )
 }

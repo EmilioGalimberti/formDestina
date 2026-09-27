@@ -228,7 +228,7 @@ export function WorldMap({ selected, onSelect }: WorldMapProps) {
           const coords = project(destination.lat, destination.lon, rotation, scale)
           const visible =
             coords !== null &&
-            isVisible(destination.lat, destination.lon, rotation, scale) &&
+            isVisible(destination.lat, destination.lon, rotation) &&
             scale >= destination.minZoom
           return (
             <DestinationMarker
