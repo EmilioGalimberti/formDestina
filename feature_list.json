@@ -23,15 +23,27 @@
     {
       "id": "F1",
       "name": "Store + Wizard shell",
-      "status": "pending",
+      "status": "done",
       "description": "Definir types.ts, store.ts (Zustand), pasos del wizard, barra de progreso, navegación next/back, transiciones entre pasos con GSAP, layout responsive.",
       "files": [
         "src/state/types.ts",
         "src/state/store.ts",
-        "src/features/wizard/"
+        "src/lib/gsap.ts",
+        "src/features/wizard/Wizard.tsx",
+        "src/features/wizard/WizardProgress.tsx",
+        "src/features/wizard/WizardNav.tsx",
+        "src/features/wizard/useWizardStep.ts",
+        "src/features/wizard/index.ts",
+        "src/features/destination/DestinationStep.tsx",
+        "src/features/transport/TransportStep.tsx",
+        "src/features/people/PeopleStep.tsx",
+        "src/features/category/CategoryStep.tsx",
+        "src/features/budget/BudgetStep.tsx",
+        "src/features/result/ResultStep.tsx",
+        "src/App.tsx"
       ],
       "acceptance": ["Navegar todos los pasos con placeholders", "Progreso visible", "Transiciones animadas"],
-      "notes": "Fuente de verdad del formulario. El resto de features dependen de esto."
+      "notes": "Fuente de verdad del formulario. Placeholders funcionales en cada step para validar navegación y store."
     },
     {
       "id": "F2",

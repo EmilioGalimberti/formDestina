@@ -51,3 +51,32 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Redeplegar / pushear para verificar que sube `dist`.
 
 **Siguiente:** verificar deploy OK y pasar a Kimi la tarea F1.
+
+---
+
+## 2026-09-27 — F1 Store + Wizard shell (opencode)
+
+**Hecho:**
+- Creado `src/state/types.ts` con `Destination`, `Transport`, `Category`, `BudgetRange`, `FormState`, `StepId`, `WizardState` y `AppState`.
+- Creado `src/state/store.ts` con Zustand: estado inicial, setters por campo (`setDestination`, `setTransport`, `setPeople`, `setCategory`, `setBudget`, `setBudgetMax`), navegación (`goToStep`, `nextStep`, `previousStep`) y `reset`. `budget.min` se deriva del destino seleccionado.
+- Creado `src/lib/gsap.ts` como punto centralizado para importar `gsap`.
+- Creado shell del wizard en `src/features/wizard/`:
+  - `Wizard.tsx`: layout responsive sticky header/footer, renderizado del paso actual y transición GSAP `x`/`opacity` con respeto a `prefers-reduced-motion`.
+  - `WizardProgress.tsx`: barra de progreso accesible con porcentaje por paso.
+  - `WizardNav.tsx`: botones Atrás/Siguiente.
+  - `useWizardStep.ts`: configuración de pasos y selector del paso actual.
+- Creados placeholders funcionales en cada feature para validar navegación y escritura en el store:
+  - `DestinationStep`, `TransportStep`, `PeopleStep`, `CategoryStep`, `BudgetStep`, `ResultStep`.
+- Actualizado `App.tsx` para renderizar `<Wizard />`.
+- Verificaciones: `bun run build` ✅ (typecheck + dist) y `bun run lint` ✅.
+
+**Decisiones:**
+- Los placeholders usan datos dummy locales; las features F2–F6 los reemplazarán por implementaciones reales y datos en `src/data/`.
+- El botón "Siguiente" siempre habilitado en F1 para facilitar la navegación de prueba; se puede agregar validación por paso más adelante.
+- Transiciones con `useLayoutEffect` + `gsap.fromTo` porque `@gsap/react` no está en el proyecto; se puede migrar a `useGSAP` si se instala más adelante.
+
+**Pendientes:**
+- F2 — Destino (mundito): reemplazar placeholder por mapa SVG interactivo.
+- F3–F6: reemplazar placeholders por features completas.
+
+**Siguiente:** F2 — Destino (mundito).
