@@ -42,8 +42,10 @@ export function DestinationMarker({
       ref={groupRef}
       role="button"
       tabIndex={visible ? 0 : -1}
-      onClick={() => onSelect(destination)}
-      onPointerDown={(e) => e.stopPropagation()}
+      onPointerDown={(e) => {
+        e.stopPropagation()
+        onSelect(destination)
+      }}
       onKeyDown={(e) => {
         if ((e.key === 'Enter' || e.key === ' ') && visible) {
           e.preventDefault()

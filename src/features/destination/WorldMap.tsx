@@ -6,7 +6,7 @@ import type { FeatureCollection, Geometry } from 'geojson'
 import { gsap } from '@/lib/gsap'
 import { DESTINATIONS } from '@/data/destinations'
 import type { Destination } from '@/state/types'
-import { project, isVisible, type Rotation } from '@/lib/projection'
+import { project, isVisible, angularDistance, type Rotation } from '@/lib/projection'
 import { DestinationMarker } from '@/features/destination/DestinationMarker'
 import worldData from 'world-atlas/countries-110m.json'
 
@@ -15,6 +15,7 @@ const MAX_SCALE = 3.5
 const ZOOM_STEP = 0.3
 const INITIAL_SCALE = 1.1
 const PHI_CLAMP = 80
+const VIEW_ANGLE_THRESHOLD = 70
 
 interface WorldMapProps {
   selected: Destination | null
@@ -229,6 +230,7 @@ export function WorldMap({ selected, onSelect }: WorldMapProps) {
           const visible =
             coords !== null &&
             isVisible(destination.lat, destination.lon, rotation) &&
+            angularDistance(destination.lat, destination.lon, rotation) <= VIEW_ANGLE_THRESHOLD &&
             scale >= destination.minZoom
           return (
             <DestinationMarker

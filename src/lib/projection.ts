@@ -40,15 +40,18 @@ export function inverseProject(x: number, y: number, rotation: Rotation, scale: 
 }
 
 export function isVisible(lat: number, lon: number, rotation: Rotation): boolean {
+  return angularDistance(lat, lon, rotation) <= 90
+}
+
+export function angularDistance(lat: number, lon: number, rotation: Rotation): number {
   const centerLon = -rotation.lambda
   const centerLat = -rotation.phi
   const centerLonRad = (centerLon * Math.PI) / 180
   const centerLatRad = (centerLat * Math.PI) / 180
   const latRad = (lat * Math.PI) / 180
   const lonRad = (lon * Math.PI) / 180
-  return (
+  const cosine =
     Math.sin(latRad) * Math.sin(centerLatRad) +
-      Math.cos(latRad) * Math.cos(centerLatRad) * Math.cos(lonRad - centerLonRad) >=
-    0
-  )
+    Math.cos(latRad) * Math.cos(centerLatRad) * Math.cos(lonRad - centerLonRad)
+  return (Math.acos(Math.min(1, Math.max(-1, cosine))) * 180) / Math.PI
 }
