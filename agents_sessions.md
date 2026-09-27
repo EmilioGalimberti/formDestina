@@ -35,3 +35,19 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno a nivel de coordinación.
 
 **Siguiente:** pasar a Kimi la tarea F1.
+
+---
+
+## 2026-09-27 — Fix deploy Cloudflare Pages (opencode)
+
+**Hecho:**
+- Eliminado `wrangler.toml`: Cloudflare Pages (Git) lo interpretaba como Worker y
+  corría `npx wrangler deploy` en vez de subir `dist`, fallando el deploy.
+- Deploy correcto: dashboard con build command `bun run build`, output `dist` y
+  "Deploy command" vacío.
+
+**Pendientes:**
+- En el dashboard: vaciar el campo "Deploy command" (Settings → Builds & deployments).
+- Redeplegar / pushear para verificar que sube `dist`.
+
+**Siguiente:** verificar deploy OK y pasar a Kimi la tarea F1.

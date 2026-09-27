@@ -15,11 +15,10 @@
         "src/index.css",
         "src/App.tsx",
         "src/main.tsx",
-        "src/lib/gsap.ts",
-        "wrangler.toml"
+        "src/lib/gsap.ts"
       ],
       "acceptance": ["bun run dev levanta", "bun run build pasa typecheck y genera dist/"],
-      "notes": "Deploy a Pages pendiente de CLOUDFLARE_API_TOKEN (no bloquea)."
+      "notes": "wrangler.toml eliminado: Cloudflare Pages (Git) no lo necesita y con campos de Worker rompía el deploy. Deploy via dashboard con build command 'bun run build' + output 'dist'."
     },
     {
       "id": "F1",
