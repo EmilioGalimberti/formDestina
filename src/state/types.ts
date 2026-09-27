@@ -4,6 +4,7 @@ export interface Destination {
   lat: number
   lon: number
   minBudget: number
+  minZoom: number
 }
 
 export interface Transport {

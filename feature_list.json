@@ -49,18 +49,20 @@
       "id": "F2",
       "name": "Destino (mundito)",
       "status": "done",
-      "description": "SVG estilizado del mundo, avión que sigue al puntero (desktop), pan con un dedo + zoom + tap (mobile), marcadores de destinos, selección guarda destino en store.",
+      "description": "Globo terráqueo ortográfico interactivo: rotación por drag, zoom con rueda/pinch/botones, avión sigue al cursor en desktop, marcadores con reveal por niveles de zoom, selección guarda destino en store.",
       "files": [
+        "package.json",
+        "src/state/types.ts",
         "src/data/destinations.ts",
         "src/lib/projection.ts",
+        "src/lib/gsap.ts",
         "public/maps/world.svg",
         "src/features/destination/DestinationStep.tsx",
         "src/features/destination/WorldMap.tsx",
-        "src/features/destination/DestinationMarker.tsx",
-        "src/features/destination/Plane.tsx"
+        "src/features/destination/DestinationMarker.tsx"
       ],
-      "acceptance": ["Seleccionar destino en mobile y desktop", "Zoom animado al marcador", "Destino persiste en store"],
-      "notes": "Feature más grande. Mapa responsive con pan, zoom +/-, wheel, avión en desktop, tap en marcadores y zoom animado al destino."
+      "acceptance": ["Seleccionar destino en mobile y desktop", "Zoom animado al marcador", "Destino persiste en store", "Globo rota y revela destinos por zoom"],
+      "notes": "Usa d3-geo (geoOrthographic) y world-atlas/topojson-client para dibujar el globo. Proyección ortográfica con parámetro Rotation (lambda, phi). Los destinos tienen minZoom 0/1.4/2.3 para reveal progresivo. Avión desktop usa GSAP quickTo."
     },
     {
       "id": "F3",

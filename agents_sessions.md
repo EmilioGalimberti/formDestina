@@ -127,3 +127,35 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno específico de F3.
 
 **Siguiente:** F4 — Personas + Categoría.
+
+---
+
+## 2026-09-27 — F2 v2 Globo ortográfico con rotación y zoom-reveal (opencode)
+
+**Hecho:**
+- Reemplazada la proyección equirectangular por ortográfica en `src/lib/projection.ts` usando `d3-geo` (`geoOrthographic`). Exponen `Rotation` (`lambda`, `phi`), `project()`, `inverseProject()` y `isVisible()`.
+- Agregada dependencia `minZoom` al tipo `Destination` en `src/state/types.ts`.
+- Actualizado `src/data/destinations.ts` con 11 destinos en 3 niveles de zoom: nivel 0 (Buenos Aires, México, São Paulo), nivel 1.4 (Nueva York, Madrid, París, Roma) y nivel 2.3 (Cancún, Bariloche, Bali, Tokio).
+- Reescrito `src/features/destination/WorldMap.tsx`:
+  - Globo SVG 500x500 dibujado con `d3-geo` + `world-atlas` + `topojson-client`.
+  - Rotación por drag (lambda/phi, phi clamp ±80°), zoom por rueda, pinch (2 dedos) y botones `+/-`.
+  - Avión en desktop con `GSAP.quickTo` siguiendo al cursor.
+  - Al seleccionar un marcador se anima rotación y zoom para centrarlo.
+  - `prefers-reduced-motion` respetado.
+- Reescrito `src/features/destination/DestinationMarker.tsx`:
+  - Recibe coordenadas proyectadas y flag `visible`.
+  - Entrada/salida con fade+scale via GSAP.
+  - Hit area de 40 unidades SVG (touch target amplio).
+- Actualizado `public/maps/world.svg` a un diseño circular simple.
+- Actualizado `src/features/destination/DestinationStep.tsx` con texto acorde al globo.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅ (sin warnings).
+
+**Decisiones:**
+- Librerías de proyección: `d3-geo` + `world-atlas` + `topojson-client`.
+- `minZoom` es un número de escala; los marcadores aparecen cuando `scale >= destination.minZoom`.
+- El avión se renderiza inline en `WorldMap` para poder aplicarle `gsap.quickTo` directamente.
+
+**Pendientes:**
+- F4 — Personas + Categoría.
+
+**Siguiente:** F4 — Personas + Categoría.

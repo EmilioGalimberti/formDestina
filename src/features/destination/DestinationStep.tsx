@@ -9,7 +9,7 @@ export function DestinationStep() {
       <div>
         <h2 className="text-2xl font-semibold">¿A dónde querés viajar?</h2>
         <p className="mt-1 text-muted-foreground">
-          Tocá un marcador en el mapa o arrastrá para explorar.
+          Arrastrá para rotar el globo y hacé zoom para descubrir más destinos.
         </p>
       </div>
 
