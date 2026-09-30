@@ -1,6 +1,6 @@
 {
   "project": "formPrimerContacto",
-  "updated": "2026-09-27",
+  "updated": "2026-09-29",
   "feature_status": ["pending", "in_progress", "blocked", "done"],
   "features": [
     {
@@ -62,7 +62,7 @@
         "src/features/destination/DestinationMarker.tsx"
       ],
       "acceptance": ["Seleccionar destino en mobile y desktop", "Zoom animado al marcador", "Destino persiste en store", "Globo rota y revela destinos por zoom"],
-      "notes": "Usa d3-geo (geoOrthographic) y world-atlas/topojson-client para dibujar el globo. Proyección ortográfica con parámetro Rotation (lambda, phi). Los destinos tienen minZoom 0/1.4/2.3 para reveal progresivo. Avión desktop usa GSAP quickTo."
+      "notes": "Usa d3-geo (geoOrthographic) y world-atlas/topojson-client para dibujar el globo. Proyección ortográfica con parámetro Rotation (lambda, phi). Los destinos tienen minZoom 0/1.4/2.3 para reveal progresivo. Avión desktop usa GSAP quickTo. v3: touch-action none + pointercancel + inercia para drag táctil fluido; visibilidad por hemisferio frontal (sin umbral fijo); tap vs drag por umbral de movimiento; marcador con g externo (React) / interno (GSAP); look de juego (océano azul con gradiente, tierra verde con fronteras, graticule, halo, pulso en seleccionado); wheel con listener nativo no pasivo."
     },
     {
       "id": "F3",

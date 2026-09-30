@@ -19,61 +19,93 @@ export function DestinationMarker({
   y,
   onSelect,
 }: DestinationMarkerProps) {
-  const groupRef = useRef<SVGGElement>(null)
+  const innerRef = useRef<SVGGElement>(null)
+  const ringRef = useRef<SVGCircleElement>(null)
 
   useLayoutEffect(() => {
-    const el = groupRef.current
+    const el = innerRef.current
     if (!el) return
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReducedMotion) {
-      gsap.set(el, { opacity: visible ? 1 : 0, scale: visible ? 1 : 0.6 })
-    } else {
-      gsap.to(el, {
-        opacity: visible ? 1 : 0,
-        scale: visible ? 1 : 0.6,
-        duration: 0.3,
-        ease: 'power2.out',
-      })
+      gsap.set(el, { opacity: visible ? 1 : 0, scale: visible ? 1 : 0.4 })
+      return
     }
+    gsap.to(el, {
+      opacity: visible ? 1 : 0,
+      scale: visible ? 1 : 0.4,
+      duration: visible ? 0.4 : 0.2,
+      ease: visible ? 'back.out(2.2)' : 'power2.in',
+      overwrite: 'auto',
+    })
   }, [visible])
+
+  useLayoutEffect(() => {
+    const ring = ringRef.current
+    if (!ring) return
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!selected || prefersReducedMotion) {
+      gsap.killTweensOf(ring)
+      gsap.set(ring, { opacity: 0 })
+      return
+    }
+    const tween = gsap.fromTo(
+      ring,
+      { scale: 0.7, opacity: 0.8 },
+      { scale: 2.4, opacity: 0, duration: 1.2, repeat: -1, ease: 'power1.out' },
+    )
+    return () => {
+      tween.kill()
+    }
+  }, [selected])
 
   return (
     <g
-      ref={groupRef}
+      transform={`translate(${x}, ${y})`}
+      data-marker-id={destination.id}
       role="button"
       tabIndex={visible ? 0 : -1}
-      onPointerDown={(e) => {
-        e.stopPropagation()
-        onSelect(destination)
-      }}
+      aria-label={destination.name}
       onKeyDown={(e) => {
         if ((e.key === 'Enter' || e.key === ' ') && visible) {
           e.preventDefault()
           onSelect(destination)
         }
       }}
-      className="cursor-pointer"
-      transform={`translate(${x}, ${y})`}
-      opacity={visible ? 1 : 0}
+      className="cursor-pointer outline-none"
       style={{ pointerEvents: visible ? 'auto' : 'none' }}
     >
-      <circle r={40} fill="transparent" />
-      <circle
-        r={selected ? 14 : 10}
-        fill={selected ? '#0d9488' : '#f59e0b'}
-        stroke="#ffffff"
-        strokeWidth={3}
-      />
-      <text
-        y={selected ? -22 : -18}
-        textAnchor="middle"
-        fill="#1c1917"
-        fontSize={selected ? 16 : 14}
-        fontWeight={600}
-        style={{ pointerEvents: 'none', textShadow: '0 1px 2px rgba(255,255,255,0.8)' }}
-      >
-        {destination.name}
-      </text>
+      <g ref={innerRef} opacity={0}>
+        <circle r={26} fill="transparent" />
+        <circle
+          ref={ringRef}
+          r={12}
+          fill="none"
+          stroke="#0d9488"
+          strokeWidth={3}
+          opacity={0}
+        />
+        <circle
+          r={selected ? 11 : 9}
+          fill={selected ? '#0d9488' : '#f59e0b'}
+          stroke="#ffffff"
+          strokeWidth={3}
+        />
+        <circle cx={-3} cy={-3} r={2.5} fill="#ffffff" opacity={0.85} />
+        <text
+          y={selected ? -20 : -17}
+          textAnchor="middle"
+          fill="#1c1917"
+          fontSize={selected ? 15 : 13}
+          fontWeight={700}
+          stroke="#ffffff"
+          strokeWidth={4}
+          strokeLinejoin="round"
+          paintOrder="stroke"
+          style={{ pointerEvents: 'none' }}
+        >
+          {destination.name}
+        </text>
+      </g>
     </g>
   )
 }

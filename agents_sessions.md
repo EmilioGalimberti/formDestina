@@ -172,3 +172,55 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Verificaciones: `bun run build` ✅ y `bun run lint` ✅ (sin warnings).
 
 **Siguiente:** F4 — Personas + Categoría.
+
+---
+
+## 2026-09-29 — F2 v3: globo fluido en mobile, marcadores estables y look de juego (opencode)
+
+**Hecho:**
+- **Fix mobile (se movía "milímetros")**: el contenedor no tenía `touch-action`, así que el
+  browser tomaba el gesto táctil como scroll de página y cancelaba los pointer events a los
+  pocos px. Agregado `touch-none` al contenedor, handler `onPointerCancel` (antes faltaba) y
+  blindado `setPointerCapture` con try/catch.
+- **Inercia tipo juego**: se trackea velocidad del drag (suavizado exponencial) y al soltar se
+  anima la rotación con GSAP `power3.out`. Se corta al empezar un nuevo gesto, al hacer zoom o
+  al seleccionar. Respetado `prefers-reduced-motion`.
+- **Sensibilidad natural**: el factor de rotación ahora escala con el zoom
+  (`120 / (scale * ancho)`), sensación de "agarrar la superficie".
+- **Fix marcadores bugueados**: GSAP y React escribían el mismo `transform` del `<g>` del
+  marcador (React el translate cada frame, GSAP el scale del fade) → se solapaban y los
+  marcadores flotaban/parpadeaban al rotar mientras aparecían. Ahora `<g>` externo (translate,
+  React) + `<g>` interno (opacity/scale, GSAP).
+- **Visibilidad**: eliminado el umbral fijo de 70° (hacía aparecer/desaparecer destinos en
+  medio del globo visible). Ahora: hemisferio frontal (`isVisible` ≤90°, evita el espejado de
+  la proyección ortográfica) + `minZoom`; el seleccionado siempre visible. Rotación inicial
+  centrada en Sudamérica (`lambda 60, phi 15`) para que se vean BA, México y São Paulo.
+- **Tap vs drag**: antes el marcador seleccionaba en `pointerdown` con hit area de r=40 →
+  empezar un drag cerca de un marcador lo seleccionaba por accidente. Ahora el contenedor
+  detecta tap (movimiento < 10px entre down/up sobre un `[data-marker-id]`); arrastrar desde
+  un marcador rota el globo sin seleccionar.
+- **Fix wheel desktop**: React 17+ registra `onWheel` como pasivo → `preventDefault()` no
+  funcionaba y la página scrolleaba al hacer zoom. Listener nativo `{ passive: false }` via ref.
+- **Post-pinch**: al soltar un dedo después del pinch se re-ancla el drag (antes el globo
+  quedaba trabado hasta soltar ambos dedos).
+- **Look de juego**: océano azul con gradiente radial, tierra verde (`#5ecf7c`) con fronteras
+  de países (`mesh` de topojson), graticule, halo de atmósfera, sombreado de limbo para
+  profundidad esférica, pop elástico (`back.out`) de marcadores, anillo pulsante en el
+  seleccionado, labels con halo blanco (`paint-order: stroke`).
+- **UX mobile**: como `touch-action: none` bloquea el scroll de página desde el mapa, al
+  seleccionar un destino la card hace `scrollIntoView` suave para quedar visible.
+- Animación de selección rota por el camino más corto (lambda normalizado a ±180°).
+- Verificaciones: `bun run build` ✅, `bun run lint` ✅, smoke test con Playwright (Chrome
+  headless, viewport iPhone 13 + desktop): 11/11 OK (drag táctil fluido con inercia, tap
+  selecciona, sin espejados al rotar, wheel sin scroll de página, drag sobre marcador no
+  selecciona, sin errores JS). Screenshots verificados.
+
+**Decisiones:**
+- Inercia manual con `gsap.to` en vez de InertiaPlugin (más simple, mismo resultado).
+- La selección se maneja desde el contenedor (tap threshold) y no desde el marcador: elimina
+  zonas muertas de drag y selecciones accidentales.
+
+**Pendientes:**
+- F4 — Personas + Categoría.
+
+**Siguiente:** F4 — Personas + Categoría.
