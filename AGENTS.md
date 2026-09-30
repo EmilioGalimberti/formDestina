@@ -94,3 +94,24 @@ Datos estáticos en `src/data/`:
 
 Número: `+54 9 3804 62-4385` → `wa.me` usa `543804624385` (se omite el `9` de móvil).
 El mensaje se arma en `src/lib/whatsapp.ts` (`buildMessage` + `buildWaLink`).
+
+## Cómo agregar destinos
+
+Es solo data: agregar un objeto al array `DESTINATIONS` en `src/data/destinations.ts`.
+NO tocar `WorldMap.tsx` ni `projection.ts` (visibilidad, zoom, selección y presupuesto
+mínimo se derivan solos).
+
+```ts
+{ id: 'lisboa', name: 'Lisboa', lat: 38.72, lon: -9.14, minBudget: 750, minZoom: 1.4 },
+```
+
+Reglas para no bugearlo:
+
+- `lat`: negativo = sur (Bariloche -41). `lon`: negativo = oeste/América (-58), positivo =
+  este/Europa-Asia-Oceanía (Tokio +139). Signo invertido = marcador del otro lado del mundo.
+- `id`: kebab-case, único. `minBudget`: USD entero.
+- `minZoom` (a qué zoom aparece el marcador): `0` = hub principal visible siempre (ej. Buenos
+  Aires), `1.4` = ciudad grande (ej. Madrid), `2.3` = lugar chico/turístico (ej. Cancún).
+- No pongas dos destinos a <10° de distancia con el mismo `minZoom`: los labels se
+  superponen. Escaloná el `minZoom` (el más importante en nivel menor).
+- Verificá con `bun run build` y, si podés, abrí el dev y rotá hasta el destino nuevo.
