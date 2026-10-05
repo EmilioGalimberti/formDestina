@@ -269,3 +269,26 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno específico de F5.
 
 **Siguiente:** F6 — Resultado + WhatsApp.
+
+---
+
+## 2026-10-05 — F6 Resultado + WhatsApp (opencode)
+
+**Hecho:**
+- Creado `src/lib/whatsapp.ts` con `buildMessage` (arma mensaje legible para Martina) y `buildWaLink` (genera link `wa.me` con el número `543804624385`).
+- Reescrito `src/features/result/ResultStep.tsx`:
+  - Resumen visual del viaje (destino, transporte, viajeros, estilo, presupuesto) en una card estilizada.
+  - Preview del mensaje de WhatsApp antes de abrir.
+  - CTA "¡A viajar!" como link `<a>` que abre `wa.me` en una nueva pestaña.
+- Formato del mensaje: saludo, datos del formulario y presupuesto formateado en USD.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se usa un link nativo `<a>` en lugar de `window.open` para mejor accesibilidad y comportamiento en mobile (abre WhatsApp/web según el SO).
+- El preview del mensaje se muestra siempre para que el usuario lo revise antes de enviar.
+- Sin emojis en el mensaje para mantener consistencia con las convenciones del proyecto; usa texto plano y "¡A viajar!" como CTA.
+
+**Pendientes:**
+- Ninguno específico de F6.
+
+**Siguiente:** F7 — Polish.

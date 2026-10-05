@@ -111,14 +111,14 @@
     {
       "id": "F6",
       "name": "Resultado + WhatsApp",
-      "status": "pending",
+      "status": "done",
       "description": "Formatear mensaje legible desde el store, link wa.me, CTA '¡A viajar!', preview antes de abrir.",
       "files": [
-        "src/features/result/",
+        "src/features/result/ResultStep.tsx",
         "src/lib/whatsapp.ts"
       ],
       "acceptance": ["Mensaje legible para Martina", "Abre wa.me con el mensaje"],
-      "notes": "Verificar número wa.me: 543804624385. Confirmar formato con Martina."
+      "notes": "Número wa.me: 543804624385. Mensaje legible con saludo, destino, transporte, viajeros, estilo, presupuesto y CTA."
     },
     {
       "id": "F7",
