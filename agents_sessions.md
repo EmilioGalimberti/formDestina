@@ -340,4 +340,29 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 **Pendientes:**
 - Ninguno.
 
+**Siguiente:** F9 — Días por destino.
+
+---
+
+## 2026-10-05 — F9 Días por destino (opencode)
+
+**Hecho:**
+- `src/state/types.ts`: agregado `daysByDestination: Record<string, number>` a `FormState`, nuevo `StepId` `'days'` y acción `setDestinationDays` en `AppState`.
+- `src/state/store.ts`: agregado `'days'` al `STEP_ORDER` entre `destination` y `transport`; `toggleDestination` inicializa 1 día al agregar un destino y limpia el registro al quitarlo; nueva acción `setDestinationDays` con mínimo 1.
+- `src/features/days/DaysStep.tsx`: nueva página con stepper de días para cada destino seleccionado (máximo 30), animación GSAP en el número y fallback si no hay destinos.
+- `src/features/days/index.ts`: exporta `DaysStep`.
+- `src/features/wizard/useWizardStep.ts`: registrado `DaysStep` en el wizard con título "Días".
+- `src/lib/whatsapp.ts`: `formatDestinations` incluye los días de cada destino; mensaje ejemplo: "Destinos: México (5 días), Brasil (10 días)".
+- `src/features/result/ResultStep.tsx`: el resumen de destinos muestra nombre + días.
+- `feature_list.json`: F9 marcada como `done` y corregida coma faltante tras `updated`.
+- Verificaciones: `bun run build` ✅.
+
+**Decisiones:**
+- La página de días va inmediatamente después de elegir destinos, antes de transporte, porque la duración define el resto del itinerario.
+- Default de 1 día por destino nuevo; se puede incrementar hasta 30, suficiente para la mayoría de los viajes de Destina.
+- Se reutilizó el patrón visual y de animación de `PeopleStep` para mantener consistencia.
+
+**Pendientes:**
+- Ninguno.
+
 **Siguiente:** Validar deploy en Cloudflare Pages tras el push.

@@ -1,5 +1,6 @@
 import type { StepId } from '@/state/types'
 import { DestinationStep } from '@/features/destination'
+import { DaysStep } from '@/features/days'
 import { TransportStep } from '@/features/transport'
 import { PeopleStep } from '@/features/people'
 import { CategoryStep } from '@/features/category'
@@ -14,6 +15,7 @@ export interface StepConfig {
 
 export const STEPS: StepConfig[] = [
   { id: 'destination', title: 'Destino', component: DestinationStep },
+  { id: 'days', title: 'Días', component: DaysStep },
   { id: 'transport', title: 'Transporte', component: TransportStep },
   { id: 'people', title: 'Viajeros', component: PeopleStep },
   { id: 'category', title: 'Estilo', component: CategoryStep },

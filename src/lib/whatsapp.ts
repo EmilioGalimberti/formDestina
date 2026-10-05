@@ -10,10 +10,14 @@ function formatMoney(value: number) {
   }).format(value)
 }
 
-function formatDestinations(destinations: FormState['destinations']) {
+function formatDestinationName(destination: FormState['destinations'][number], days: number | undefined) {
+  if (!days || days <= 0) return destination.name
+  return `${destination.name} (${days} ${days === 1 ? 'día' : 'días'})`
+}
+
+function formatDestinations(destinations: FormState['destinations'], daysByDestination: FormState['daysByDestination']) {
   if (destinations.length === 0) return 'No seleccionado'
-  if (destinations.length === 1) return destinations[0].name
-  return destinations.map((d) => d.name).join(', ')
+  return destinations.map((d) => formatDestinationName(d, daysByDestination[d.id])).join(', ')
 }
 
 export function buildMessage(state: FormState): string {
@@ -21,7 +25,7 @@ export function buildMessage(state: FormState): string {
   const lines = [
     'Hola Martina, quiero armar un viaje con Destina.',
     '',
-    `${destinationLabel}: ${formatDestinations(state.destinations)}`,
+    `${destinationLabel}: ${formatDestinations(state.destinations, state.daysByDestination)}`,
     `Transporte: ${state.transport?.name ?? 'No seleccionado'}`,
     `Viajeros: ${state.people}`,
     `Estilo: ${state.category?.name ?? 'No seleccionado'}`,

@@ -3,6 +3,7 @@ import type { AppState, BudgetRange, Destination, StepId } from '@/state/types'
 
 export const STEP_ORDER: StepId[] = [
   'destination',
+  'days',
   'transport',
   'people',
   'category',
@@ -21,6 +22,7 @@ function calculateBudgetFromDestinations(destinations: Destination[]): BudgetRan
 const initialState: Omit<
   AppState,
   | 'toggleDestination'
+  | 'setDestinationDays'
   | 'setTransport'
   | 'setPeople'
   | 'setCategory'
@@ -32,6 +34,7 @@ const initialState: Omit<
   | 'reset'
 > = {
   destinations: [],
+  daysByDestination: {},
   transport: null,
   people: INITIAL_PEOPLE,
   category: null,
@@ -48,11 +51,28 @@ export const useStore = create<AppState>((set, get) => ({
       const destinations = exists
         ? state.destinations.filter((d) => d.id !== destination.id)
         : [...state.destinations, destination]
+
+      const daysByDestination = { ...state.daysByDestination }
+      if (exists) {
+        delete daysByDestination[destination.id]
+      } else {
+        daysByDestination[destination.id] = 1
+      }
+
       return {
         destinations,
+        daysByDestination,
         budget: calculateBudgetFromDestinations(destinations),
       }
     }),
+
+  setDestinationDays: (destinationId, days) =>
+    set((state) => ({
+      daysByDestination: {
+        ...state.daysByDestination,
+        [destinationId]: Math.max(1, days),
+      },
+    })),
 
   setTransport: (transport) => set({ transport }),
 

@@ -1,6 +1,6 @@
 {
   "project": "formPrimerContacto",
-  "updated": "2026-10-05"
+  "updated": "2026-10-05",
   "feature_status": ["pending", "in_progress", "blocked", "done"],
   "features": [
     {
@@ -148,6 +148,23 @@
       ],
       "acceptance": ["Seleccionar México y Brasil y que el mensaje diga 'Destinos: México, Brasil'", "Presupuesto general para todos los destinos"],
       "notes": "El estado pasó de destination (singular) a destinations (array). toggleDestination agrega/quita. El presupuesto mínimo es la suma de los minBudget de los destinos seleccionados."
+    },
+    {
+      "id": "F9",
+      "name": "Seccion para elegir la cantidad de dias de viaje",
+      "status": "done",
+      "description": "Se debe crear una seccion nueva que permita al usuario elegir la cantidad de dias de viaje en cada uno de los destinos seleccionados, y que se refleje en el mensaje de WhatsApp.",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/features/wizard/useWizardStep.ts",
+        "src/features/days/DaysStep.tsx",
+        "src/features/days/index.ts",
+        "src/features/result/ResultStep.tsx",
+        "src/lib/whatsapp.ts"
+      ],
+      "acceptance": ["Seleccionar 5 dias para México y 10 dias para Brasil y que el mensaje diga 'Destinos: México (5 dias), Brasil (10 dias)'"],
+      "notes": "Nueva página 'Días' entre Destino y Transporte. Estado daysByDestination guarda días por destino; default 1 día al agregar destino; se limpia al quitar destino. Máximo 30 días. Reflejado en resumen y mensaje de WhatsApp."
     }
   ]
 }

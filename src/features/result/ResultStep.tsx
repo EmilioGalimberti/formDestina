@@ -17,7 +17,7 @@ function ResultItem({ label, value }: ResultItemProps) {
 
 export function ResultStep() {
   const state = useStore()
-  const { destinations, transport, people, category, budget } = state
+  const { destinations, daysByDestination, transport, people, category, budget } = state
 
   const message = buildMessage(state)
   const waLink = buildWaLink(state)
@@ -32,7 +32,12 @@ export function ResultStep() {
     maximumFractionDigits: 0,
   }).format(budget.max)}`
 
-  const destinationLabel = destinations.map((d) => d.name).join(', ') || '—'
+  const formatDestination = (destination: (typeof destinations)[number]) => {
+    const days = daysByDestination[destination.id] ?? 1
+    return `${destination.name} (${days} ${days === 1 ? 'día' : 'días'})`
+  }
+
+  const destinationLabel = destinations.map(formatDestination).join(', ') || '—'
 
   return (
     <div className="flex flex-col gap-6">
