@@ -1,6 +1,6 @@
 {
   "project": "formPrimerContacto",
-  "updated": "2026-09-29",
+  "updated": "2026-10-05",
   "feature_status": ["pending", "in_progress", "blocked", "done"],
   "features": [
     {
@@ -85,15 +85,16 @@
     {
       "id": "F4",
       "name": "Personas + Categoría",
-      "status": "pending",
+      "status": "done",
       "description": "Stepper de cantidad de personas y cards de categoría de viaje (fiesta, playas lindas, tranquilidad, aventura...).",
       "files": [
-        "src/features/people/",
-        "src/features/category/",
+        "src/features/people/PeopleStep.tsx",
+        "src/features/category/CategoryStep.tsx",
+        "src/features/category/CategoryCard.tsx",
         "src/data/categories.ts"
       ],
       "acceptance": ["Ajustar cantidad de personas", "Seleccionar categoría"],
-      "notes": ""
+      "notes": "8 categorías con iconos SVG inline; PeopleStep con animación de número y botón - deshabilitado en 1."
     },
     {
       "id": "F5",

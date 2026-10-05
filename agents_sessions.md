@@ -224,3 +224,24 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - F4 — Personas + Categoría.
 
 **Siguiente:** F4 — Personas + Categoría.
+
+---
+
+## 2026-10-05 — F4 Personas + Categoría (opencode)
+
+**Hecho:**
+- Creado `src/data/categories.ts` con 8 categorías: Playas lindas, Fiesta, Tranquilidad, Aventura, Naturaleza, Cultura, Gastronomía y En familia.
+- Creado `src/features/category/CategoryCard.tsx`: card con icono SVG inline por categoría, nombre, check visual al seleccionar y micro-animación GSAP elástica al hacer click, respetando `prefers-reduced-motion`.
+- Reemplazado `src/features/category/CategoryStep.tsx` por la implementación real usando `CATEGORIES` y `CategoryCard`, con layout responsive de 2 a 4 columnas.
+- Reescrito `src/features/people/PeopleStep.tsx`: stepper de cantidad con subtítulo, botón `-` deshabilitado en 1 persona, botón `+` con color primario y animación GSAP en el número al cambiar.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Los iconos de categoría son SVGs inline (sin assets externos ni emojis) para mantener consistencia con el look del proyecto y facilitar cambios de color por estado.
+- `CategoryCard` reutiliza el patrón de `TransportCard` (borde, fondo, check, animación elástica) pero usa el color `secondary` (naranja) para diferenciar visualmente la sección.
+- El contador de personas anima solo el número, no toda la pantalla, para no competir con la transición del wizard.
+
+**Pendientes:**
+- Ninguno específico de F4.
+
+**Siguiente:** F5 — Presupuesto.

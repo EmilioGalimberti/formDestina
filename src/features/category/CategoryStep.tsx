@@ -1,32 +1,25 @@
 import { useStore } from '@/state/store'
-
-const DUMMY_CATEGORIES = [
-  { id: 'party', name: 'Fiesta' },
-  { id: 'beach', name: 'Playas lindas' },
-  { id: 'relax', name: 'Tranquilidad' },
-  { id: 'adventure', name: 'Aventura' },
-]
+import { CATEGORIES } from '@/data/categories'
+import { CategoryCard } from '@/features/category/CategoryCard'
 
 export function CategoryStep() {
   const { category, setCategory } = useStore()
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-2xl font-semibold">¿Qué tipo de viaje querés?</h2>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {DUMMY_CATEGORIES.map((c) => (
-          <button
+      <div>
+        <h2 className="text-2xl font-semibold">¿Qué tipo de viaje querés?</h2>
+        <p className="mt-1 text-muted-foreground">Elegí la categoría que mejor defina la experiencia.</p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+        {CATEGORIES.map((c) => (
+          <CategoryCard
             key={c.id}
-            type="button"
-            onClick={() => setCategory(c)}
-            className={`rounded-2xl border-2 px-4 py-6 text-left transition-colors ${
-              category?.id === c.id
-                ? 'border-secondary bg-secondary/10'
-                : 'border-border bg-card hover:border-secondary/50'
-            }`}
-          >
-            <span className="text-lg font-medium">{c.name}</span>
-          </button>
+            category={c}
+            selected={category?.id === c.id}
+            onSelect={setCategory}
+          />
         ))}
       </div>
     </div>
