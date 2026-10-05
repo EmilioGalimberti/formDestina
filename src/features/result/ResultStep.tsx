@@ -60,7 +60,8 @@ export function ResultStep() {
         href={waLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex w-full items-center justify-center rounded-2xl bg-primary px-6 py-4 text-lg font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-95"
+        className="inline-flex w-full items-center justify-center rounded-2xl bg-primary px-6 py-4 text-lg font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95"
+        aria-label="Enviar resumen del viaje a Martina por WhatsApp"
       >
         ¡A viajar!
       </a>

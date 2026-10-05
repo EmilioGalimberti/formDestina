@@ -3,6 +3,14 @@ import { BudgetDisplay } from '@/features/budget/BudgetDisplay'
 
 const PRESETS = [100, 500, 1000]
 
+function formatMoney(value: number) {
+  return new Intl.NumberFormat('es-AR', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(value)
+}
+
 export function BudgetStep() {
   const { destination, budget, setBudgetMax } = useStore()
 
@@ -29,7 +37,7 @@ export function BudgetStep() {
       <div>
         <h2 className="text-2xl font-semibold">Presupuesto estimado</h2>
         <p className="mt-1 text-muted-foreground">
-          Para {destination.name}, el presupuesto mínimo sugerido es {new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(min)}.
+          Para {destination.name}, el presupuesto mínimo sugerido es {formatMoney(min)}.
         </p>
       </div>
 
@@ -48,8 +56,8 @@ export function BudgetStep() {
         />
 
         <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-          <span>Mínimo</span>
-          <span>Máximo</span>
+          <span>{formatMoney(min)}</span>
+          <span>{formatMoney(maxLimit)}</span>
         </div>
 
         <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -59,7 +67,7 @@ export function BudgetStep() {
               type="button"
               onClick={() => adjustMax(amount)}
               disabled={max + amount > maxLimit}
-              className="rounded-full bg-muted px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted/80 disabled:opacity-40 active:scale-95"
+              className="flex min-h-11 items-center rounded-full bg-muted px-4 py-2 text-sm font-medium text-foreground outline-offset-4 transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-40 active:scale-95"
             >
               + USD {amount}
             </button>

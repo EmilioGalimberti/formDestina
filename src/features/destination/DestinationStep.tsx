@@ -26,6 +26,7 @@ export function DestinationStep() {
         onSelect={(dest) => {
           setDestination(dest)
         }}
+        aria-label="Mapa mundi interactivo: arrastrá para rotar, hacé zoom y tocá un marcador para elegir destino"
       />
 
       {destination && (
@@ -38,7 +39,7 @@ export function DestinationStep() {
           <button
             type="button"
             onClick={nextStep}
-            className="mt-4 w-full rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground active:scale-95"
+            className="mt-4 w-full rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95"
           >
             Elegir {destination.name}
           </button>

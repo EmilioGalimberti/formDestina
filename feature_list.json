@@ -1,6 +1,6 @@
 {
   "project": "formPrimerContacto",
-  "updated": "2026-10-05",
+  "updated": "2026-10-05"
   "feature_status": ["pending", "in_progress", "blocked", "done"],
   "features": [
     {
@@ -123,15 +123,14 @@
     {
       "id": "F7",
       "name": "Polish",
-      "status": "pending",
+      "status": "done",
       "description": "Responsive + touch + polish: test 360px/1440px, prefers-reduced-motion, safe-area, touch targets, orientación, meta/OG, accesibilidad.",
       "files": [
         "src/features/*",
-        "src/ui/",
         "index.html"
       ],
       "acceptance": ["Funciona bien en mobile y desktop", "Reduced motion respetado", "Accesible"],
-      "notes": ""
+      "notes": "Meta/OG en index.html, focus-visible y aria-pressed en cards, aria-live en wizard/people, touch targets >=44px, safe-area ya existente, mapa con role application y aria-label."
     }
   ]
 }

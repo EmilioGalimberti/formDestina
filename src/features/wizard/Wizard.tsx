@@ -36,9 +36,13 @@ export function Wizard() {
         </div>
       </header>
 
-      <main className="flex flex-1 flex-col px-6 py-6">
+      <main className="flex flex-1 flex-col px-6 py-6" aria-label={`Paso ${step.title}`}>
         <div className="mx-auto w-full max-w-2xl flex-1">
-          <div ref={contentRef} className="rounded-3xl border border-border bg-card p-6 shadow-sm md:p-10">
+          <div
+            ref={contentRef}
+            className="rounded-3xl border border-border bg-card p-6 shadow-sm outline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:p-10"
+            tabIndex={-1}
+          >
             <StepComponent />
           </div>
         </div>
@@ -49,6 +53,10 @@ export function Wizard() {
           <WizardNav isFirst={isFirst} isLast={isLast} onBack={previousStep} onNext={nextStep} />
         </div>
       </footer>
+
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {step.title}
+      </div>
     </div>
   )
 }

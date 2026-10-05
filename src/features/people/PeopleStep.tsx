@@ -36,13 +36,13 @@ export function PeopleStep() {
           type="button"
           onClick={() => updatePeople(people - 1)}
           disabled={people <= 1}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-muted text-2xl font-semibold text-foreground transition-colors hover:bg-muted/80 active:scale-95 disabled:opacity-40"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-muted text-2xl font-semibold text-foreground outline-offset-4 transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:opacity-40"
           aria-label="Disminuir cantidad"
         >
           −
         </button>
 
-        <div className="flex min-w-[7rem] flex-col items-center">
+        <div className="flex min-w-[7rem] flex-col items-center" aria-live="polite" aria-atomic="true">
           <span ref={valueRef} className="text-6xl font-bold text-primary md:text-7xl">
             {people}
           </span>
@@ -52,7 +52,7 @@ export function PeopleStep() {
         <button
           type="button"
           onClick={() => updatePeople(people + 1)}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-2xl font-semibold text-primary-foreground transition-colors hover:bg-primary/90 active:scale-95"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-2xl font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95"
           aria-label="Aumentar cantidad"
         >
           +

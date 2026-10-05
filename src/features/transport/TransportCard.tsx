@@ -32,7 +32,8 @@ export function TransportCard({ transport, selected, onSelect }: TransportCardPr
       ref={cardRef}
       type="button"
       onClick={handleClick}
-      className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 px-4 py-8 text-center transition-colors duration-200 active:scale-95 md:py-10 ${
+      aria-pressed={selected}
+      className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 px-4 py-8 text-center outline-offset-4 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 md:py-10 ${
         selected
           ? 'border-primary bg-primary/10'
           : 'border-border bg-card hover:border-primary/50'

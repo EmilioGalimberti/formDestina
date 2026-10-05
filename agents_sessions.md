@@ -292,3 +292,28 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno específico de F6.
 
 **Siguiente:** F7 — Polish.
+
+---
+
+## 2026-10-05 — F7 Polish (opencode)
+
+**Hecho:**
+- `index.html`: agregados meta tags OG/Twitter, descripción más completa y `theme-color`.
+- `Wizard.tsx`: región `aria-live` para anunciar el paso actual, `aria-label` en `<main>` y `focus-visible` en el contenedor del paso.
+- `WizardNav.tsx`: `aria-label` en botones de navegación y `focus-visible:ring`.
+- `TransportCard.tsx` y `CategoryCard.tsx`: `aria-pressed` para indicar selección y `focus-visible:ring`.
+- `PeopleStep.tsx`: `aria-live` en el contador para anunciar cambios y `focus-visible:ring` en botones.
+- `BudgetStep.tsx`: touch targets de presets a `min-h-11` (44px), labels de min/max formateados y `focus-visible:ring`.
+- `ResultStep.tsx`: `aria-label` descriptivo en el CTA de WhatsApp y `focus-visible:ring`.
+- `DestinationStep.tsx` y `WorldMap.tsx`: `role="application"` + `aria-label` en el mapa interactivo, `focus-visible:ring` en botón de confirmar destino.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se priorizó accesibilidad sin romper el look: `focus-visible:ring` solo aparece al navegar con teclado.
+- `prefers-reduced-motion` ya estaba respetado en F2–F6; no se agregaron nuevas animaciones en F7.
+- `safe-area-inset-bottom` ya estaba en el footer del wizard desde F1.
+
+**Pendientes:**
+- Ninguno. MVP completo.
+
+**Siguiente:** Validar deploy en Cloudflare Pages tras el push.

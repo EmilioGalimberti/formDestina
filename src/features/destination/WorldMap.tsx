@@ -23,6 +23,7 @@ const INERTIA_THROW_SECONDS = 0.35
 interface WorldMapProps {
   selected: Destination | null
   onSelect: (destination: Destination) => void
+  'aria-label'?: string
 }
 
 function useFinePointer() {
@@ -48,7 +49,7 @@ const landFeature = feature(worldTopology, countriesObject) as FeatureCollection
 const borderLines = mesh(worldTopology, countriesObject, (a, b) => a !== b)
 const graticule = geoGraticule10()
 
-export function WorldMap({ selected, onSelect }: WorldMapProps) {
+export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldMapProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [rotation, setRotation] = useState<Rotation>({ lambda: 60, phi: 15 })
   const [scale, setScale] = useState(INITIAL_SCALE)
@@ -309,6 +310,8 @@ export function WorldMap({ selected, onSelect }: WorldMapProps) {
   return (
     <div
       ref={containerRef}
+      role="application"
+      aria-label={ariaLabel}
       className="relative h-80 w-full cursor-grab touch-none overflow-hidden rounded-2xl border border-border bg-[#dff2fd] select-none [-webkit-tap-highlight-color:transparent] active:cursor-grabbing md:h-[28rem]"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
