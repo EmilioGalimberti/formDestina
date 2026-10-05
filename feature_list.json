@@ -99,13 +99,14 @@
     {
       "id": "F5",
       "name": "Presupuesto",
-      "status": "pending",
+      "status": "done",
       "description": "Slider min/max: min derivado del destino (México → USD 500), usuario define max, display formateado en vivo.",
       "files": [
-        "src/features/budget/"
+        "src/features/budget/BudgetStep.tsx",
+        "src/features/budget/BudgetDisplay.tsx"
       ],
       "acceptance": ["Min depende del destino elegido", "Max definido por el usuario", "Display en vivo"],
-      "notes": ""
+      "notes": "Min fijo por destino; max ajustable con range o botones +100/+500/+1000; display animado y formateado en USD."
     },
     {
       "id": "F6",

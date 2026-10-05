@@ -245,3 +245,27 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno específico de F4.
 
 **Siguiente:** F5 — Presupuesto.
+
+---
+
+## 2026-10-05 — F5 Presupuesto (opencode)
+
+**Hecho:**
+- Creado `src/features/budget/BudgetDisplay.tsx`: componente que muestra el rango formateado en USD con animación GSAP suave cada vez que cambia el máximo.
+- Reescrito `src/features/budget/BudgetStep.tsx`:
+  - Muestra el destino seleccionado y el presupuesto mínimo sugerido derivado de `destination.minBudget`.
+  - Slider único para ajustar el máximo, con `min` fijo y `maxLimit = min + 5000`.
+  - Botones rápidos `+100`, `+500`, `+1000` para ajustes táctiles.
+  - Mensaje claro si no hay destino seleccionado (fallback).
+  - Display en vivo formateado con `Intl.NumberFormat`.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- El `min` queda fijo según el destino elegido; el usuario solo ajusta el `max`, simplificando la UX y respetando el modelo "min derivado del destino".
+- El rango máximo del slider es `min + 5000`, lo que da suficiente flexibilidad tanto para destinos cercanos (BA, USD 400) como para destinos lejanos (Tokio, USD 1200).
+- Los botones de preset usan `setBudgetMax` y se deshabilitan si superan el límite.
+
+**Pendientes:**
+- Ninguno específico de F5.
+
+**Siguiente:** F6 — Resultado + WhatsApp.
