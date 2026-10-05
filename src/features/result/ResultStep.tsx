@@ -17,7 +17,7 @@ function ResultItem({ label, value }: ResultItemProps) {
 
 export function ResultStep() {
   const state = useStore()
-  const { destination, transport, people, category, budget } = state
+  const { destinations, transport, people, category, budget } = state
 
   const message = buildMessage(state)
   const waLink = buildWaLink(state)
@@ -32,6 +32,8 @@ export function ResultStep() {
     maximumFractionDigits: 0,
   }).format(budget.max)}`
 
+  const destinationLabel = destinations.map((d) => d.name).join(', ') || '—'
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -41,7 +43,7 @@ export function ResultStep() {
 
       <div className="rounded-3xl border border-border bg-card p-6 shadow-sm md:p-8">
         <dl>
-          <ResultItem label="Destino" value={destination?.name ?? '—'} />
+          <ResultItem label={destinations.length > 1 ? 'Destinos' : 'Destino'} value={destinationLabel} />
           <ResultItem label="Transporte" value={transport?.name ?? '—'} />
           <ResultItem label="Viajeros" value={String(people)} />
           <ResultItem label="Estilo" value={category?.name ?? '—'} />

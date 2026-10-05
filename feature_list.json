@@ -131,6 +131,23 @@
       ],
       "acceptance": ["Funciona bien en mobile y desktop", "Reduced motion respetado", "Accesible"],
       "notes": "Meta/OG en index.html, focus-visible y aria-pressed en cards, aria-live en wizard/people, touch targets >=44px, safe-area ya existente, mapa con role application y aria-label."
+    },
+    {
+      "id": "F8",
+      "name": "Seleccionar varios destinos",
+      "status": "done",
+      "description": "En el mundito generado de la primer pantalla, permitir seleccionar varios destinos y que se refleje en el mensaje de WhatsApp.",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/features/destination/WorldMap.tsx",
+        "src/features/destination/DestinationStep.tsx",
+        "src/features/budget/BudgetStep.tsx",
+        "src/features/result/ResultStep.tsx",
+        "src/lib/whatsapp.ts"
+      ],
+      "acceptance": ["Seleccionar México y Brasil y que el mensaje diga 'Destinos: México, Brasil'", "Presupuesto general para todos los destinos"],
+      "notes": "El estado pasó de destination (singular) a destinations (array). toggleDestination agrega/quita. El presupuesto mínimo es la suma de los minBudget de los destinos seleccionados."
     }
   ]
 }

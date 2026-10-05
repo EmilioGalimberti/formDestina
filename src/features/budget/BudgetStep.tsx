@@ -12,21 +12,23 @@ function formatMoney(value: number) {
 }
 
 export function BudgetStep() {
-  const { destination, budget, setBudgetMax } = useStore()
+  const { destinations, budget, setBudgetMax } = useStore()
 
-  if (!destination) {
+  if (destinations.length === 0) {
     return (
       <div className="flex flex-col gap-4 text-center">
         <h2 className="text-2xl font-semibold">Presupuesto estimado</h2>
-        <p className="text-muted-foreground">Primero elegí un destino para calcular el presupuesto mínimo sugerido.</p>
+        <p className="text-muted-foreground">Primero elegí al menos un destino para calcular el presupuesto mínimo sugerido.</p>
       </div>
     )
   }
 
-  const min = destination.minBudget
+  const min = budget.min
   const max = Math.max(min, budget.max)
   const step = 100
   const maxLimit = min + 5000
+
+  const destinationNames = destinations.map((d) => d.name).join(', ')
 
   const adjustMax = (amount: number) => {
     setBudgetMax(max + amount)
@@ -37,7 +39,7 @@ export function BudgetStep() {
       <div>
         <h2 className="text-2xl font-semibold">Presupuesto estimado</h2>
         <p className="mt-1 text-muted-foreground">
-          Para {destination.name}, el presupuesto mínimo sugerido es {formatMoney(min)}.
+          Para {destinationNames}, el presupuesto mínimo sugerido es {formatMoney(min)}.
         </p>
       </div>
 

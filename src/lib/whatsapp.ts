@@ -10,11 +10,18 @@ function formatMoney(value: number) {
   }).format(value)
 }
 
+function formatDestinations(destinations: FormState['destinations']) {
+  if (destinations.length === 0) return 'No seleccionado'
+  if (destinations.length === 1) return destinations[0].name
+  return destinations.map((d) => d.name).join(', ')
+}
+
 export function buildMessage(state: FormState): string {
+  const destinationLabel = state.destinations.length > 1 ? 'Destinos' : 'Destino'
   const lines = [
     'Hola Martina, quiero armar un viaje con Destina.',
     '',
-    `Destino: ${state.destination?.name ?? 'No seleccionado'}`,
+    `${destinationLabel}: ${formatDestinations(state.destinations)}`,
     `Transporte: ${state.transport?.name ?? 'No seleccionado'}`,
     `Viajeros: ${state.people}`,
     `Estilo: ${state.category?.name ?? 'No seleccionado'}`,

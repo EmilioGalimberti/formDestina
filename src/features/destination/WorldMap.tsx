@@ -21,7 +21,7 @@ const INERTIA_MIN_SPEED = 60
 const INERTIA_THROW_SECONDS = 0.35
 
 interface WorldMapProps {
-  selected: Destination | null
+  selected: Destination[]
   onSelect: (destination: Destination) => void
   'aria-label'?: string
 }
@@ -68,6 +68,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   const quickPlaneY = useRef<ReturnType<typeof gsap.quickTo> | null>(null)
   const quickPlaneRot = useRef<ReturnType<typeof gsap.quickTo> | null>(null)
   const lastPlanePos = useRef({ x: 0, y: 0 })
+  const selectedCountRef = useRef(selected.length)
 
   useEffect(() => {
     scaleRef.current = scale
@@ -122,8 +123,10 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   }, [])
 
   useLayoutEffect(() => {
-    if (selected) {
-      animateToDestination(selected)
+    const previousCount = selectedCountRef.current
+    selectedCountRef.current = selected.length
+    if (selected.length > previousCount && selected.length > 0) {
+      animateToDestination(selected[selected.length - 1])
     }
   }, [selected, animateToDestination])
 
@@ -304,7 +307,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   const globeRadius = scale * 250
 
   const orderedDestinations = [...DESTINATIONS].sort(
-    (a, b) => Number(a.id === selected?.id) - Number(b.id === selected?.id),
+    (a, b) => Number(selected.some((d) => d.id === a.id)) - Number(selected.some((d) => d.id === b.id)),
   )
 
   return (
@@ -345,7 +348,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
 
         {orderedDestinations.map((destination) => {
           const coords = project(destination.lat, destination.lon, rotation, scale)
-          const isSelected = selected?.id === destination.id
+          const isSelected = selected.some((d) => d.id === destination.id)
           const visible =
             coords !== null &&
             isVisible(destination.lat, destination.lon, rotation) &&

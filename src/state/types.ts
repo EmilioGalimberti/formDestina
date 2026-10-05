@@ -24,7 +24,7 @@ export interface BudgetRange {
 }
 
 export interface FormState {
-  destination: Destination | null
+  destinations: Destination[]
   transport: Transport | null
   people: number
   category: Category | null
@@ -44,7 +44,7 @@ export interface WizardState {
 }
 
 export interface AppState extends FormState, WizardState {
-  setDestination: (destination: Destination | null) => void
+  toggleDestination: (destination: Destination) => void
   setTransport: (transport: Transport | null) => void
   setPeople: (people: number) => void
   setCategory: (category: Category | null) => void

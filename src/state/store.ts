@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { AppState, StepId } from '@/state/types'
+import type { AppState, BudgetRange, Destination, StepId } from '@/state/types'
 
 export const STEP_ORDER: StepId[] = [
   'destination',
@@ -12,9 +12,15 @@ export const STEP_ORDER: StepId[] = [
 
 const INITIAL_PEOPLE = 1
 
+function calculateBudgetFromDestinations(destinations: Destination[]): BudgetRange {
+  if (destinations.length === 0) return { min: 0, max: 0 }
+  const min = destinations.reduce((sum, d) => sum + d.minBudget, 0)
+  return { min, max: min * 2 }
+}
+
 const initialState: Omit<
   AppState,
-  | 'setDestination'
+  | 'toggleDestination'
   | 'setTransport'
   | 'setPeople'
   | 'setCategory'
@@ -25,7 +31,7 @@ const initialState: Omit<
   | 'previousStep'
   | 'reset'
 > = {
-  destination: null,
+  destinations: [],
   transport: null,
   people: INITIAL_PEOPLE,
   category: null,
@@ -36,12 +42,16 @@ const initialState: Omit<
 export const useStore = create<AppState>((set, get) => ({
   ...initialState,
 
-  setDestination: (destination) =>
-    set({
-      destination,
-      budget: destination
-        ? { min: destination.minBudget, max: destination.minBudget * 2 }
-        : { min: 0, max: 0 },
+  toggleDestination: (destination) =>
+    set((state) => {
+      const exists = state.destinations.some((d) => d.id === destination.id)
+      const destinations = exists
+        ? state.destinations.filter((d) => d.id !== destination.id)
+        : [...state.destinations, destination]
+      return {
+        destinations,
+        budget: calculateBudgetFromDestinations(destinations),
+      }
     }),
 
   setTransport: (transport) => set({ transport }),

@@ -317,3 +317,27 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno. MVP completo.
 
 **Siguiente:** Validar deploy en Cloudflare Pages tras el push.
+
+---
+
+## 2026-10-05 — F8 Seleccionar varios destinos (opencode)
+
+**Hecho:**
+- `src/state/types.ts`: reemplazado `destination: Destination | null` por `destinations: Destination[]` y `setDestination` por `toggleDestination`.
+- `src/state/store.ts`: `toggleDestination` agrega/quita destinos; el presupuesto mínimo se calcula como la suma de `minBudget` de los destinos seleccionados y el máximo como `min * 2`.
+- `src/features/destination/WorldMap.tsx`: prop `selected` ahora es un array; animación al mapa solo cuando se agrega un nuevo destino; marcadores seleccionados detectados por `id`.
+- `src/features/destination/DestinationStep.tsx`: lista de destinos seleccionados con botón "Quitar" por cada uno; presupuesto mínimo general; botón "Continuar".
+- `src/features/budget/BudgetStep.tsx`: adaptado para mostrar nombres de destinos y presupuesto general.
+- `src/features/result/ResultStep.tsx`: muestra "Destino" o "Destinos" según la cantidad seleccionada.
+- `src/lib/whatsapp.ts`: mensaje usa "Destino" o "Destinos" y lista los nombres separados por coma.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se mantuvo `onSelect` como nombre de callback en `WorldMap` para minimizar cambios; internamente se comporta como toggle.
+- El orden de renderizado de marcadores prioriza los seleccionados (quedan arriba), igual que antes.
+- Si se quita un destino, el globo no anima automáticamente; solo anima cuando se agrega uno nuevo.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar deploy en Cloudflare Pages tras el push.
