@@ -390,4 +390,30 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 **Pendientes:**
 - Ninguno.
 
+**Siguiente:** F10 — Editar sección presupuesto.
+
+---
+
+## 2026-10-05 — F10 Editar sección presupuesto (opencode)
+
+**Hecho:**
+- `src/state/types.ts`: reemplazado `BudgetRange` por `BudgetCategory` (id, name, description); `FormState.budget` pasó a `budgetCategory: BudgetCategory | null`; `AppState` ahora expone `setBudgetCategory` en lugar de `setBudget`/`setBudgetMax`.
+- `src/state/store.ts`: eliminado el cálculo monetario de presupuesto, el estado `budget` y las acciones `setBudget`/`setBudgetMax`; agregada `setBudgetCategory`.
+- Creado `src/data/budgetCategories.ts` con las tres categorías: Low-cost, Calidad-precio y Lujo, cada una con descripción.
+- Creado `src/features/budget/BudgetCategoryCard.tsx`: card con icono SVG, nombre, descripción, check visual y micro-animación GSAP elástica al seleccionar.
+- Reescrito `src/features/budget/BudgetStep.tsx`: muestra las tres cards de categoría en lugar del slider monetario.
+- Eliminado `src/features/budget/BudgetDisplay.tsx` (obsoleto).
+- `src/features/result/ResultStep.tsx`: el resumen muestra la categoría de presupuesto seleccionada.
+- `src/lib/whatsapp.ts`: el mensaje muestra `Categoría: Low-cost` (u otra seleccionada) en lugar del rango en USD.
+- `feature_list.json`: F10 marcada como `done`; F5 actualizada con nota indicando que fue reemplazada por F10.
+- Verificaciones: `bun run build` ✅.
+
+**Decisiones:**
+- Se mantuvo el paso con id `'budget'` y título "Presupuesto" para no alterar la navegación, aunque ahora representa una categoría de gasto en vez de montos.
+- Cada card incluye una descripción con bullets implícitos (párrafo explicativo) para ayudar al usuario a elegir.
+- Se reutilizó el patrón visual de `CategoryCard` para mantener consistencia.
+
+**Pendientes:**
+- Ninguno.
+
 **Siguiente:** Validar deploy en Cloudflare Pages tras el push.

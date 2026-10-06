@@ -18,9 +18,10 @@ export interface Category {
   name: string
 }
 
-export interface BudgetRange {
-  min: number
-  max: number
+export interface BudgetCategory {
+  id: string
+  name: string
+  description: string
 }
 
 export interface FormState {
@@ -28,7 +29,7 @@ export interface FormState {
   daysByDestination: Record<string, number>
   people: number
   category: Category | null
-  budget: BudgetRange
+  budgetCategory: BudgetCategory | null
 }
 
 export type StepId =
@@ -48,8 +49,7 @@ export interface AppState extends FormState, WizardState {
   setDestinationDays: (destinationId: string, days: number) => void
   setPeople: (people: number) => void
   setCategory: (category: Category | null) => void
-  setBudget: (budget: BudgetRange) => void
-  setBudgetMax: (max: number) => void
+  setBudgetCategory: (budgetCategory: BudgetCategory | null) => void
   goToStep: (step: StepId) => void
   nextStep: () => void
   previousStep: () => void

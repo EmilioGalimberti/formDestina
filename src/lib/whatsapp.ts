@@ -2,14 +2,6 @@ import type { FormState } from '@/state/types'
 
 const WHATSAPP_NUMBER = '543804624385'
 
-function formatMoney(value: number) {
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(value)
-}
-
 function formatDestinationName(destination: FormState['destinations'][number], days: number | undefined) {
   if (!days || days <= 0) return destination.name
   return `${destination.name} (${days} ${days === 1 ? 'día' : 'días'})`
@@ -28,7 +20,7 @@ export function buildMessage(state: FormState): string {
     `${destinationLabel}: ${formatDestinations(state.destinations, state.daysByDestination)}`,
     `Viajeros: ${state.people}`,
     `Estilo: ${state.category?.name ?? 'No seleccionado'}`,
-    `Presupuesto estimado: ${formatMoney(state.budget.min)} - ${formatMoney(state.budget.max)}`,
+    `Categoría: ${state.budgetCategory?.name ?? 'No seleccionado'}`,
     '',
     '¡A viajar!',
   ]

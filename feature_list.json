@@ -106,7 +106,7 @@
         "src/features/budget/BudgetDisplay.tsx"
       ],
       "acceptance": ["Min depende del destino elegido", "Max definido por el usuario", "Display en vivo"],
-      "notes": "Min fijo por destino; max ajustable con range o botones +100/+500/+1000; display animado y formateado en USD."
+      "notes": "Implementado originalmente con slider monetario y reemplazado por F10: ahora la sección de presupuesto usa categorías (Low-cost, Calidad-precio, Lujo) en vez de montos en USD."
     },
     {
       "id": "F6",
@@ -165,6 +165,23 @@
       ],
       "acceptance": ["Seleccionar 5 dias para México y 10 dias para Brasil y que el mensaje diga 'Destinos: México (5 dias), Brasil (10 dias)'"],
       "notes": "Nueva página 'Días' entre Destino y Transporte. Estado daysByDestination guarda días por destino; default 1 día al agregar destino; se limpia al quitar destino. Máximo 30 días. Reflejado en resumen y mensaje de WhatsApp."
+    },
+    {
+      "id": "F10",
+      "name": "Editar seccion presupuesto",
+      "status": "done",
+      "description": "Se debe modificar la seccion de presupuesto para que no aparezca lo monetario, sino que aparezca tres categorias y puedas seleccionar una de ellas, las categorias deben ser low-cost, calidad-precio y lujo, y que se refleje en el mensaje de WhatsApp.",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/data/budgetCategories.ts",
+        "src/features/budget/BudgetStep.tsx",
+        "src/features/budget/BudgetCategoryCard.tsx",
+        "src/features/result/ResultStep.tsx",
+        "src/lib/whatsapp.ts"
+      ],
+      "acceptance": ["Seleccionar 'low-cost' y que el mensaje diga 'Categoría: Low-cost'"],
+      "notes": "Reemplazado el rango monetario por tres cards de categoría: Low-cost, Calidad-precio y Lujo, cada una con descripción. Eliminado BudgetDisplay.tsx. El mensaje y el resumen muestran la categoría seleccionada."
     }
   ]
 }

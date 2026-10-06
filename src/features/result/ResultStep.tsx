@@ -17,20 +17,10 @@ function ResultItem({ label, value }: ResultItemProps) {
 
 export function ResultStep() {
   const state = useStore()
-  const { destinations, daysByDestination, people, category, budget } = state
+  const { destinations, daysByDestination, people, category, budgetCategory } = state
 
   const message = buildMessage(state)
   const waLink = buildWaLink(state)
-
-  const budgetLabel = `${new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(budget.min)} - ${new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(budget.max)}`
 
   const formatDestination = (destination: (typeof destinations)[number]) => {
     const days = daysByDestination[destination.id] ?? 1
@@ -51,7 +41,7 @@ export function ResultStep() {
           <ResultItem label={destinations.length > 1 ? 'Destinos' : 'Destino'} value={destinationLabel} />
           <ResultItem label="Viajeros" value={String(people)} />
           <ResultItem label="Estilo" value={category?.name ?? '—'} />
-          <ResultItem label="Presupuesto" value={budgetLabel} />
+          <ResultItem label="Categoría" value={budgetCategory?.name ?? '—'} />
         </dl>
       </div>
 

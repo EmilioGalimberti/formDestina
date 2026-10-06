@@ -1,80 +1,26 @@
 import { useStore } from '@/state/store'
-import { BudgetDisplay } from '@/features/budget/BudgetDisplay'
-
-const PRESETS = [100, 500, 1000]
-
-function formatMoney(value: number) {
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(value)
-}
+import { BUDGET_CATEGORIES } from '@/data/budgetCategories'
+import { BudgetCategoryCard } from '@/features/budget/BudgetCategoryCard'
 
 export function BudgetStep() {
-  const { destinations, budget, setBudgetMax } = useStore()
-
-  if (destinations.length === 0) {
-    return (
-      <div className="flex flex-col gap-4 text-center">
-        <h2 className="text-2xl font-semibold">Presupuesto estimado</h2>
-        <p className="text-muted-foreground">Primero elegí al menos un destino para calcular el presupuesto mínimo sugerido.</p>
-      </div>
-    )
-  }
-
-  const min = budget.min
-  const max = Math.max(min, budget.max)
-  const step = 100
-  const maxLimit = min + 5000
-
-  const destinationNames = destinations.map((d) => d.name).join(', ')
-
-  const adjustMax = (amount: number) => {
-    setBudgetMax(max + amount)
-  }
+  const { budgetCategory, setBudgetCategory } = useStore()
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold">Presupuesto estimado</h2>
-        <p className="mt-1 text-muted-foreground">
-          Para {destinationNames}, el presupuesto mínimo sugerido es {formatMoney(min)}.
-        </p>
+        <h2 className="text-2xl font-semibold">¿Qué tipo de presupuesto manejás?</h2>
+        <p className="mt-1 text-muted-foreground">Elegí la categoría que mejor se adapte a lo que buscás.</p>
       </div>
 
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm md:p-10">
-        <BudgetDisplay min={min} max={max} />
-
-        <input
-          type="range"
-          min={min}
-          max={maxLimit}
-          step={step}
-          value={max}
-          onChange={(e) => setBudgetMax(Number(e.target.value))}
-          className="mt-8 w-full accent-primary"
-          aria-label="Ajustar presupuesto máximo"
-        />
-
-        <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-          <span>{formatMoney(min)}</span>
-          <span>{formatMoney(maxLimit)}</span>
-        </div>
-
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          {PRESETS.map((amount) => (
-            <button
-              key={amount}
-              type="button"
-              onClick={() => adjustMax(amount)}
-              disabled={max + amount > maxLimit}
-              className="flex min-h-11 items-center rounded-full bg-muted px-4 py-2 text-sm font-medium text-foreground outline-offset-4 transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-40 active:scale-95"
-            >
-              + USD {amount}
-            </button>
-          ))}
-        </div>
+      <div className="flex flex-col gap-3">
+        {BUDGET_CATEGORIES.map((category) => (
+          <BudgetCategoryCard
+            key={category.id}
+            category={category}
+            selected={budgetCategory?.id === category.id}
+            onSelect={setBudgetCategory}
+          />
+        ))}
       </div>
     </div>
   )
