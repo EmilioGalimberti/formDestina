@@ -17,7 +17,7 @@ function ResultItem({ label, value }: ResultItemProps) {
 
 export function ResultStep() {
   const state = useStore()
-  const { destinations, daysByDestination, transport, people, category, budget } = state
+  const { destinations, daysByDestination, people, category, budget } = state
 
   const message = buildMessage(state)
   const waLink = buildWaLink(state)
@@ -49,7 +49,6 @@ export function ResultStep() {
       <div className="rounded-3xl border border-border bg-card p-6 shadow-sm md:p-8">
         <dl>
           <ResultItem label={destinations.length > 1 ? 'Destinos' : 'Destino'} value={destinationLabel} />
-          <ResultItem label="Transporte" value={transport?.name ?? '—'} />
           <ResultItem label="Viajeros" value={String(people)} />
           <ResultItem label="Estilo" value={category?.name ?? '—'} />
           <ResultItem label="Presupuesto" value={budgetLabel} />

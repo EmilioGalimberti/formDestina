@@ -366,3 +366,28 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar deploy en Cloudflare Pages tras el push.
+
+---
+
+## 2026-10-05 — Remoción de la sección Transporte (opencode)
+
+**Hecho:**
+- `src/state/types.ts`: eliminado `transport` de `FormState`, `setTransport` de `AppState` y `'transport'` de `StepId`. Se conserva la interfaz `Transport` como tipo huérfano.
+- `src/state/store.ts`: eliminado `transport` del estado inicial, `setTransport` del store y `'transport'` del `STEP_ORDER`.
+- `src/features/wizard/useWizardStep.ts`: eliminada la importación y el registro de `TransportStep`.
+- `src/features/result/ResultStep.tsx`: eliminada la línea de transporte del resumen.
+- `src/lib/whatsapp.ts`: eliminada la línea `Transporte: ...` del mensaje.
+- Eliminados los archivos activos de la feature:
+  - `src/features/transport/` (completa)
+  - `src/data/transports.ts`
+- `feature_list.json`: actualizada la nota de F3 indicando que fue removido por decisión de producto.
+- Verificaciones: `bun run build` ✅.
+
+**Decisiones:**
+- Se eliminaron los archivos React y de datos de transporte para evitar errores de typecheck, ya que `tsc -b` compila todos los archivos del proyecto aunque no se importen.
+- Se conservaron los SVGs en `public/images/transport/` porque no afectan el build y pueden reutilizarse si se vuelve a incluir la feature.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar deploy en Cloudflare Pages tras el push.

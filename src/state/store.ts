@@ -4,7 +4,6 @@ import type { AppState, BudgetRange, Destination, StepId } from '@/state/types'
 export const STEP_ORDER: StepId[] = [
   'destination',
   'days',
-  'transport',
   'people',
   'category',
   'budget',
@@ -23,7 +22,6 @@ const initialState: Omit<
   AppState,
   | 'toggleDestination'
   | 'setDestinationDays'
-  | 'setTransport'
   | 'setPeople'
   | 'setCategory'
   | 'setBudget'
@@ -35,7 +33,6 @@ const initialState: Omit<
 > = {
   destinations: [],
   daysByDestination: {},
-  transport: null,
   people: INITIAL_PEOPLE,
   category: null,
   budget: { min: 0, max: 0 },
@@ -73,8 +70,6 @@ export const useStore = create<AppState>((set, get) => ({
         [destinationId]: Math.max(1, days),
       },
     })),
-
-  setTransport: (transport) => set({ transport }),
 
   setPeople: (people) => set({ people: Math.max(1, people) }),
 

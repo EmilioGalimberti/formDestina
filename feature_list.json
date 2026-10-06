@@ -80,7 +80,7 @@
         "public/images/transport/tren.svg"
       ],
       "acceptance": ["Seleccionar transporte", "Animación de selección"],
-      "notes": "Cada transporte tiene SVG ilustrativo; micro-animación elástica al hacer click y check visual en selección."
+      "notes": "Implementado originalmente y luego removido por decisión de producto: la sección de transporte ya no forma parte del flujo ni del mensaje de WhatsApp. Los archivos de la feature fueron eliminados en la sesión de remoción."
     },
     {
       "id": "F4",

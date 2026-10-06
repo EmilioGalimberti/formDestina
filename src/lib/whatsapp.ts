@@ -26,7 +26,6 @@ export function buildMessage(state: FormState): string {
     'Hola Martina, quiero armar un viaje con Destina.',
     '',
     `${destinationLabel}: ${formatDestinations(state.destinations, state.daysByDestination)}`,
-    `Transporte: ${state.transport?.name ?? 'No seleccionado'}`,
     `Viajeros: ${state.people}`,
     `Estilo: ${state.category?.name ?? 'No seleccionado'}`,
     `Presupuesto estimado: ${formatMoney(state.budget.min)} - ${formatMoney(state.budget.max)}`,

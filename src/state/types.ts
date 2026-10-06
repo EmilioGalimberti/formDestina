@@ -26,7 +26,6 @@ export interface BudgetRange {
 export interface FormState {
   destinations: Destination[]
   daysByDestination: Record<string, number>
-  transport: Transport | null
   people: number
   category: Category | null
   budget: BudgetRange
@@ -35,7 +34,6 @@ export interface FormState {
 export type StepId =
   | 'destination'
   | 'days'
-  | 'transport'
   | 'people'
   | 'category'
   | 'budget'
@@ -48,7 +46,6 @@ export interface WizardState {
 export interface AppState extends FormState, WizardState {
   toggleDestination: (destination: Destination) => void
   setDestinationDays: (destinationId: string, days: number) => void
-  setTransport: (transport: Transport | null) => void
   setPeople: (people: number) => void
   setCategory: (category: Category | null) => void
   setBudget: (budget: BudgetRange) => void
