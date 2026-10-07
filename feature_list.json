@@ -182,6 +182,43 @@
       ],
       "acceptance": ["Seleccionar 'low-cost' y que el mensaje diga 'Categoría: Low-cost'"],
       "notes": "Reemplazado el rango monetario por tres cards de categoría: Low-cost, Calidad-precio y Lujo, cada una con descripción. Eliminado BudgetDisplay.tsx. El mensaje y el resumen muestran la categoría seleccionada."
+    },
+    {
+      "id":"F11",
+      "name":"Modificar destinos",
+      "status":"done",
+      "description": "Se debe vizualizar las capitales de los paises y a medida de que se haga zoom cerca de ese lugar aparecer las provincias de ese pais",
+      "files": [
+        "src/data/places.ts",
+        "src/features/destination/PlaceMarker.tsx",
+        "src/features/destination/WorldMap.tsx"
+      ],
+      "paises": ["Argentina", "Brasil", "Chile", "Uruguay", "Paraguay", "Bolivia", "Peru", "Ecuador", "Colombia", "Venezuela","EEUU", "Canada", "Mexico", "España", "Francia", "Italia", "Alemania", "Reino Unido", "Portugal", "paises bajos", "Hungria","Austria","Checa","UK","Aruba"],
+      "lugaresDeArgentina": ["Buenos Aires", "Cordoba", "Mendoza", "Salta", "Tucuman", "Bariloche","Cataratas","Ushuaia"],
+      "lugaresDeBrasil": ["Rio de Janeiro", "Sao Paulo","Maceio","Natal", "Florianopolis","Recife"],
+      "lugaresDeChile":["Santiago"],
+      "lugaresDeUruguay":["Montevideo"],
+      "lugaresDeParaguay":["Asuncion"],
+      "lugaresDeBolivia":["La Paz"],
+      "lugaresDePeru":["Lima"],
+      "lugaresDeEcuador":["Quito"],
+      "lugaresDeColombia":["Bogota","Cartagena de Indias"],
+      "lugaresDeVenezuela":["Caracas"],
+      "lugaresDeEEUU":["New York","Los Angeles","Miami","Washington D.C."],
+      "lugaresDeCanada":["Ottawa"],
+      "lugaresDeAruba":["Oranjestad"],
+      "lugaresDeMexico":["Ciudad de Mexico","Cancun"],
+      "lugaresDeEspaña":["Madrid","Barcelona","Malaga","Valencia","Sevilla"],
+      "lugaresDeFrancia":["Paris"],
+      "lugaresDeItalia":["Roma","Venecia","Florencia","Milán","Napoles"],
+      "lugaresDePortugal":["Lisboa","porto"],
+      "lugaresDeCheca":["Praga"],
+      "lugaresDeHungria":["Budapest"],
+      "lugaresDeAustria":["Viena"],
+      "lugaresDeUK":["Londres","Manchester","Birmingham"],
+      "lugaresDePaisesBajos":["Amsterdam","Rotterdam"],
+      "acceptance": ["por defecto se deben vizualizar las capitales de los paises que esten en el rango de vision del mundito", ["se debe vizualizar las demas provincias a medida que se hace zoom hacia ese lugar"]],
+      "notes": "Jerarquia visual: paises amarillos grandes (selectables, visibles de base, se ocultan al zoom 2.0 salvo seleccionados) y ciudades (destinos destacados, capitales y provincias) azules/grises chiquitas (selectables, aparecen al zoom 2.3 y persisten visibles si estan seleccionadas). Los destinos destacados (Madrid, Paris, Buenos Aires, Cancun, etc.) se renderizan con el mismo estilo chiquito de las capitales (azul). Cada pais/capital/provincia/destino tiene minBudget. El tap resuelve por id en DESTINATION_BY_ID (destinos de ciudad pisan homonimos, ej. Mexico). Decluttering de labels sembrado con los marcadores seleccionados y destinos visibles; los lugares que coinciden con un destino destacado se omiten para no duplicar marcadores."
     }
   ]
 }

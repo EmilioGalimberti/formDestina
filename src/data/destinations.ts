@@ -7,7 +7,7 @@ export const DESTINATIONS: Destination[] = [
     lat: -34.6,
     lon: -58.38,
     minBudget: 400,
-    minZoom: 0,
+    minZoom: 2.3,
   },
   {
     id: 'mexico',
@@ -15,7 +15,7 @@ export const DESTINATIONS: Destination[] = [
     lat: 19.43,
     lon: -99.13,
     minBudget: 500,
-    minZoom: 0,
+    minZoom: 2.3,
   },
   {
     id: 'saopaulo',
@@ -23,7 +23,7 @@ export const DESTINATIONS: Destination[] = [
     lat: -23.55,
     lon: -46.63,
     minBudget: 600,
-    minZoom: 0,
+    minZoom: 2.3,
   },
   {
     id: 'nueva-york',
@@ -31,7 +31,7 @@ export const DESTINATIONS: Destination[] = [
     lat: 40.71,
     lon: -74.01,
     minBudget: 900,
-    minZoom: 1.4,
+    minZoom: 2.3,
   },
   {
     id: 'madrid',
@@ -39,7 +39,7 @@ export const DESTINATIONS: Destination[] = [
     lat: 40.42,
     lon: -3.7,
     minBudget: 800,
-    minZoom: 1.4,
+    minZoom: 2.3,
   },
   {
     id: 'paris',
@@ -47,7 +47,7 @@ export const DESTINATIONS: Destination[] = [
     lat: 48.86,
     lon: 2.35,
     minBudget: 850,
-    minZoom: 1.4,
+    minZoom: 2.3,
   },
   {
     id: 'roma',
@@ -55,7 +55,7 @@ export const DESTINATIONS: Destination[] = [
     lat: 41.9,
     lon: 12.5,
     minBudget: 850,
-    minZoom: 1.4,
+    minZoom: 2.3,
   },
   {
     id: 'cancun',

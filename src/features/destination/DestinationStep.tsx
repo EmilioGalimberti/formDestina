@@ -19,7 +19,8 @@ export function DestinationStep() {
       <div>
         <h2 className="text-2xl font-semibold">¿A dónde querés viajar?</h2>
         <p className="mt-1 text-muted-foreground">
-          Arrastrá para rotar el globo, hacé zoom y tocá los marcadores para elegir uno o más destinos.
+          Arrastrá para rotar el globo. Tocá un país para elegirlo o hacé zoom sobre él para ver y
+          elegir sus ciudades.
         </p>
       </div>
 

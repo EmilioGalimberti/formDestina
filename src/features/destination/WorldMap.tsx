@@ -6,8 +6,10 @@ import type { FeatureCollection, Geometry } from 'geojson'
 import { gsap } from '@/lib/gsap'
 import { DESTINATIONS } from '@/data/destinations'
 import type { Destination } from '@/state/types'
+import { COUNTRY_DESTINATIONS, PLACE_DESTINATIONS, PLACES } from '@/data/places'
 import { isVisible, project, type Rotation } from '@/lib/projection'
 import { DestinationMarker } from '@/features/destination/DestinationMarker'
+import { PlaceMarker } from '@/features/destination/PlaceMarker'
 import worldData from 'world-atlas/countries-110m.json'
 
 const MIN_SCALE = 1
@@ -19,6 +21,8 @@ const DRAG_DEGREES = 120
 const TAP_THRESHOLD_PX = 10
 const INERTIA_MIN_SPEED = 60
 const INERTIA_THROW_SECONDS = 0.35
+const MIN_LABEL_GAP = 26
+const SELECTABLE_MATCH_DEGREES = 0.6
 
 interface WorldMapProps {
   selected: Destination[]
@@ -48,6 +52,19 @@ const countriesObject = (worldData as { objects: { countries: GeometryCollection
 const landFeature = feature(worldTopology, countriesObject) as FeatureCollection<Geometry>
 const borderLines = mesh(worldTopology, countriesObject, (a, b) => a !== b)
 const graticule = geoGraticule10()
+
+const COUNTRY_BY_ID = new Map<string, Destination>()
+for (const country of COUNTRY_DESTINATIONS) {
+  COUNTRY_BY_ID.set(country.id, country)
+}
+
+const DESTINATION_BY_ID = new Map<string, Destination>(COUNTRY_BY_ID)
+for (const place of PLACE_DESTINATIONS) {
+  DESTINATION_BY_ID.set(place.id, place)
+}
+for (const destination of DESTINATIONS) {
+  DESTINATION_BY_ID.set(destination.id, destination)
+}
 
 export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldMapProps) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -268,7 +285,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       start.markerId &&
       Math.hypot(e.clientX - start.x, e.clientY - start.y) < TAP_THRESHOLD_PX
     ) {
-      const destination = DESTINATIONS.find((d) => d.id === start.markerId)
+      const destination = DESTINATION_BY_ID.get(start.markerId)
       if (destination) handleSelect(destination)
     } else if (wasSinglePointer && isDragging) {
       startInertia()
@@ -310,6 +327,74 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     (a, b) => Number(selected.some((d) => d.id === a.id)) - Number(selected.some((d) => d.id === b.id)),
   )
 
+  const destinationsToRender = orderedDestinations.map((destination) => {
+    const coords = project(destination.lat, destination.lon, rotation, scale)
+    const isSelected = selected.some((d) => d.id === destination.id)
+    const visible =
+      coords !== null &&
+      isVisible(destination.lat, destination.lon, rotation) &&
+      (scale >= destination.minZoom || isSelected)
+    return { destination, isSelected, visible, x: coords?.x ?? 0, y: coords?.y ?? 0 }
+  })
+
+  const placedLabels = destinationsToRender
+    .filter((entry) => entry.visible)
+    .map((entry) => ({ x: entry.x, y: entry.y }))
+
+  for (const place of PLACES) {
+    const isSelected = selected.some((d) => d.id === place.id)
+    if (!isSelected) continue
+    if (!isVisible(place.lat, place.lon, rotation)) continue
+    const coords = projection([place.lon, place.lat])
+    if (!coords) continue
+    placedLabels.push({ x: coords[0], y: coords[1] })
+  }
+
+  const countryMarkers: { destination: Destination; x: number; y: number; showLabel: boolean }[] = []
+  for (const place of PLACES) {
+    if (place.kind !== 'country') continue
+    const destination = COUNTRY_BY_ID.get(place.id)
+    if (!destination) continue
+    const isSelected = selected.some((d) => d.id === place.id)
+    if (place.maxZoom !== undefined && scale >= place.maxZoom && !isSelected) continue
+    if (!isVisible(place.lat, place.lon, rotation)) continue
+    const coords = projection([place.lon, place.lat])
+    if (!coords) continue
+    const x = coords[0]
+    const y = coords[1]
+    const overlapping =
+      !isSelected && placedLabels.some((p) => Math.hypot(p.x - x, p.y - y) < MIN_LABEL_GAP)
+    if (overlapping) {
+      countryMarkers.push({ destination, x, y, showLabel: false })
+    } else {
+      placedLabels.push({ x, y })
+      countryMarkers.push({ destination, x, y, showLabel: true })
+    }
+  }
+
+  const placeMarkers: { place: (typeof PLACES)[number]; x: number; y: number; showLabel: boolean }[] = []
+  for (const place of PLACES.filter((p) => p.kind !== 'country')) {
+    const matchesSelectable = DESTINATIONS.some(
+      (d) => Math.hypot(d.lat - place.lat, d.lon - place.lon) < SELECTABLE_MATCH_DEGREES,
+    )
+    if (matchesSelectable) continue
+    const isSelected = selected.some((d) => d.id === place.id)
+    if (scale < place.minZoom && !isSelected) continue
+    if (!isVisible(place.lat, place.lon, rotation)) continue
+    const coords = projection([place.lon, place.lat])
+    if (!coords) continue
+    const x = coords[0]
+    const y = coords[1]
+    const overlapping =
+      !isSelected && placedLabels.some((p) => Math.hypot(p.x - x, p.y - y) < MIN_LABEL_GAP)
+    if (overlapping) {
+      placeMarkers.push({ place, x, y, showLabel: false })
+    } else {
+      placedLabels.push({ x, y })
+      placeMarkers.push({ place, x, y, showLabel: true })
+    }
+  }
+
   return (
     <div
       ref={containerRef}
@@ -346,25 +431,53 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
         )}
         <circle cx={250} cy={250} r={globeRadius} fill="url(#globe-shade)" />
 
-        {orderedDestinations.map((destination) => {
-          const coords = project(destination.lat, destination.lon, rotation, scale)
-          const isSelected = selected.some((d) => d.id === destination.id)
-          const visible =
-            coords !== null &&
-            isVisible(destination.lat, destination.lon, rotation) &&
-            (scale >= destination.minZoom || isSelected)
+        {countryMarkers.map(({ destination, x, y, showLabel }) => (
+          <DestinationMarker
+            key={destination.id}
+            destination={destination}
+            selected={selected.some((d) => d.id === destination.id)}
+            visible
+            x={x}
+            y={y}
+            onSelect={handleSelect}
+            showLabel={showLabel}
+          />
+        ))}
+
+        {placeMarkers.map(({ place, x, y, showLabel }) => {
+          const destination = DESTINATION_BY_ID.get(place.id)
           return (
-            <DestinationMarker
-              key={destination.id}
-              destination={destination}
-              selected={isSelected}
-              visible={visible}
-              x={coords?.x ?? 0}
-              y={coords?.y ?? 0}
-              onSelect={handleSelect}
+            <PlaceMarker
+              key={place.id}
+              id={place.id}
+              name={place.name}
+              kind={place.kind as 'capital' | 'city'}
+              showLabel={showLabel}
+              x={x}
+              y={y}
+              selected={selected.some((d) => d.id === place.id)}
+              onSelect={() => {
+                if (destination) handleSelect(destination)
+              }}
             />
           )
         })}
+
+        {destinationsToRender
+          .filter((entry) => entry.visible)
+          .map(({ destination, isSelected, x, y }) => (
+            <PlaceMarker
+              key={destination.id}
+              id={destination.id}
+              name={destination.name}
+              kind="capital"
+              showLabel
+              x={x}
+              y={y}
+              selected={isSelected}
+              onSelect={() => handleSelect(destination)}
+            />
+          ))}
       </svg>
 
       {isFinePointer && (

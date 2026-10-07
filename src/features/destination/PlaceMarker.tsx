@@ -1,45 +1,43 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '@/lib/gsap'
-import type { Destination } from '@/state/types'
+import type { PlaceKind } from '@/data/places'
 
-interface DestinationMarkerProps {
-  destination: Destination
-  selected: boolean
-  visible: boolean
+type MarkerKind = Exclude<PlaceKind, 'country'>
+
+interface PlaceMarkerProps {
+  id: string
+  name: string
+  kind: MarkerKind
+  showLabel: boolean
   x: number
   y: number
-  onSelect: (destination: Destination) => void
-  showLabel?: boolean
+  selected: boolean
+  onSelect: () => void
 }
 
-export function DestinationMarker({
-  destination,
-  selected,
-  visible,
-  x,
-  y,
-  onSelect,
-  showLabel = true,
-}: DestinationMarkerProps) {
+const KIND_STYLE: Record<
+  MarkerKind,
+  { r: number; fill: string; strokeWidth: number; fontSize: number; fontWeight: number; labelY: number }
+> = {
+  capital: { r: 5, fill: '#0ea5e9', strokeWidth: 2.5, fontSize: 11, fontWeight: 600, labelY: -13 },
+  city: { r: 4, fill: '#64748b', strokeWidth: 2, fontSize: 10, fontWeight: 500, labelY: -12 },
+}
+
+export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, onSelect }: PlaceMarkerProps) {
   const innerRef = useRef<SVGGElement>(null)
   const ringRef = useRef<SVGCircleElement>(null)
+  const style = KIND_STYLE[kind]
 
   useLayoutEffect(() => {
     const el = innerRef.current
     if (!el) return
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReducedMotion) {
-      gsap.set(el, { opacity: visible ? 1 : 0, scale: visible ? 1 : 0.4 })
+      gsap.set(el, { opacity: 1 })
       return
     }
-    gsap.to(el, {
-      opacity: visible ? 1 : 0,
-      scale: visible ? 1 : 0.4,
-      duration: visible ? 0.4 : 0.2,
-      ease: visible ? 'back.out(2.2)' : 'power2.in',
-      overwrite: 'auto',
-    })
-  }, [visible])
+    gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power1.out' })
+  }, [])
 
   useLayoutEffect(() => {
     const ring = ringRef.current
@@ -53,7 +51,7 @@ export function DestinationMarker({
     const tween = gsap.fromTo(
       ring,
       { scale: 0.7, opacity: 0.8 },
-      { scale: 2.4, opacity: 0, duration: 1.2, repeat: -1, ease: 'power1.out' },
+      { scale: 2.6, opacity: 0, duration: 1.2, repeat: -1, ease: 'power1.out' },
     )
     return () => {
       tween.kill()
@@ -63,50 +61,55 @@ export function DestinationMarker({
   return (
     <g
       transform={`translate(${x}, ${y})`}
-      data-marker-id={destination.id}
+      data-marker-id={id}
       role="button"
-      tabIndex={visible ? 0 : -1}
-      aria-label={destination.name}
+      tabIndex={0}
+      aria-label={name}
       onKeyDown={(e) => {
-        if ((e.key === 'Enter' || e.key === ' ') && visible) {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
-          onSelect(destination)
+          onSelect()
         }
       }}
       className="cursor-pointer outline-none"
-      style={{ pointerEvents: visible ? 'auto' : 'none' }}
     >
       <g ref={innerRef} opacity={0}>
-        <circle r={26} fill="transparent" />
+        <circle r={style.r + 12} fill="transparent" />
         <circle
           ref={ringRef}
-          r={12}
+          r={style.r + 2}
           fill="none"
           stroke="#0d9488"
-          strokeWidth={3}
+          strokeWidth={2.5}
           opacity={0}
         />
         <circle
-          r={selected ? 11 : 9}
-          fill={selected ? '#0d9488' : '#f59e0b'}
+          r={selected ? style.r + 1 : style.r}
+          fill={selected ? '#0d9488' : style.fill}
           stroke="#ffffff"
-          strokeWidth={3}
+          strokeWidth={selected ? 2.5 : style.strokeWidth}
         />
-        <circle cx={-3} cy={-3} r={2.5} fill="#ffffff" opacity={0.85} />
+        <circle
+          cx={-style.r * 0.35}
+          cy={-style.r * 0.35}
+          r={style.r * 0.3}
+          fill="#ffffff"
+          opacity={0.85}
+        />
         {showLabel && (
           <text
-            y={selected ? -20 : -17}
+            y={style.labelY}
             textAnchor="middle"
             fill="#1c1917"
-            fontSize={selected ? 15 : 13}
-            fontWeight={700}
+            fontSize={style.fontSize}
+            fontWeight={style.fontWeight}
             stroke="#ffffff"
             strokeWidth={4}
             strokeLinejoin="round"
             paintOrder="stroke"
             style={{ pointerEvents: 'none' }}
           >
-            {destination.name}
+            {name}
           </text>
         )}
       </g>

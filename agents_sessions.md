@@ -390,7 +390,7 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 **Pendientes:**
 - Ninguno.
 
-**Siguiente:** F10 — Editar sección presupuesto.
+**Siguiente:** Validar deploy en Cloudflare Pages tras el push.
 
 ---
 
@@ -412,6 +412,57 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Se mantuvo el paso con id `'budget'` y título "Presupuesto" para no alterar la navegación, aunque ahora representa una categoría de gasto en vez de montos.
 - Cada card incluye una descripción con bullets implícitos (párrafo explicativo) para ayudar al usuario a elegir.
 - Se reutilizó el patrón visual de `CategoryCard` para mantener consistencia.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar deploy en Cloudflare Pages tras el push.
+
+---
+
+## 2026-10-07 — F11 Capitales y provincias en el globo (opencode)
+
+**Hecho:**
+- Creado `src/data/places.ts` con `Place` (`id`, `name`, `lat`, `lon`, `country`, `kind`, `minZoom`, `maxZoom`) y el array `PLACES` con 24 países, 24 capitales y 30 provincias/ciudades cubriendo los países y lugares listados en F11.
+- Creado `src/features/destination/PlaceMarker.tsx`: marcador no seleccionable con el mismo look de los marcadores seleccionables (punto con stroke blanco, glint y label con halo), diferenciando por `kind`: país (teal), capital (celeste), provincia (slate). Fade-in GSAP respetando `prefers-reduced-motion`.
+- Modificado `src/features/destination/WorldMap.tsx`:
+  - Renderiza la capa de lugares debajo de los marcadores seleccionables.
+  - Países visibles por defecto (`minZoom 0`) y se ocultan al pasar el zoom 2.0 (`maxZoom`); capitales y provincias aparecen al hacer zoom (`minZoom 2.3`).
+  - Se omiten los lugares que coinciden (<0.6°) con un destino seleccionable para no duplicar marcadores.
+  - Decluttering de labels por distancia en pantalla (`MIN_LABEL_GAP 26`), priorizando países > capitales > provincias.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Cambio de enfoque respecto a la primera versión: ya no se muestran todas las capitales a la vez; el globo arranca mostrando países y, al hacer zoom sobre uno, se revelan su capital y provincias, evitando un mapa saturado de etiquetas.
+- La capa de lugares es solo de visualización: no es seleccionable ni toca el store, respetando la nota de no romper la selección de destinos.
+- Se reutiliza la proyección ortográfica ya creada en el render para proyectar los lugares sin reconstruirla por cada punto.
+- Capital de Brasil es Brasilia (agregada aunque no estaba en `lugaresDeBrasil`); Reino Unido/UK se unificaron en `Reino Unido`.
+
+**Ajuste de estilo y flujo (feedback del usuario):**
+- Los países ahora usan el mismo círculo amarillo de los destinos seleccionables (mismo look: dot ámbar con stroke blanco, glint y label con halo).
+- Los destinos seleccionables pasaron todos a `minZoom 2.3` (`destinations.ts`), de modo que la vista base muestra solo países y las ciudades (destinos, capitales y provincias) aparecen al hacer zoom.
+- El decluttering de labels se siembra con las posiciones de los destinos visibles para que los labels de países/ciudades no se superpongan con los destinos seleccionables.
+- `DestinationStep.tsx`: subtítulo actualizado para explicar el flujo (países → zoom → destinos).
+
+**Países seleccionables (feedback: "no se puede seleccionar"):**
+- Los países ahora son seleccionables como destinos del viaje: agregado `minBudget` a cada país en `places.ts` y exportado `COUNTRY_DESTINATIONS` (`Destination[]`).
+- `WorldMap.tsx` renderiza los países con `DestinationMarker` (mismo comportamiento: tap/teclado selecciona, verde + pulso al estar seleccionado), con `showLabel` para mantener el decluttering de labels.
+- El tap resuelve por id en un mapa único `DESTINATION_BY_ID` (destinos de ciudad pisan países homónimos, ej. México).
+- Países seleccionados quedan visibles a cualquier zoom; los no seleccionados se ocultan al pasar zoom 2.0.
+- `DestinationMarker.tsx`: nueva prop opcional `showLabel` (default true).
+- Verificado con Playwright: tap en Argentina/Brasil los agrega al viaje, la selección persiste al hacer zoom y sigue funcionando la selección de ciudades.
+
+**Capitales y provincias seleccionables (feedback: "debería poder seleccionarlas"):**
+- Agregado `minBudget` a todas las capitales y provincias en `places.ts` y exportado `PLACE_DESTINATIONS` (`Destination[]`).
+- `PlaceMarker.tsx`: ahora es interactivo (tap/teclado, `data-marker-id`, `role="button"`) manteniendo su look chiquito; al seleccionar el punto se pone verde, crece levemente y pulsa con anillo verde (igual patrón que `DestinationMarker`).
+- `WorldMap.tsx`: `DESTINATION_BY_ID` incluye países, lugares y destinos; los lugares seleccionados quedan visibles a cualquier zoom (como los destinos) y sus labels se siembran en el decluttering para que nada se superponga.
+- Verificado con Playwright: tap en Córdoba la agrega al viaje, persiste al alejar el zoom, y siguen pasando los tests de países y destinos de ciudad.
+
+**Destinos destacados con look chiquito azul (feedback del usuario):**
+- Madrid, Roma, París, Nueva York, Cancún, México, São Paulo, Buenos Aires, Bariloche, Bali y Tokio ahora se renderizan con el mismo estilo chiquito azul de las capitales en vez del círculo amarillo grande.
+- `PlaceMarker.tsx`: refactorizado a props genéricas (`id`, `name`, `kind`) para poder renderizar tanto lugares como destinos destacados; `DestinationMarker` quedó solo para países (amarillo grande).
+- `WorldMap.tsx`: los destinos destacados se dibujan como `PlaceMarker` con `kind="capital"` (azul) y solo cuando están visibles; los países quedan debajo en z-order.
+- Verificado con Playwright: Buenos Aires se ve/selecta como marcador chiquito y Argentina sigue selectable en la vista base.
 
 **Pendientes:**
 - Ninguno.
