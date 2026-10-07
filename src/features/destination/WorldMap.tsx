@@ -13,7 +13,7 @@ import { PlaceMarker } from '@/features/destination/PlaceMarker'
 import worldData from 'world-atlas/countries-110m.json'
 
 const MIN_SCALE = 1
-const MAX_SCALE = 3.5
+const MAX_SCALE = 5
 const ZOOM_STEP = 0.3
 const INITIAL_SCALE = 1.15
 const PHI_CLAMP = 80

@@ -464,6 +464,9 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - `WorldMap.tsx`: los destinos destacados se dibujan como `PlaceMarker` con `kind="capital"` (azul) y solo cuando están visibles; los países quedan debajo en z-order.
 - Verificado con Playwright: Buenos Aires se ve/selecta como marcador chiquito y Argentina sigue selectable en la vista base.
 
+**Ajuste: más zoom en el globo (feedback del usuario):**
+- `WorldMap.tsx`: `MAX_SCALE` subió de 3.5 a 5, permitiendo acercarse más a países y ciudades (radio visible ~11.5°).
+
 **Pendientes:**
 - Ninguno.
 
