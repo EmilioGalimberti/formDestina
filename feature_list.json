@@ -93,8 +93,8 @@
         "src/features/category/CategoryCard.tsx",
         "src/data/categories.ts"
       ],
-      "acceptance": ["Ajustar cantidad de personas", "Seleccionar categoría"],
-      "notes": "8 categorías con iconos SVG inline; PeopleStep con animación de número y botón - deshabilitado en 1."
+      "acceptance": ["Ajustar cantidad de personas", "Seleccionar una o varias categorías"],
+      "notes": "8 categorías con iconos SVG inline; PeopleStep con animación de número y botón - deshabilitado en 1. La selección de categorías permite elegir varias a la vez (estado categories: Category[] con toggleCategory)."
     },
     {
       "id": "F5",

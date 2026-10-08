@@ -17,7 +17,7 @@ function ResultItem({ label, value }: ResultItemProps) {
 
 export function ResultStep() {
   const state = useStore()
-  const { destinations, daysByDestination, people, category, budgetCategory } = state
+  const { destinations, daysByDestination, people, categories, budgetCategory } = state
 
   const message = buildMessage(state)
   const waLink = buildWaLink(state)
@@ -40,7 +40,7 @@ export function ResultStep() {
         <dl>
           <ResultItem label={destinations.length > 1 ? 'Destinos' : 'Destino'} value={destinationLabel} />
           <ResultItem label="Viajeros" value={String(people)} />
-          <ResultItem label="Estilo" value={category?.name ?? '—'} />
+          <ResultItem label="Estilo" value={categories.map((c) => c.name).join(', ') || '—'} />
           <ResultItem label="Categoría" value={budgetCategory?.name ?? '—'} />
         </dl>
       </div>

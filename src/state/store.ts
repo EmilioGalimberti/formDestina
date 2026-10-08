@@ -18,7 +18,7 @@ const initialState: Omit<
   | 'addCustomDestination'
   | 'setDestinationDays'
   | 'setPeople'
-  | 'setCategory'
+  | 'toggleCategory'
   | 'setBudgetCategory'
   | 'goToStep'
   | 'nextStep'
@@ -28,7 +28,7 @@ const initialState: Omit<
   destinations: [],
   daysByDestination: {},
   people: INITIAL_PEOPLE,
-  category: null,
+  categories: [],
   budgetCategory: null,
   currentStep: 'destination',
 }
@@ -89,7 +89,14 @@ export const useStore = create<AppState>((set, get) => ({
 
   setPeople: (people) => set({ people: Math.max(1, people) }),
 
-  setCategory: (category) => set({ category }),
+  toggleCategory: (category) =>
+    set((state) => {
+      const exists = state.categories.some((c) => c.id === category.id)
+      const categories = exists
+        ? state.categories.filter((c) => c.id !== category.id)
+        : [...state.categories, category]
+      return { categories }
+    }),
 
   setBudgetCategory: (budgetCategory) => set({ budgetCategory }),
 

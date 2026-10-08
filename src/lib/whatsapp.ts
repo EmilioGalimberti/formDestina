@@ -12,6 +12,11 @@ function formatDestinations(destinations: FormState['destinations'], daysByDesti
   return destinations.map((d) => formatDestinationName(d, daysByDestination[d.id])).join(', ')
 }
 
+function formatCategories(categories: FormState['categories']) {
+  if (categories.length === 0) return 'No seleccionado'
+  return categories.map((c) => c.name).join(', ')
+}
+
 export function buildMessage(state: FormState): string {
   const destinationLabel = state.destinations.length > 1 ? 'Destinos' : 'Destino'
   const lines = [
@@ -19,7 +24,7 @@ export function buildMessage(state: FormState): string {
     '',
     `${destinationLabel}: ${formatDestinations(state.destinations, state.daysByDestination)}`,
     `Viajeros: ${state.people}`,
-    `Estilo: ${state.category?.name ?? 'No seleccionado'}`,
+    `Estilo: ${formatCategories(state.categories)}`,
     `Categoría: ${state.budgetCategory?.name ?? 'No seleccionado'}`,
     '',
     '¡A viajar!',

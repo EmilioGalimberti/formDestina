@@ -500,3 +500,26 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar deploy en Cloudflare Pages tras el push.
+
+---
+
+## 2026-10-08 — Ajuste: selección múltiple de categorías (opencode)
+
+**Hecho:**
+- `src/state/types.ts`: cambiado `category: Category | null` por `categories: Category[]`; reemplazada la acción `setCategory` por `toggleCategory`.
+- `src/state/store.ts`: estado inicial ahora usa `categories: []`; implementada `toggleCategory` que agrega o quita una categoría del array.
+- `src/features/category/CategoryStep.tsx`: ahora usa `categories` y `toggleCategory`; cada card muestra si está seleccionada; el usuario puede elegir varias categorías a la vez. Actualizado el subtítulo a "Elegí una o varias categorías".
+- `src/features/category/CategoryCard.tsx`: sin cambios de API, sigue recibiendo `selected` y `onSelect`; el check visual sigue funcionando por categoría.
+- `src/features/result/ResultStep.tsx`: el resumen muestra las categorías seleccionadas separadas por coma.
+- `src/lib/whatsapp.ts`: agregada función `formatCategories`; el mensaje lista todas las categorías elegidas.
+- `feature_list.json`: actualizada nota y acceptance de F4 para reflejar selección múltiple.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se mantuvo el mismo patrón visual de check en cada card; al tocar una categoría ya seleccionada se deselecciona.
+- El label del resumen sigue siendo "Estilo" y las categorías se muestran como lista separada por comas.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar deploy en Cloudflare Pages tras el push.
