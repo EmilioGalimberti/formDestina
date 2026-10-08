@@ -71,6 +71,10 @@ function DaysSelector({ destination, days, onChange }: DaysSelectorProps) {
 export function DaysStep() {
   const { destinations, daysByDestination, setDestinationDays } = useStore()
 
+  const totalDays = destinations.reduce((sum, destination) => {
+    return sum + (daysByDestination[destination.id] ?? 1)
+  }, 0)
+
   if (destinations.length === 0) {
     return (
       <div className="flex flex-col gap-4 text-center">
@@ -96,6 +100,13 @@ export function DaysStep() {
             onChange={(days) => setDestinationDays(destination.id, days)}
           />
         ))}
+      </div>
+
+      <div className="flex items-center justify-between rounded-2xl border border-primary/30 bg-primary/5 p-4">
+        <span className="font-semibold text-foreground">Total de días</span>
+        <span className="text-2xl font-bold text-primary">
+          {totalDays} {totalDays === 1 ? 'día' : 'días'}
+        </span>
       </div>
     </div>
   )
