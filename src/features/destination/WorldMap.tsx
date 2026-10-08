@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { geoGraticule10, geoOrthographic, geoPath } from 'd3-geo'
 import { feature, mesh } from 'topojson-client'
 import type { GeometryCollection, Topology } from 'topojson-specification'
@@ -28,18 +28,6 @@ interface WorldMapProps {
   selected: Destination[]
   onSelect: (destination: Destination) => void
   'aria-label'?: string
-}
-
-function useFinePointer() {
-  return useSyncExternalStore(
-    (callback) => {
-      const mq = window.matchMedia('(pointer: fine)')
-      mq.addEventListener('change', callback)
-      return () => mq.removeEventListener('change', callback)
-    },
-    () => window.matchMedia('(pointer: fine)').matches,
-    () => false,
-  )
 }
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
@@ -79,12 +67,6 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   const velocity = useRef({ x: 0, y: 0 })
   const lastMove = useRef({ x: 0, y: 0, t: 0 })
   const motionTween = useRef<gsap.core.Tween | null>(null)
-  const isFinePointer = useFinePointer()
-  const planeRef = useRef<HTMLDivElement>(null)
-  const quickPlaneX = useRef<ReturnType<typeof gsap.quickTo> | null>(null)
-  const quickPlaneY = useRef<ReturnType<typeof gsap.quickTo> | null>(null)
-  const quickPlaneRot = useRef<ReturnType<typeof gsap.quickTo> | null>(null)
-  const lastPlanePos = useRef({ x: 0, y: 0 })
   const selectedCountRef = useRef(selected.length)
 
   useEffect(() => {
@@ -94,14 +76,6 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   useEffect(() => {
     rotationRef.current = rotation
   }, [rotation])
-
-  useEffect(() => {
-    const el = planeRef.current
-    if (!el || !isFinePointer) return
-    quickPlaneX.current = gsap.quickTo(el, 'x', { duration: 0.25, ease: 'power2.out' })
-    quickPlaneY.current = gsap.quickTo(el, 'y', { duration: 0.25, ease: 'power2.out' })
-    quickPlaneRot.current = gsap.quickTo(el, 'rotation', { duration: 0.2, ease: 'power2.out' })
-  }, [isFinePointer])
 
   const getContainerWidth = useCallback(() => {
     return containerRef.current?.getBoundingClientRect().width ?? 1
@@ -232,16 +206,6 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   }
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    if (isFinePointer && quickPlaneX.current && quickPlaneY.current && quickPlaneRot.current) {
-      const dx = e.clientX - lastPlanePos.current.x
-      const dy = e.clientY - lastPlanePos.current.y
-      const angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90
-      quickPlaneX.current(e.clientX)
-      quickPlaneY.current(e.clientY)
-      quickPlaneRot.current(Number.isFinite(angle) ? angle : -45)
-      lastPlanePos.current = { x: e.clientX, y: e.clientY }
-    }
-
     if (!activePointers.current.has(e.pointerId)) return
     updatePointer(e.pointerId, e.clientX, e.clientY)
 
@@ -482,18 +446,6 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
             />
           ))}
       </svg>
-
-      {isFinePointer && (
-        <div
-          ref={planeRef}
-          className="pointer-events-none fixed left-0 top-0 z-20 hidden md:block"
-          style={{ transform: 'translate(-50%, -50%)' }}
-        >
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="#0d9488">
-            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
-          </svg>
-        </div>
-      )}
 
       <div className="absolute bottom-3 right-3 flex flex-col gap-2">
         <button
