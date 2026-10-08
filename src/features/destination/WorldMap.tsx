@@ -143,7 +143,10 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     const previousCount = selectedCountRef.current
     selectedCountRef.current = selected.length
     if (selected.length > previousCount && selected.length > 0) {
-      animateToDestination(selected[selected.length - 1])
+      const last = selected[selected.length - 1]
+      if (!last.custom) {
+        animateToDestination(last)
+      }
     }
   }, [selected, animateToDestination])
 

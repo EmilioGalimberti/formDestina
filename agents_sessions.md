@@ -472,3 +472,31 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar deploy en Cloudflare Pages tras el push.
+
+---
+
+## 2026-10-08 — F12 Agrega destino (opencode)
+
+**Hecho:**
+- `src/state/types.ts`: agregado campo opcional `custom?: boolean` a `Destination` para distinguir destinos creados por el usuario.
+- `src/state/store.ts`: agregada acción `addCustomDestination(name)` que crea un destino con id único, coordenadas neutrales, `minBudget: 0`, `minZoom: 0` y `custom: true`; lo agrega a `destinations` e inicializa `daysByDestination` en 1.
+- Creado `src/features/destination/CustomDestinationInput.tsx`:
+  - Input con label "¿No encontrás tu destino?" y placeholder "Escribí tu destino".
+  - Botón "Agregar destino" al lado del input.
+  - Validación: no permite números (filtra dígitos en `onChange`, previene teclas numéricas en `onKeyDown`, valida al enviar).
+  - Mensaje de error visual cuando se intenta ingresar un número o enviar vacío.
+  - Submit con Enter o click en el botón.
+- `src/features/destination/DestinationStep.tsx`: integrado `CustomDestinationInput` debajo del `WorldMap` y del resumen de destinos seleccionados.
+- `src/features/destination/WorldMap.tsx`: la animación de centrado al agregar un destino se saltea los destinos `custom` (no tienen coordenadas en el globo).
+- `feature_list.json`: F12 marcada como `done` con archivos y acceptance actualizados.
+- Verificaciones: `bun run build` ✅.
+
+**Decisiones:**
+- Los destinos custom comparten el mismo tipo `Destination` y fluyen por todo el wizard (días, resumen, WhatsApp) sin cambios adicionales.
+- Presupuesto mínimo sugerido no se ve afectado porque los destinos custom tienen `minBudget: 0`.
+- No se renderizan marcadores custom en el globo porque no pertenecen a `DESTINATIONS` ni `PLACES`.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar deploy en Cloudflare Pages tras el push.

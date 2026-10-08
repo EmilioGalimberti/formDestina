@@ -5,6 +5,7 @@ export interface Destination {
   lon: number
   minBudget: number
   minZoom: number
+  custom?: boolean
 }
 
 export interface Transport {
@@ -46,6 +47,7 @@ export interface WizardState {
 
 export interface AppState extends FormState, WizardState {
   toggleDestination: (destination: Destination) => void
+  addCustomDestination: (name: string) => void
   setDestinationDays: (destinationId: string, days: number) => void
   setPeople: (people: number) => void
   setCategory: (category: Category | null) => void

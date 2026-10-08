@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { useStore } from '@/state/store'
 import { WorldMap } from '@/features/destination/WorldMap'
+import { CustomDestinationInput } from '@/features/destination/CustomDestinationInput'
 
 export function DestinationStep() {
-  const { destinations, toggleDestination, nextStep } = useStore()
+  const { destinations, toggleDestination, addCustomDestination, nextStep } = useStore()
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -29,6 +30,8 @@ export function DestinationStep() {
         onSelect={toggleDestination}
         aria-label="Mapa mundi interactivo: arrastrá para rotar, hacé zoom y tocá un marcador para elegir o quitar destinos"
       />
+
+      <CustomDestinationInput onAdd={addCustomDestination} />
 
       {destinations.length > 0 && (
         <div ref={cardRef} className="rounded-2xl border border-primary/30 bg-primary/5 p-4">

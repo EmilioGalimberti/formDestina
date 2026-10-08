@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { AppState, StepId } from '@/state/types'
+import type { AppState, Destination, StepId } from '@/state/types'
 
 export const STEP_ORDER: StepId[] = [
   'destination',
@@ -15,6 +15,7 @@ const INITIAL_PEOPLE = 1
 const initialState: Omit<
   AppState,
   | 'toggleDestination'
+  | 'addCustomDestination'
   | 'setDestinationDays'
   | 'setPeople'
   | 'setCategory'
@@ -52,6 +53,29 @@ export const useStore = create<AppState>((set, get) => ({
       return {
         destinations,
         daysByDestination,
+      }
+    }),
+
+  addCustomDestination: (name) =>
+    set((state) => {
+      const trimmed = name.trim()
+      if (trimmed.length === 0) return state
+      if (/\d/.test(trimmed)) return state
+
+      const id = `custom-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+      const destination: Destination = {
+        id,
+        name: trimmed,
+        lat: 0,
+        lon: 0,
+        minBudget: 0,
+        minZoom: 0,
+        custom: true,
+      }
+
+      return {
+        destinations: [...state.destinations, destination],
+        daysByDestination: { ...state.daysByDestination, [id]: 1 },
       }
     }),
 

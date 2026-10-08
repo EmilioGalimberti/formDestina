@@ -1,6 +1,6 @@
 {
   "project": "formPrimerContacto",
-  "updated": "2026-10-05",
+  "updated": "2026-10-08",
   "feature_status": ["pending", "in_progress", "blocked", "done"],
   "features": [
     {
@@ -219,6 +219,28 @@
       "lugaresDePaisesBajos":["Amsterdam","Rotterdam"],
       "acceptance": ["por defecto se deben vizualizar las capitales de los paises que esten en el rango de vision del mundito", ["se debe vizualizar las demas provincias a medida que se hace zoom hacia ese lugar"]],
       "notes": "Jerarquia visual: paises amarillos grandes (selectables, visibles de base, se ocultan al zoom 2.0 salvo seleccionados) y ciudades (destinos destacados, capitales y provincias) azules/grises chiquitas (selectables, aparecen al zoom 2.3 y persisten visibles si estan seleccionadas). Los destinos destacados (Madrid, Paris, Buenos Aires, Cancun, etc.) se renderizan con el mismo estilo chiquito de las capitales (azul). Cada pais/capital/provincia/destino tiene minBudget. El tap resuelve por id en DESTINATION_BY_ID (destinos de ciudad pisan homonimos, ej. Mexico). Decluttering de labels sembrado con los marcadores seleccionados y destinos visibles; los lugares que coinciden con un destino destacado se omiten para no duplicar marcadores."
+    },
+    {
+      "id": "F12",
+      "name": "Agrega destino",
+      "status": "done",
+      "description": "Permitir al usuario agregar un destino que no esté en la lista del mundito mediante un input de texto; se suma a los destinos seleccionados y se refleja en el mensaje de WhatsApp.",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/features/destination/CustomDestinationInput.tsx",
+        "src/features/destination/DestinationStep.tsx",
+        "src/features/destination/WorldMap.tsx"
+      ],
+      "acceptance": [
+        "Se visualiza un input de texto con la pregunta: ¿No encontrás tu destino?",
+        "El input se renderiza debajo de la sección '¿A dónde querés viajar?' y del mundito",
+        "Hay un botón para agregar el destino escrito en el input y se suma a los destinos seleccionados",
+        "El input tiene validación básica para no ingresar números",
+        "Se puede agregar el destino presionando Enter o el botón de agregar destino"
+      ],
+      "notes": "Se agregó el campo opcional `custom?: boolean` a `Destination`. `addCustomDestination` crea un destino con id único, coordenadas neutrales, minBudget 0 y custom: true; se agrega al array de destinos y se inicializa con 1 día. El mapa no anima hacia destinos custom porque no tienen ubicación. El input filtra dígitos, muestra error visual y permite submit con Enter o botón."
     }
+    
   ]
 }
