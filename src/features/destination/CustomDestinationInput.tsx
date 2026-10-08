@@ -57,7 +57,7 @@ export function CustomDestinationInput({ onAdd }: CustomDestinationInputProps) {
       <label htmlFor="custom-destination" className="text-sm font-medium text-muted-foreground">
         ¿No encontrás tu destino?
       </label>
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 md:flex-row">
         <input
           id="custom-destination"
           type="text"
@@ -72,7 +72,7 @@ export function CustomDestinationInput({ onAdd }: CustomDestinationInputProps) {
         <button
           type="button"
           onClick={submit}
-          className="shrink-0 rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95"
+          className="w-full shrink-0 rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 md:w-auto"
         >
           Agregar destino
         </button>
