@@ -13,8 +13,6 @@ export function DestinationStep() {
     }
   }, [destinations])
 
-  const totalMinBudget = destinations.reduce((sum, d) => sum + d.minBudget, 0)
-
   return (
     <div className="flex flex-col gap-4">
       <div>
@@ -53,9 +51,6 @@ export function DestinationStep() {
               </li>
             ))}
           </ul>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Presupuesto mínimo sugerido: USD {totalMinBudget}
-          </p>
           <button
             type="button"
             onClick={nextStep}
