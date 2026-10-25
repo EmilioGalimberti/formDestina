@@ -539,8 +539,9 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 **Ajuste posterior (feedback del usuario):**
 - `src/features/wizard/Wizard.tsx`: logo movido a la izquierda del header, junto a la barra de progreso, usando `rounded-full` para recortar el cuadrado blanco del PNG y que se vea solo el círculo vino.
-- `index.html`: favicon cambiado de `/favicon.svg` a `/images/logo.png`.
+- `index.html`: favicon cambiado de `/favicon.svg` a `/images/logo.png` y luego a `/favicon.png`.
 - `public/images/logo.png`: regenerado para que el fondo blanco puro coincida con el header.
+- `public/favicon.png`: generado con Pillow como versión circular con fondo transparente (128x128) para que el icono de pestaña se vea redondo.
 - Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
 
 **Decisiones:**
