@@ -553,3 +553,27 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar deploy en Cloudflare Pages tras el push.
+
+---
+
+## 2026-10-25 — F14 Menores de edad (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/state/types.ts`: agregado `minors: number` a `FormState` y `setMinors` a `AppState`.
+- `src/state/store.ts`: inicializado `minors: 0`; `setPeople` resetea `minors` a 0 cuando la cantidad de adultos baja a 1; agregada acción `setMinors` con mínimo 0.
+- `src/ui/Checkbox.tsx`: nuevo componente accesible con estilo del proyecto (borde redondeado, color primario al marcar, focus ring).
+- `src/features/people/PeopleStep.tsx`: reescrito para mostrar el stepper de adultos con label 'adultos'; si hay más de 1 adulto aparece el checkbox 'Viajo con menores de edad' que habilita un segundo stepper para menores, con animación GSAP en ambos números.
+- `src/features/result/ResultStep.tsx`: el resumen muestra 'Viajeros' con adultos y menores cuando corresponde.
+- `src/lib/whatsapp.ts`: el mensaje incluye adultos y menores (ej. 'Viajeros: 2 adultos y 1 menor').
+- `feature_list.json`: F14 marcada como `done` con archivos y notas actualizadas.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se integró la selección de menores dentro del paso existente `people` en lugar de agregar un nuevo paso al wizard, porque la feature pide que sea "en la misma sección".
+- El checkbox se deshabilita visualmente con `opacity-40` y `cursor-not-allowed` cuando hay 1 solo adulto, y se resetean los menores automáticamente si el usuario baja a 1 adulto.
+- El stepper de menores usa mínimo 1 (no tiene sentido mostrarlo con 0 si el checkbox está activo).
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.

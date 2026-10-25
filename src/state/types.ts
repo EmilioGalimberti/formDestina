@@ -29,6 +29,7 @@ export interface FormState {
   destinations: Destination[]
   daysByDestination: Record<string, number>
   people: number
+  minors: number
   categories: Category[]
   budgetCategory: BudgetCategory | null
 }
@@ -50,6 +51,7 @@ export interface AppState extends FormState, WizardState {
   addCustomDestination: (name: string) => void
   setDestinationDays: (destinationId: string, days: number) => void
   setPeople: (people: number) => void
+  setMinors: (minors: number) => void
   toggleCategory: (category: Category) => void
   setBudgetCategory: (budgetCategory: BudgetCategory | null) => void
   goToStep: (step: StepId) => void

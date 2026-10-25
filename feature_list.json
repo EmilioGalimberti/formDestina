@@ -257,6 +257,26 @@
       "acceptance": ["en toda la aplicacion donde el colo era: #0a7067 ahora debe ser #6e1f3c",
       "agregar el logo de la empresa"],
       "notes": "Color primario y anillo pasaron de #0d9488 a #6e1f3c. Se actualizaron theme-color, marcadores del mapa y el header ahora muestra el logo de Destina en lugar del texto. El logo se optimizó a 512x512 y se ubicó en public/images/logo.png."
+    },
+    {
+      "id": "F14",
+      "name": "menores de edad",
+      "status": "done",
+      "description": "Como viajero quiero seleccionar con cuantos menores de edad viajo en la seccion de cuantos viajan?",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/ui/Checkbox.tsx",
+        "src/features/people/PeopleStep.tsx",
+        "src/features/result/ResultStep.tsx",
+        "src/lib/whatsapp.ts"
+      ],
+      "acceptance": ["Se debe agregar un nuevo step en la seccion de cuantos viajan que permita seleccionar la cantidad de menores de edad que viajan junto con los adultos",
+    "Se debe primero seleccionar la cantidad de adultos y si son > 1 habilitar un checbox de que se vija con menores de edad",
+  "Si selecciona ese checkbox se debe habilitar abajo la cantidad de menores de edad que viajan junto con los adultos",
+  "Si la cantidad de adultos es 1 no se debe habilitar el checkbox",
+"Se debe reflejar en el mensaje de WhatsApp la cantidad de menores de edad que viajan junto con los adultos"],
+      "notes": "Se agregó el campo `minors` al store y se integró dentro del paso `people`. El stepper de adultos ahora muestra 'adultos'; si hay más de 1 aparece un checkbox 'Viajo con menores de edad' que habilita un segundo stepper para menores. Al bajar a 1 adulto se deshabilita el checkbox y se resetea la cantidad de menores. El resumen y el mensaje de WhatsApp reflejan adultos y menores."
     }
   ]
 }

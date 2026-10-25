@@ -17,13 +17,20 @@ function formatCategories(categories: FormState['categories']) {
   return categories.map((c) => c.name).join(', ')
 }
 
+function formatTravelers(people: number, minors: number) {
+  if (minors > 0) {
+    return `${people} ${people === 1 ? 'adulto' : 'adultos'} y ${minors} ${minors === 1 ? 'menor' : 'menores'}`
+  }
+  return String(people)
+}
+
 export function buildMessage(state: FormState): string {
   const destinationLabel = state.destinations.length > 1 ? 'Destinos' : 'Destino'
   const lines = [
     'Hola Martina, quiero armar un viaje con Destina.',
     '',
     `${destinationLabel}: ${formatDestinations(state.destinations, state.daysByDestination)}`,
-    `Viajeros: ${state.people}`,
+    `Viajeros: ${formatTravelers(state.people, state.minors)}`,
     `Estilo: ${formatCategories(state.categories)}`,
     `Categoría: ${state.budgetCategory?.name ?? 'No seleccionado'}`,
     '',
