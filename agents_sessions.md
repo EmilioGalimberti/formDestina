@@ -570,13 +570,13 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 **Decisiones:**
 - Se integró la selección de menores dentro del paso existente `people` en lugar de agregar un nuevo paso al wizard, porque la feature pide que sea "en la misma sección".
-- El checkbox solo se renderiza cuando hay más de 1 adulto.
-- La cantidad de menores nunca puede superar ni igualar a la de adultos (`minors < people`); el store ajusta automáticamente al cambiar adultos y el botón `+` de menores se deshabilita al límite.
+- El checkbox se renderiza siempre que haya al menos 1 adulto.
+- La cantidad de menores nunca puede superar a la de adultos (`minors <= people`); el store ajusta automáticamente al cambiar adultos y el botón `+` de menores se deshabilita al límite.
 - El stepper de menores usa mínimo 1 (no tiene sentido mostrarlo con 0 si el checkbox está activo).
 
 **Corrección (feedback del usuario):**
-- `src/state/store.ts`: `setPeople` ahora limita `minors` a `people - 1` al cambiar adultos; `setMinors` limita a `people - 1`.
-- `src/features/people/PeopleStep.tsx`: el checkbox solo aparece si `people > 1`; el stepper de menores recibe `max={people - 1}` y deshabilita el botón `+` al llegar al límite.
+- `src/state/store.ts`: `setPeople` limita `minors` a `people`; `setMinors` limita a `people`.
+- `src/features/people/PeopleStep.tsx`: el checkbox vuelve a aparecer con 1 adulto; el stepper de menores usa `max={people}` para permitir 1 adulto + 1 menor.
 
 **Pendientes:**
 - Ninguno.
