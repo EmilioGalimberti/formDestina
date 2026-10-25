@@ -537,10 +537,16 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - `feature_list.json`: F13 marcada como `done` con archivos y notas actualizadas.
 - Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
 
+**Ajuste posterior (feedback del usuario):**
+- `src/features/wizard/Wizard.tsx`: logo movido a la izquierda del header, junto a la barra de progreso, usando `rounded-full` para recortar el cuadrado blanco del PNG y que se vea solo el círculo vino.
+- `index.html`: favicon cambiado de `/favicon.svg` a `/images/logo.png`.
+- `public/images/logo.png`: regenerado para que el fondo blanco puro coincida con el header.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
 **Decisiones:**
-- Se usó `DestinaLogo2.png` con fondo blanco y se pintó el header de blanco puro para que el logo encaje sin recortes.
-- Se descartó hacer transparente el logo porque el color crema de la palma/texto es tan claro que al quitar el fondo blanco también se transparentaban esos elementos.
-- El logo mide 512x512 y se renderiza a `h-16` en el header; conserva el margen blanco alrededor del círculo para mantener proporciones.
+- Se usó `DestinaLogo2.png` con fondo blanco y se pintó el header de blanco puro para que el logo encaje.
+- `rounded-full` en la imagen elimina las esquinas blancas del PNG y deja visible solo el círculo del logo.
+- El logo mide 512x512 y se renderiza a `h-14 w-14` al lado de la barra de progreso.
 
 **Pendientes:**
 - Ninguno.
