@@ -218,7 +218,7 @@
       "lugaresDeUK":["Londres","Manchester","Birmingham"],
       "lugaresDePaisesBajos":["Amsterdam","Rotterdam"],
       "acceptance": ["por defecto se deben vizualizar las capitales de los paises que esten en el rango de vision del mundito", ["se debe vizualizar las demas provincias a medida que se hace zoom hacia ese lugar"]],
-      "notes": "Jerarquia visual: paises amarillos grandes (selectables, visibles de base, se ocultan al zoom 2.0 salvo seleccionados) y ciudades (destinos destacados, capitales y provincias) azules/grises chiquitas (selectables, aparecen al zoom 2.3 y persisten visibles si estan seleccionadas). Los destinos destacados (Madrid, Paris, Buenos Aires, Cancun, etc.) se renderizan con el mismo estilo chiquito de las capitales (azul). Cada pais/capital/provincia/destino tiene minBudget. El tap resuelve por id en DESTINATION_BY_ID (destinos de ciudad pisan homonimos, ej. Mexico). Decluttering de labels sembrado con los marcadores seleccionados y destinos visibles; los lugares que coinciden con un destino destacado se omiten para no duplicar marcadores."
+      "notes": "Jerarquía visual: países amarillos grandes (selectables, visibles de base, se ocultan al zoom 2.0 salvo seleccionados) y ciudades azules/grises (selectables). Capitales aparecen al zoom 2.3, ciudades grandes/turísticas al 3.3 y provincias/ciudades secundarias al 5.0. A mayor zoom se revelan más lugares y los marcadores crecen para no perderse. Los destinos destacados se renderizan con el mismo estilo chiquito de las capitales. Cada pais/capital/provincia/destino tiene minBudget. El tap resuelve por id en DESTINATION_BY_ID. Decluttering de labels sembrado con marcadores seleccionados y destinos visibles."
     },
     {
       "id": "F12",

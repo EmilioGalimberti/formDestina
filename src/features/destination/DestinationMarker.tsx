@@ -8,6 +8,7 @@ interface DestinationMarkerProps {
   visible: boolean
   x: number
   y: number
+  scale: number
   onSelect: (destination: Destination) => void
   showLabel?: boolean
 }
@@ -18,6 +19,7 @@ export function DestinationMarker({
   visible,
   x,
   y,
+  scale,
   onSelect,
   showLabel = true,
 }: DestinationMarkerProps) {
@@ -60,6 +62,8 @@ export function DestinationMarker({
     }
   }, [selected])
 
+  const zoomFactor = Math.max(1, 1 + (scale - 1) * 0.08)
+
   return (
     <g
       transform={`translate(${x}, ${y})`}
@@ -77,28 +81,28 @@ export function DestinationMarker({
       style={{ pointerEvents: visible ? 'auto' : 'none' }}
     >
       <g ref={innerRef} opacity={0}>
-        <circle r={26} fill="transparent" />
+        <circle r={26 * zoomFactor} fill="transparent" />
         <circle
           ref={ringRef}
-          r={12}
+          r={12 * zoomFactor}
           fill="none"
           stroke="#6e1f3c"
-          strokeWidth={3}
+          strokeWidth={3 * zoomFactor}
           opacity={0}
         />
         <circle
-          r={selected ? 11 : 9}
+          r={(selected ? 11 : 9) * zoomFactor}
           fill={selected ? '#6e1f3c' : '#f59e0b'}
           stroke="#ffffff"
-          strokeWidth={3}
+          strokeWidth={3 * zoomFactor}
         />
-        <circle cx={-3} cy={-3} r={2.5} fill="#ffffff" opacity={0.85} />
+        <circle cx={-3 * zoomFactor} cy={-3 * zoomFactor} r={2.5 * zoomFactor} fill="#ffffff" opacity={0.85} />
         {showLabel && (
           <text
-            y={selected ? -20 : -17}
+            y={(selected ? -20 : -17) * zoomFactor}
             textAnchor="middle"
             fill="#1c1917"
-            fontSize={selected ? 15 : 13}
+            fontSize={(selected ? 15 : 13) * Math.max(1, 1 + (scale - 1) * 0.04)}
             fontWeight={700}
             stroke="#ffffff"
             strokeWidth={4}

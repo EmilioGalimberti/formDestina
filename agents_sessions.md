@@ -616,3 +616,25 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-25 — Ajuste F11: más lugares y marcadores que crecen con el zoom (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/data/places.ts`: se separaron los lugares en tres niveles de zoom (capitales 2.3, ciudades grandes 3.3, provincias/ciudades secundarias 5.0) y se agregaron ~25 nuevas ciudades/provincias distribuidas por los países principales.
+- `src/features/destination/PlaceMarker.tsx`: ahora recibe `scale` y aumenta el tamaño del punto, stroke y label a medida que crece el zoom para que no se vean diminutos.
+- `src/features/destination/DestinationMarker.tsx`: igual ajuste de escala para los marcadores de país.
+- `src/features/destination/WorldMap.tsx`: pasa `scale` a ambos tipos de marcadores.
+- `feature_list.json`: actualizada la nota de F11.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se prefirió "agregar más provincias" en niveles de zoom progresivos en lugar de solo agrandar los puntos existentes, para mantener la legibilidad y darle al usuario más opciones al acercar.
+- El crecimiento del marcador es lineal moderado (`1 + (scale - 2.3) * 0.12`) para no tapar el mapa a zoom alto.
+- Se mantuvo el decluttering de labels para evitar saturación visual.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.

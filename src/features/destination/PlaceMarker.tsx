@@ -12,6 +12,7 @@ interface PlaceMarkerProps {
   x: number
   y: number
   selected: boolean
+  scale: number
   onSelect: () => void
 }
 
@@ -23,10 +24,19 @@ const KIND_STYLE: Record<
   city: { r: 4, fill: '#64748b', strokeWidth: 2, fontSize: 10, fontWeight: 500, labelY: -12 },
 }
 
-export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, onSelect }: PlaceMarkerProps) {
+export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, scale, onSelect }: PlaceMarkerProps) {
   const innerRef = useRef<SVGGElement>(null)
   const ringRef = useRef<SVGCircleElement>(null)
-  const style = KIND_STYLE[kind]
+  const baseStyle = KIND_STYLE[kind]
+  const zoomFactor = Math.max(1, 1 + (scale - 2.3) * 0.12)
+  const style = {
+    r: baseStyle.r * zoomFactor,
+    fill: baseStyle.fill,
+    strokeWidth: baseStyle.strokeWidth * zoomFactor,
+    fontSize: baseStyle.fontSize * Math.max(1, 1 + (scale - 2.3) * 0.06),
+    fontWeight: baseStyle.fontWeight,
+    labelY: baseStyle.labelY * zoomFactor,
+  }
 
   useLayoutEffect(() => {
     const el = innerRef.current

@@ -406,6 +406,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
             visible
             x={x}
             y={y}
+            scale={scale}
             onSelect={handleSelect}
             showLabel={showLabel}
           />
@@ -423,6 +424,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
               x={x}
               y={y}
               selected={selected.some((d) => d.id === place.id)}
+              scale={scale}
               onSelect={() => {
                 if (destination) handleSelect(destination)
               }}
@@ -442,6 +444,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
               x={x}
               y={y}
               selected={isSelected}
+              scale={scale}
               onSelect={() => handleSelect(destination)}
             />
           ))}
