@@ -59,6 +59,7 @@ export interface AppState extends FormState, WizardState {
   toggleCategory: (category: Category) => void
   setBudgetCategory: (budgetCategory: BudgetCategory | null) => void
   toggleDate: (date: string) => void
+  setSelectedDates: (dates: string[]) => void
   setCalendarMonth: (year: number, month: number) => void
   setFlexible: (flexible: boolean) => void
   goToStep: (step: StepId) => void

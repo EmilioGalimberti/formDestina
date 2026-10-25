@@ -24,6 +24,7 @@ const initialState: Omit<
   | 'toggleCategory'
   | 'setBudgetCategory'
   | 'toggleDate'
+  | 'setSelectedDates'
   | 'setCalendarMonth'
   | 'setFlexible'
   | 'goToStep'
@@ -130,6 +131,8 @@ export const useStore = create<AppState>((set, get) => ({
         : [...state.selectedDates, date].sort()
       return { selectedDates }
     }),
+
+  setSelectedDates: (dates) => set({ selectedDates: dates.sort() }),
 
   setCalendarMonth: (year, month) => set({ calendarMonth: { year, month } }),
 

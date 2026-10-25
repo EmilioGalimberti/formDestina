@@ -37,8 +37,22 @@ function parseDateKey(date: string) {
   return { year, month: month - 1, day }
 }
 
-function sortDates(dates: string[]) {
-  return [...dates].sort()
+function getDatesBetween(start: string, end: string) {
+  let startDate = new Date(start + 'T00:00:00')
+  let endDate = new Date(end + 'T00:00:00')
+  if (startDate > endDate) {
+    const temp = startDate
+    startDate = endDate
+    endDate = temp
+  }
+
+  const dates: string[] = []
+  const current = new Date(startDate)
+  while (current <= endDate) {
+    dates.push(formatDateKey(current.getFullYear(), current.getMonth(), current.getDate()))
+    current.setDate(current.getDate() + 1)
+  }
+  return dates
 }
 
 export function CalendarStep() {
@@ -48,11 +62,12 @@ export function CalendarStep() {
     selectedDates,
     calendarMonth,
     isFlexible,
-    toggleDate,
+    setSelectedDates,
     setCalendarMonth,
     setFlexible,
   } = useStore()
 
+  const [anchorDate, setAnchorDate] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const totalDays = destinations.reduce((sum, destination) => {
@@ -71,14 +86,27 @@ export function CalendarStep() {
 
   const handleDayClick = (day: number) => {
     const key = formatDateKey(calendarMonth.year, calendarMonth.month, day)
-    const exists = selectedDates.includes(key)
 
-    if (!exists && selectedDates.length >= maxSelectableDays) {
+    if (selectedDates.includes(key)) {
+      setSelectedDates([])
+      setAnchorDate(null)
+      return
+    }
+
+    if (selectedDates.length === 0 || anchorDate === null) {
+      setSelectedDates([key])
+      setAnchorDate(key)
+      return
+    }
+
+    const range = getDatesBetween(anchorDate, key)
+    if (range.length > maxSelectableDays) {
       showError(`Podés seleccionar hasta ${maxSelectableDays} días (${totalDays} del viaje + 2 por vuelos).`)
       return
     }
 
-    toggleDate(key)
+    setSelectedDates(range)
+    setAnchorDate(null)
   }
 
   const changeMonth = (delta: number) => {
@@ -88,7 +116,7 @@ export function CalendarStep() {
     setCalendarMonth(year, month)
   }
 
-  const sortedDates = sortDates(selectedDates)
+  const sortedDates = [...selectedDates].sort()
   const formattedRange = (() => {
     if (sortedDates.length === 0) return null
     const first = parseDateKey(sortedDates[0])
@@ -108,7 +136,7 @@ export function CalendarStep() {
       <div>
         <h2 className="text-2xl font-semibold">¿Qué días querés viajar?</h2>
         <p className="mt-1 text-muted-foreground">
-          Seleccioná hasta {maxSelectableDays} días ({totalDays} del viaje + 2 por vuelos).
+          Seleccioná el día de inicio y el día de fin. Hasta {maxSelectableDays} días ({totalDays} del viaje + 2 por vuelos).
         </p>
       </div>
 
@@ -152,6 +180,7 @@ export function CalendarStep() {
             const day = index + 1
             const key = formatDateKey(calendarMonth.year, calendarMonth.month, day)
             const selected = selectedDates.includes(key)
+            const isAnchor = anchorDate === key
 
             return (
               <button
@@ -162,7 +191,9 @@ export function CalendarStep() {
                 className={`aspect-square rounded-xl text-sm font-medium outline-offset-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                   selected
                     ? 'bg-primary text-primary-foreground'
-                    : 'text-foreground hover:bg-muted'
+                    : isAnchor
+                      ? 'bg-primary/20 text-primary'
+                      : 'text-foreground hover:bg-muted'
                 }`}
               >
                 {day}

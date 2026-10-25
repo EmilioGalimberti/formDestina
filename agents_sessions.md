@@ -605,6 +605,12 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Se reutilizó el componente `Checkbox` de `src/ui` para mantener consistencia visual.
 - El diseño del calendario sigue el lenguaje del proyecto: card blanca redondeada, botones circulares, color primario para días seleccionados y tipografía Inter.
 
+**Corrección (feedback del usuario):**
+- La selección pasó de ser día por día a rango con dos toques: el primer toque marca el inicio, el segundo toque completa el rango entre inicio y fin.
+- Se agregó `setSelectedDates` al store para reemplazar el rango completo en una sola acción.
+- Si se toca un día ya seleccionado, se limpia toda la selección para empezar de nuevo.
+- El día de inicio se resalta con fondo primario/20 mientras espera el segundo toque.
+
 **Pendientes:**
 - Ninguno.
 
