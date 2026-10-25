@@ -1,6 +1,6 @@
 import type { FormState } from '@/state/types'
 
-const WHATSAPP_NUMBER = '543804624385'
+const WHATSAPP_NUMBER = '543512176616'
 
 function formatDestinationName(destination: FormState['destinations'][number], days: number | undefined) {
   if (!days || days <= 0) return destination.name

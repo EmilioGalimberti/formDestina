@@ -26,3 +26,7 @@ dist-ssr
 # Cloudflare
 .wrangler
 .cloudflare
+
+# AI agent skills (no commitear)
+.agents
+.opencode
