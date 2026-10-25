@@ -9,7 +9,7 @@ function formatDestinationName(destination: FormState['destinations'][number], d
 
 function formatDestinations(destinations: FormState['destinations'], daysByDestination: FormState['daysByDestination']) {
   if (destinations.length === 0) return 'No seleccionado'
-  return destinations.map((d) => formatDestinationName(d, daysByDestination[d.id])).join(', ')
+  return destinations.map((d) => formatDestinationName(d, daysByDestination[d.id])).join('\n- ')
 }
 
 function formatCategories(categories: FormState['categories']) {
@@ -21,7 +21,7 @@ function formatTravelers(people: number, minors: number) {
   if (minors > 0) {
     return `${people} ${people === 1 ? 'adulto' : 'adultos'} y ${minors} ${minors === 1 ? 'menor' : 'menores'}`
   }
-  return String(people)
+  return `${people} ${people === 1 ? 'adulto' : 'adultos'}`
 }
 
 function formatDates(selectedDates: string[]) {
@@ -43,22 +43,26 @@ function formatDates(selectedDates: string[]) {
 }
 
 export function buildMessage(state: FormState): string {
-  const destinationLabel = state.destinations.length > 1 ? 'Destinos' : 'Destino'
   const lines = [
-    'Hola Martina, quiero armar un viaje con Destina.',
+    '✈️ ¡Hola Destina! Quiero armar un viaje con ustedes.',
     '',
-    `${destinationLabel}: ${formatDestinations(state.destinations, state.daysByDestination)}`,
-    `Fechas: ${formatDates(state.selectedDates)}`,
-    `Viajeros: ${formatTravelers(state.people, state.minors)}`,
-    `Estilo: ${formatCategories(state.categories)}`,
-    `Categoría: ${state.budgetCategory?.name ?? 'No seleccionado'}`,
+    '🌍 *Destinos y días*',
+    `- ${formatDestinations(state.destinations, state.daysByDestination)}`,
+    '',
+    `📅 *Fechas:* ${formatDates(state.selectedDates)}`,
+    `👥 *Viajeros:* ${formatTravelers(state.people, state.minors)}`,
+    `✨ *Estilo:* ${formatCategories(state.categories)}`,
+    `💼 *Categoría:* ${state.budgetCategory?.name ?? 'No seleccionado'}`,
   ]
 
   if (state.isFlexible) {
-    lines.push('Soy flexible con los días de viaje.')
+    lines.push('🗓️ *Flexibilidad:* soy flexible con los días de viaje.')
   }
 
-  lines.push('', '¡A viajar!')
+  lines.push(
+    '',
+    '¡Gracias! Quedo atento/a para que me contacten. 🧳',
+  )
 
   return lines.join('\n')
 }

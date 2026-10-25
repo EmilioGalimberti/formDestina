@@ -637,6 +637,26 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 ---
 
+## 2026-10-25 — F16: refactor del step resultado como boleto de avión (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/result/ResultStep.tsx`: nuevo diseño de pasaje/boarding pass vertical (mobile-first). Header primario con ícono de avión y marca Destina, secciones "Desde/Hacia", "Pasajeros", "Fechas", "Estilo", "Categoría", "Flexibilidad" y "Destinos y días", separadores punteados con muescas laterales y código de barras decorativo. Se eliminó el preview del mensaje de WhatsApp.
+- `src/lib/whatsapp.ts`: mensaje refactorizado con saludo principal (`✈️ ¡Hola Destina!`), emojis por sección, lista con guiones para destinos y días, negritas con asteriscos y cierre amigable.
+- `feature_list.json`: F16 marcada como `done` con archivos y notas actualizadas.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se mantuvo el estilo visual del proyecto: colores primarios, bordes redondeados, tipografía Inter, fondo background.
+- El pasaje es vertical para respetar mobile-first; en desktop crece proporcionalmente pero conserva la orientación vertical.
+- Se mostraron solo los datos ingresados; "Desde Argentina" como origen por defecto porque el formulario no lo pregunta.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar visualmente en el navegador y hacer push a `main` para deploy automático.
+
+---
+
 ## 2026-10-25 — Ajuste F11: más lugares y marcadores que crecen con el zoom (Kimi K2.7 Code)
 
 **Hecho:**

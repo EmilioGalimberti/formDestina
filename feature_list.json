@@ -299,6 +299,20 @@
       "Se debe agrear un checkbox que diga `flexible con los dias de viaje` que si el usuario lo selecciona  avise en el mensaje de whatsasp, permitiendo a destina mover un poco las fechas para encotrar vuelos mas baratos"
     ],
       "notes": "Nuevo step 'Fechas' después de 'Días'. Calendario mensual navegable (mes anterior/siguiente) con grilla de días seleccionables. Máximo de selección = total de días por destino + 2 (ida/vuelta). Si se excede se muestra mensaje de error temporal. Checkbox 'Soy flexible con los días de viaje'. Las fechas y la flexibilidad se reflejan en el resumen y en el mensaje de WhatsApp."
+    },
+    {
+      "id": "F16",
+      "name": "refactor step result",
+      "status": "done",
+      "description": "refactorizar el step de resultado quiero que parezca un voleto de avion y al final tenga el boton de a viajar",
+      "files": [
+        "src/features/result/ResultStep.tsx",
+        "src/lib/whatsapp.ts"
+      ],
+      "acceptance": ["El step de resultado debe parecer un boleto de avion y al final debe tener el boton de a viajar", "utilizar de ejemplos los pasajes de files"
+    , "respetar el estilo del resto de la pagina y solo mostrar resultado los datos ingresados","tene en cuenta que es mobile first por lo que no puede ser horizontal el pasaje","quita el preview del mensaje de whatsapp en la pantalla",
+  "refactoriza el mensaje que se envia por whatsapp para que se mas legible, emojis un saludo princpal "],
+      "notes": "El resultado se renderiza como un pasaje vertical tipo boarding pass: header primario con ícono de avión, secciones con separadores punteados, datos ingresados y código de barras decorativo. Se quitó el preview del mensaje de WhatsApp. El mensaje de WhatsApp ahora tiene saludo principal con emojis, secciones con asteriscos y un cierre amigable."
     }
   ]
 }
