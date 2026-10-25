@@ -1,117 +1,177 @@
 # AGENTS.md
 
-Instrucciones para trabajar en este repo (leídas por cualquier agente de código).
+Instrucciones para cualquier agente que trabaje en este repo. **Leé esto primero.**
 
-## Qué es este proyecto
+## Qué es este repo AHORA
 
-"Form Primer Contacto" de Destina: formulario interactivo tipo juego para captar
-el primer contacto con clientes y armar un viaje (destino, transporte, personas,
-categoría, presupuesto) que al final genera un mensaje de WhatsApp para Martina.
+Este repo dejó de ser el repo de desarrollo del producto y ahora es el **repo de
+referencia y aprendizaje**.
 
-- Spec original: `docs/product.md`
-- Plan completo: `docs/plan.md`
-- Control de features: `feature_list.json`
-- Log de sesiones: `agents_sessions.md`
+- Contiene el **MVP funcional** (ya aprobado por el cliente). Tratalo como
+  **"la respuesta"**: material de consulta y estudio, de lectura mostly.
+- El objetivo actual es **aprender React y el stack reconstruyendo la app desde
+  cero**, en un **repo nuevo separado**, guiado por un tutor de IA y escribiendo
+  el código a mano.
+- Acá **no se desarrollan features nuevas de producto**. Se usa para auditar,
+  entender y explicar el código existente, y para alojar las skills de estudio.
+- El **rebuild se hace en otro repo**. Este queda como referencia estable.
 
-**Antes de tocar código, leé siempre `docs/plan.md` y `feature_list.json`.**
+## Regla de oro para el agente en este repo
+
+- Actuá como **tutor**, no como implementador.
+- Explicá siempre el **porqué**: por qué se hace así y **qué problema resuelve
+  comparado con JS nativo (vanilla)**.
+- **No escupas la solución completa.** Dar ejercicios acotados y **pistas**; el
+  humano escribe el código y recién se revisa.
+- Cuando expliques código de este repo, **citá archivos y líneas concretas**.
+- Apoyate en las skills instaladas para citar buenas prácticas.
+
+## Plan de aprendizaje (ruta, de simple a complejo)
+
+1. Pantalla **"Personas"** (stepper con `+`/`-`) en React → componentes, props,
+   estado (`useState`).
+2. Cards seleccionables + resumen.
+3. Estado **compartido** entre pasos → store con **Zustand**.
+4. Animaciones → **GSAP** (`gsap-react`, `gsap-core`).
+5. Estilos → **Tailwind** (`tailwind-css-patterns`).
+6. **Tests** (`vitest`) + **commits** (`git-workflow-and-versioning`) antes de
+   entregar cada parte.
+7. El **globo** (d3-geo + GSAP + `gsap-utils`) → lo más complejo, al final.
+8. Accesibilidad + diseño (`accessibility`, `frontend-design`).
+9. Deploy (Vite + Cloudflare Pages).
+
+**Modo de trabajo por parte:** implementar → verificar (test) → commit limpio →
+siguiente parte. Commits atómicos, mensajes que explican el porqué.
+
+## Modelo recomendado
+
+Ver `~/Documents/system-engineer-obsidian/guia_MODELOS_UNIFICADO.md`.
+
+- **Tutor diario:** `Qwen3.7 Plus` (modo lectura/Plan, `high`). Barato y bueno
+  para explicar paso a paso. Ojo: no pasar de **256K tokens** (triplica precio).
+- **Pasos difíciles / cruzar muchos archivos:** `Step 5 Preview` (`high`).
+- **Revisar antes de entregar al cliente (anti-bugs):** `Kimi K2.7 Code`.
+- **Auditoría profunda puntual:** `Kimi K3` o `Qwen3.8 Max`.
+
+## Skills instaladas (repo local, gitignored en `.agents/skills/`)
+
+| Skill | Para qué |
+|---|---|
+| vercel-react-best-practices | Performance y buenas prácticas de React (mal vs. bien) |
+| vercel-composition-patterns | Armar componentes que escalan (evitar props booleanas) |
+| gsap-react | `useGSAP`: animar en React sin fugas ni conflictos |
+| gsap-core | API de animación (`to/from/fromTo`, easing, stagger) |
+| gsap-performance | Animar `transform`/`opacity`, evitar lag, `will-change` |
+| gsap-plugins | `quickTo`, `Draggable`, `Inertia`, `Flip`, `Observer` |
+| gsap-utils | `clamp`, `mapRange`, `interpolate` (rotación/zoom del globo) |
+| git-workflow-and-versioning | Commits atómicos, "parte → verificar → commit" |
+| react-state-management | Cuándo usar estado local/global/servidor; Zustand |
+| tailwind-css-patterns | Patrones de Tailwind (responsive, layout) |
+| vitest | Tests unitarios y de componentes |
+| frontend-design | Decisiones de diseño visual |
+| accessibility | WCAG 2.2 (teclado, ARIA, foco) |
+| cloudflare | Arquitectura/productos Cloudflare (Pages vs Workers) |
+
+> Estas skills **no afectan el build ni el deploy**. Son archivos de instrucciones
+> que solo lee el agente. Están en `.gitignore` para no subirlas al repo del
+> cliente.
+
+## Migración a Cloudflare (tarea separada, solo de dashboard)
+
+El deploy es un **sitio estático** (Vite → `dist/`) por integración Git en
+Cloudflare Pages. No requiere cambios de código.
+
+1. Repo pusheado a GitHub (el push lo hace el humano).
+2. Cuenta **del cliente**: Workers & Pages → Create → Pages → Connect to Git →
+   elegir el repo.
+3. Build: Framework "None", Build command `bun run build`, Build output `dist`,
+   Deploy command **vacío**. **No agregar `wrangler.toml`** (rompe el deploy).
+4. Deploy → dominio custom → DNS. Después borrar el proyecto viejo de la cuenta
+   propia.
+
+---
+
+# Referencia del producto (material de estudio)
+
+Lo de aquí para abajo describe **cómo está hecha** la app de referencia, para
+poder auditararla y reconstruirla.
 
 ## Stack
 
-- React 19 + TypeScript + Vite (strict)
-- Tailwind CSS v4 (mobile-first, import en `src/index.css`)
-- GSAP 3 (todos los plugins son gratis desde 2025) vía `src/lib/gsap.ts`
-- Zustand para estado global (`src/state/store.ts`)
-- Deploy: Cloudflare Pages (estático) vía integración Git con GitHub. Auto-deploy en
-  cada push a `main`.
-
-## Deploy (Cloudflare Pages)
-
-No hay `wrangler.toml` en el repo (rompía el deploy: Cloudflare lo interpretaba como
-Worker y corría `npx wrangler deploy` en vez de subir `dist`). La config vive en el
-dashboard del proyecto Pages:
-
-- Build command: `bun run build`
-- Build output directory: `dist`
-- Deploy command: **vacío**
-
-El deploy es automático en cada push a `main`. No hace falta `CLOUDFLARE_API_TOKEN`.
+- React 19 + TypeScript (strict)
+- Vite (build/dev) + `@tailwindcss/vite`
+- Tailwind CSS v4
+- GSAP 3 (core, `useGSAP`, `quickTo`)
+- Zustand (estado global, `src/state/store.ts`)
+- d3-geo + world-atlas + topojson-client (el globo)
+- Bun (package manager / scripts). Podría ser Node/npm.
+- oxlint (linter)
+- Deploy: Cloudflare Pages (estático)
 
 ## Comandos
 
 ```bash
-bun install          # instalar deps
-bun run dev          # dev server en http://localhost:5173
-bun run build        # typecheck (tsc -b) + build a dist/
-bun run lint         # oxlint
+bun install
+bun run dev       # dev server
+bun run build     # typecheck (tsc -b) + build a dist/
+bun run lint      # oxlint
 ```
 
 ## Git
 
-- El agente **solo hace commits**, con un mensaje claro tipo `F<N>: descripción`.
-- **NO pushear.** El usuario hace el `git push` manualmente (y con eso Cloudflare
-  despliega). El agente puede sugerir el push pero no ejecutarlo.
+- Commits claros tipo `F<N>: descripción` (o Conventional Commits).
+- **NO pushear** desde el agente: el push lo hace el humano (y con eso Cloudflare
+  despliega).
+- `.agents/` y `.opencode/` están en `.gitignore`: las skills no se commitean.
 
-## Convenciones de código
+## Convenciones de código (las sigue la app de referencia)
 
 - TypeScript estricto, sin `any`.
-- **Sin comentarios en el código** salvo que se pidan explícitamente.
+- **Sin comentarios en el código** salvo pedido explícito.
 - Tailwind mobile-first: base para celular, `md:`/`lg:` para desktop.
-- Alias `@/` → `src/`. Importar con `@/...`.
-- Un solo store Zustand (`src/state/store.ts`) como fuente de verdad del formulario.
-- GSAP se usa vía el hook `useGSAP`; registrar plugins solo en `src/lib/gsap.ts`.
-- No commitear secretos ni keys. Nunca loguear `CLOUDFLARE_API_TOKEN`.
+- Alias `@/` → `src/`.
+- Un solo store Zustand como fuente de verdad del formulario.
+- GSAP vía el hook `useGSAP`; registrar plugins en `src/lib/gsap.ts`.
 - Sin emojis en UI/código salvo pedido explícito.
-
-## Cómo trabajar (una feature por sesión)
-
-1. Leé `docs/plan.md` (sección 3) y `feature_list.json` para saber qué feature sigue
-   y su estado.
-2. Trabajá **solo** en `src/features/<feature>` y en los archivos compartidos que
-   necesites (`src/state/`, `src/data/`, `src/lib/`, `src/ui/`).
-3. Respetá el modelo del store (abajo) y las interfaces de `src/state/types.ts`.
-4. Verificá con `bun run build` (debe pasar typecheck) antes de dar por terminado.
-5. Al terminar, actualizá:
-   - `feature_list.json`: marcá la feature como `done`.
-   - `agents_sessions.md`: agregá la sesión con lo hecho, decisiones y pendientes.
 
 ## Modelo del formulario (fuente de verdad)
 
 ```ts
 interface FormState {
-  destination: Destination | null;
-  transport: Transport | null;
-  people: number;                          // default 1
-  category: Category | null;
-  budget: { min: number; max: number };    // min derivado del destino
+  destinations: Destination[];                 // multiselección
+  daysByDestination: Record<string, number>;   // días por destino
+  people: number;                              // default 1
+  categories: Category[];                      // multiselección
+  budgetCategory: BudgetCategory | null;       // low-cost / calidad-precio / lujo
 }
 ```
 
-Datos estáticos en `src/data/`:
-- `destinations.ts`: `{ id, name, lat, lon, minBudget }`
-- `transports.ts`, `categories.ts`
+Datos estáticos en `src/data/`: `destinations.ts`, `places.ts`, `categories.ts`,
+`budgetCategories.ts`.
 
 ## WhatsApp
 
-Número: `+54 9 3804 62-4385` → `wa.me` usa `543804624385` (se omite el `9` de móvil).
+Número: `+54 9 3804 62-4385` → `wa.me` usa `543804624385` (se omite el `9`).
 El mensaje se arma en `src/lib/whatsapp.ts` (`buildMessage` + `buildWaLink`).
 
-## Cómo agregar destinos
+## Cómo funciona el globo / los destinos (para poder reconstruirlo)
 
-Es solo data: agregar un objeto al array `DESTINATIONS` en `src/data/destinations.ts`.
-NO tocar `WorldMap.tsx` ni `projection.ts` (visibilidad, zoom, selección y presupuesto
-mínimo se derivan solos).
+- Proyección ortográfica con `d3-geo`; rotación por drag, zoom por
+  rueda/pinch/botones; el avión sigue al cursor en desktop con `gsap.quickTo`.
+- Ciudades/países en `{ lat, lon }` proyectados a coordenadas SVG.
+- `minZoom` controla cuándo aparece cada marcador (reveal progresivo).
+
+Para agregar destinos es solo data (ej. en `src/data/`):
 
 ```ts
-{ id: 'lisboa', name: 'Lisboa', lat: 38.72, lon: -9.14, minBudget: 750, minZoom: 1.4 },
+{ id: 'lisboa', name: 'Lisboa', lat: 38.72, lon: -9.14, minBudget: 750, minZoom: 1.4 }
 ```
 
 Reglas para no bugearlo:
 
-- `lat`: negativo = sur (Bariloche -41). `lon`: negativo = oeste/América (-58), positivo =
-  este/Europa-Asia-Oceanía (Tokio +139). Signo invertido = marcador del otro lado del mundo.
+- `lat`: negativo = sur (Bariloche -41). `lon`: negativo = oeste/América (-58),
+  positivo = este/Europa-Asia-Oceanía (Tokio +139).
 - `id`: kebab-case, único. `minBudget`: USD entero.
-- `minZoom` (a qué zoom aparece el marcador): `0` = hub principal visible siempre (ej. Buenos
-  Aires), `1.4` = ciudad grande (ej. Madrid), `2.3` = lugar chico/turístico (ej. Cancún).
-- No pongas dos destinos a <10° de distancia con el mismo `minZoom`: los labels se
-  superponen. Escaloná el `minZoom` (el más importante en nivel menor).
-- Verificá con `bun run build` y, si podés, abrí el dev y rotá hasta el destino nuevo.
+- `minZoom`: `0` = visible siempre; `1.4` = ciudad grande; `2.3` = lugar chico.
+- No pongas dos destinos a <10° de distancia con el mismo `minZoom` (se superponen
+  los labels). Escaloná el `minZoom`.
