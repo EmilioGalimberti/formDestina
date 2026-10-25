@@ -649,6 +649,7 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Se mantuvo el estilo visual del proyecto: colores primarios, bordes redondeados, tipografía Inter, fondo background.
 - El pasaje es vertical para respetar mobile-first; en desktop crece proporcionalmente pero conserva la orientación vertical.
 - Se mostraron solo los datos ingresados; "Desde Argentina" como origen por defecto porque el formulario no lo pregunta.
+- Corrección post-feedback: se quitaron los emojis del mensaje de WhatsApp porque algunos navegadores/WhatsApp los decodificaban como caracteres corruptos (�). El mensaje sigue siendo legible usando negritas con asteriscos.
 
 **Pendientes:**
 - Ninguno.

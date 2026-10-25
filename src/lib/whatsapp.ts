@@ -44,24 +44,24 @@ function formatDates(selectedDates: string[]) {
 
 export function buildMessage(state: FormState): string {
   const lines = [
-    '✈️ ¡Hola Destina! Quiero armar un viaje con ustedes.',
+    '*Hola Destina!* Quiero armar un viaje con ustedes.',
     '',
-    '🌍 *Destinos y días*',
+    '*Destinos y días*',
     `- ${formatDestinations(state.destinations, state.daysByDestination)}`,
     '',
-    `📅 *Fechas:* ${formatDates(state.selectedDates)}`,
-    `👥 *Viajeros:* ${formatTravelers(state.people, state.minors)}`,
-    `✨ *Estilo:* ${formatCategories(state.categories)}`,
-    `💼 *Categoría:* ${state.budgetCategory?.name ?? 'No seleccionado'}`,
+    `*Fechas:* ${formatDates(state.selectedDates)}`,
+    `*Viajeros:* ${formatTravelers(state.people, state.minors)}`,
+    `*Estilo:* ${formatCategories(state.categories)}`,
+    `*Categoría:* ${state.budgetCategory?.name ?? 'No seleccionado'}`,
   ]
 
   if (state.isFlexible) {
-    lines.push('🗓️ *Flexibilidad:* soy flexible con los días de viaje.')
+    lines.push('*Flexibilidad:* soy flexible con los días de viaje.')
   }
 
   lines.push(
     '',
-    '¡Gracias! Quedo atento/a para que me contacten. 🧳',
+    '¡Gracias! Quedo atento/a para que me contacten.',
   )
 
   return lines.join('\n')
