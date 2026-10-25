@@ -4,6 +4,7 @@ import type { AppState, Destination, StepId } from '@/state/types'
 export const STEP_ORDER: StepId[] = [
   'destination',
   'days',
+  'calendar',
   'people',
   'category',
   'budget',
@@ -11,6 +12,7 @@ export const STEP_ORDER: StepId[] = [
 ]
 
 const INITIAL_PEOPLE = 1
+const NOW = new Date()
 
 const initialState: Omit<
   AppState,
@@ -21,6 +23,9 @@ const initialState: Omit<
   | 'setMinors'
   | 'toggleCategory'
   | 'setBudgetCategory'
+  | 'toggleDate'
+  | 'setCalendarMonth'
+  | 'setFlexible'
   | 'goToStep'
   | 'nextStep'
   | 'previousStep'
@@ -32,6 +37,9 @@ const initialState: Omit<
   minors: 0,
   categories: [],
   budgetCategory: null,
+  selectedDates: [],
+  calendarMonth: { year: NOW.getFullYear(), month: NOW.getMonth() },
+  isFlexible: false,
   currentStep: 'destination',
 }
 
@@ -113,6 +121,19 @@ export const useStore = create<AppState>((set, get) => ({
     }),
 
   setBudgetCategory: (budgetCategory) => set({ budgetCategory }),
+
+  toggleDate: (date) =>
+    set((state) => {
+      const exists = state.selectedDates.includes(date)
+      const selectedDates = exists
+        ? state.selectedDates.filter((d) => d !== date)
+        : [...state.selectedDates, date].sort()
+      return { selectedDates }
+    }),
+
+  setCalendarMonth: (year, month) => set({ calendarMonth: { year, month } }),
+
+  setFlexible: (isFlexible) => set({ isFlexible }),
 
   goToStep: (step) => set({ currentStep: step }),
 

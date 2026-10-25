@@ -17,7 +17,7 @@ function ResultItem({ label, value }: ResultItemProps) {
 
 export function ResultStep() {
   const state = useStore()
-  const { destinations, daysByDestination, people, minors, categories, budgetCategory } = state
+  const { destinations, daysByDestination, people, minors, categories, budgetCategory, selectedDates, isFlexible } = state
 
   const message = buildMessage(state)
   const waLink = buildWaLink(state)
@@ -28,6 +28,24 @@ export function ResultStep() {
   }
 
   const destinationLabel = destinations.map(formatDestination).join(', ') || '—'
+
+  const datesLabel = (() => {
+    if (selectedDates.length === 0) return '—'
+    const sorted = [...selectedDates].sort()
+    const first = new Date(sorted[0] + 'T00:00:00')
+    const last = new Date(sorted[sorted.length - 1] + 'T00:00:00')
+    const monthFormatter = new Intl.DateTimeFormat('es-AR', { month: 'long' })
+    const dayFormatter = new Intl.DateTimeFormat('es-AR', { day: 'numeric' })
+    const firstMonth = monthFormatter.format(first)
+    const lastMonth = monthFormatter.format(last)
+    if (sorted.length === 1) {
+      return `${dayFormatter.format(first)} de ${firstMonth}`
+    }
+    if (firstMonth === lastMonth) {
+      return `${dayFormatter.format(first)} al ${dayFormatter.format(last)} de ${firstMonth}`
+    }
+    return `${dayFormatter.format(first)} de ${firstMonth} al ${dayFormatter.format(last)} de ${lastMonth}`
+  })()
 
   const travelersLabel = (() => {
     if (minors > 0) {
@@ -47,6 +65,8 @@ export function ResultStep() {
         <dl>
           <ResultItem label={destinations.length > 1 ? 'Destinos' : 'Destino'} value={destinationLabel} />
           <ResultItem label="Viajeros" value={travelersLabel} />
+          <ResultItem label="Fechas" value={datesLabel} />
+          {isFlexible && <ResultItem label="Flexibilidad" value="Flexible con las fechas" />}
           <ResultItem label="Estilo" value={categories.map((c) => c.name).join(', ') || '—'} />
           <ResultItem label="Categoría" value={budgetCategory?.name ?? '—'} />
         </dl>

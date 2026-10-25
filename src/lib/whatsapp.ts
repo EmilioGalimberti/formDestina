@@ -24,18 +24,41 @@ function formatTravelers(people: number, minors: number) {
   return String(people)
 }
 
+function formatDates(selectedDates: string[]) {
+  if (selectedDates.length === 0) return 'No seleccionado'
+  const sorted = [...selectedDates].sort()
+  const first = new Date(sorted[0] + 'T00:00:00')
+  const last = new Date(sorted[sorted.length - 1] + 'T00:00:00')
+  const monthFormatter = new Intl.DateTimeFormat('es-AR', { month: 'long' })
+  const dayFormatter = new Intl.DateTimeFormat('es-AR', { day: 'numeric' })
+  const firstMonth = monthFormatter.format(first)
+  const lastMonth = monthFormatter.format(last)
+  if (sorted.length === 1) {
+    return `${dayFormatter.format(first)} de ${firstMonth}`
+  }
+  if (firstMonth === lastMonth) {
+    return `${dayFormatter.format(first)} al ${dayFormatter.format(last)} de ${firstMonth}`
+  }
+  return `${dayFormatter.format(first)} de ${firstMonth} al ${dayFormatter.format(last)} de ${lastMonth}`
+}
+
 export function buildMessage(state: FormState): string {
   const destinationLabel = state.destinations.length > 1 ? 'Destinos' : 'Destino'
   const lines = [
     'Hola Martina, quiero armar un viaje con Destina.',
     '',
     `${destinationLabel}: ${formatDestinations(state.destinations, state.daysByDestination)}`,
+    `Fechas: ${formatDates(state.selectedDates)}`,
     `Viajeros: ${formatTravelers(state.people, state.minors)}`,
     `Estilo: ${formatCategories(state.categories)}`,
     `Categoría: ${state.budgetCategory?.name ?? 'No seleccionado'}`,
-    '',
-    '¡A viajar!',
   ]
+
+  if (state.isFlexible) {
+    lines.push('Soy flexible con los días de viaje.')
+  }
+
+  lines.push('', '¡A viajar!')
 
   return lines.join('\n')
 }

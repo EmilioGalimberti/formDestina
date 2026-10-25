@@ -277,6 +277,28 @@
   "Si la cantidad de adultos es 1 no se debe habilitar el checkbox",
 "Se debe reflejar en el mensaje de WhatsApp la cantidad de menores de edad que viajan junto con los adultos"],
       "notes": "Se agregó el campo `minors` al store y se integró dentro del paso `people`. El checkbox aparece con 1 o más adultos. La cantidad de menores nunca puede superar a la de adultos (`minors <= people`); el botón `+` se deshabilita al límite y el store ajusta automáticamente al cambiar adultos. El resumen y el mensaje de WhatsApp reflejan adultos y menores."
+    },
+    {
+      "id": "F15",
+      "name": "Agregar un step de calendario",
+      "status": "done",
+      "description": "Como viajero quiero seleccionar que dias quiero viajar para relflejarlo en el mensaje de WhatsApp, para que la agencia pueda organizar mejor el viaje",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/features/wizard/useWizardStep.ts",
+        "src/features/calendar/CalendarStep.tsx",
+        "src/features/calendar/index.ts",
+        "src/features/result/ResultStep.tsx",
+        "src/lib/whatsapp.ts"
+      ],
+      "acceptance": ["Se debe agregar un nuevo step luego de cuantos dias en cada destino donde muestre un calendario con los dias del mes y el usuario pueda seleccionar los dias que quiere viajar",
+    "se debe poder seleccionar hasta 2 dias mas que los dias totales seleccionados en la seccion de cuantos dias en cada destino, para contemplar el vuelo de ida y de vuelta",
+    "se debe reflejar en el mensaje de WhatsApp los dias seleccionados para viajar y el mes en el que se va a viajar",
+      "No se debe poder seleccionar 2 dias mas que los dias totales seleccionados en la seccion de cuantos dias en cada destino, si el usuario intenta seleccionar mas de 2 dias adicionales se debe mostrar un mensaje de error y no permitir la seleccion de esos dias adicionales",
+      "Se debe agrear un checkbox que diga `flexible con los dias de viaje` que si el usuario lo selecciona  avise en el mensaje de whatsasp, permitiendo a destina mover un poco las fechas para encotrar vuelos mas baratos"
+    ],
+      "notes": "Nuevo step 'Fechas' después de 'Días'. Calendario mensual navegable (mes anterior/siguiente) con grilla de días seleccionables. Máximo de selección = total de días por destino + 2 (ida/vuelta). Si se excede se muestra mensaje de error temporal. Checkbox 'Soy flexible con los días de viaje'. Las fechas y la flexibilidad se reflejan en el resumen y en el mensaje de WhatsApp."
     }
   ]
 }

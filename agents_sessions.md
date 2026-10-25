@@ -582,3 +582,30 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-25 — F15 Step de calendario (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/state/types.ts`: agregado `selectedDates: string[]`, `calendarMonth: { year, month }` e `isFlexible: boolean` a `FormState`; nuevo `StepId` `'calendar'`; acciones `toggleDate`, `setCalendarMonth` y `setFlexible` en `AppState`.
+- `src/state/store.ts`: agregado `'calendar'` al `STEP_ORDER` después de `'days'`; estado inicial con mes actual, fechas vacías y flexibilidad en false; implementadas las nuevas acciones.
+- `src/features/calendar/CalendarStep.tsx`: calendario mensual navegable con flechas de mes anterior/siguiente, grilla de días seleccionables, límite `totalDays + 2`, mensaje de error temporal al excederse, resumen de fechas seleccionadas y checkbox 'Soy flexible con los días de viaje'.
+- `src/features/calendar/index.ts`: exporta `CalendarStep`.
+- `src/features/wizard/useWizardStep.ts`: registrado `CalendarStep` con título 'Fechas'.
+- `src/features/result/ResultStep.tsx`: el resumen muestra las fechas seleccionadas y la flexibilidad.
+- `src/lib/whatsapp.ts`: el mensaje incluye las fechas y una línea 'Soy flexible con los días de viaje.' cuando corresponde.
+- `feature_list.json`: F15 marcada como `done` con archivos y notas actualizadas.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Las fechas se guardan como strings `YYYY-MM-DD` para evitar problemas de timezone.
+- El calendario arranca en el mes actual y permite navegar libremente hacia atrás o adelante.
+- El límite de selección se calcula como la suma de días por destino + 2, contemplando los vuelos de ida y vuelta.
+- Se reutilizó el componente `Checkbox` de `src/ui` para mantener consistencia visual.
+- El diseño del calendario sigue el lenguaje del proyecto: card blanca redondeada, botones circulares, color primario para días seleccionados y tipografía Inter.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
