@@ -27,16 +27,18 @@ export function Wizard() {
 
   return (
     <div className="flex min-h-svh flex-col">
-      <header className="sticky top-0 z-10 bg-white px-6 pb-4 pt-6 shadow-sm">
-        <div className="mx-auto flex w-full max-w-2xl flex-col items-center">
+      <header className="sticky top-0 z-10 bg-white px-6 py-4 shadow-sm">
+        <div className="mx-auto flex w-full max-w-2xl items-center gap-4">
           <img
             src="/images/logo.png"
             alt="Destina"
-            className="mb-4 h-16 w-auto"
+            className="h-14 w-14 shrink-0 rounded-full object-cover"
             width="512"
             height="512"
           />
-          <WizardProgress progress={progress} />
+          <div className="flex-1">
+            <WizardProgress progress={progress} />
+          </div>
         </div>
       </header>
 
