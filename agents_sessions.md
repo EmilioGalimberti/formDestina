@@ -576,7 +576,7 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 **Corrección (feedback del usuario):**
 - `src/state/store.ts`: `setPeople` limita `minors` a `people`; `setMinors` limita a `people`.
-- `src/features/people/PeopleStep.tsx`: el checkbox vuelve a aparecer con 1 adulto; el stepper de menores usa `max={people}` para permitir 1 adulto + 1 menor.
+- `src/features/people/PeopleStep.tsx`: el checkbox vuelve a aparecer con 1 adulto; el stepper de menores usa `max={people}` para permitir 1 adulto + 1 menor. Fix posterior: la flag `travelingWithMinors` pasó a depender solo de `minors > 0`, porque la condición previa `people > 1` impedía mostrar el stepper cuando había 1 adulto.
 
 **Pendientes:**
 - Ninguno.

@@ -65,7 +65,7 @@ export function PeopleStep() {
   const adultValueRef = useRef<HTMLSpanElement>(null)
   const minorValueRef = useRef<HTMLSpanElement>(null)
 
-  const travelingWithMinors = people > 1 && minors > 0
+  const travelingWithMinors = minors > 0
 
   const updatePeople = (next: number) => {
     const nextPeople = Math.max(1, next)
