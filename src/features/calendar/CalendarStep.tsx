@@ -68,6 +68,7 @@ export function CalendarStep() {
   } = useStore()
 
   const [anchorDate, setAnchorDate] = useState<string | null>(null)
+  const [hoverDate, setHoverDate] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const totalDays = destinations.reduce((sum, destination) => {
@@ -78,6 +79,11 @@ export function CalendarStep() {
 
   const daysInMonth = getDaysInMonth(calendarMonth.year, calendarMonth.month)
   const startOffset = getFirstWeekday(calendarMonth.year, calendarMonth.month)
+
+  const previewDates = (() => {
+    if (!anchorDate || !hoverDate) return []
+    return getDatesBetween(anchorDate, hoverDate).slice(0, maxSelectableDays)
+  })()
 
   const showError = (message: string) => {
     setError(message)
@@ -181,19 +187,24 @@ export function CalendarStep() {
             const key = formatDateKey(calendarMonth.year, calendarMonth.month, day)
             const selected = selectedDates.includes(key)
             const isAnchor = anchorDate === key
+            const isPreview = previewDates.includes(key) && !selected
 
             return (
               <button
                 key={key}
                 type="button"
                 onClick={() => handleDayClick(day)}
+                onMouseEnter={() => setHoverDate(key)}
+                onMouseLeave={() => setHoverDate(null)}
                 aria-pressed={selected}
                 className={`aspect-square rounded-xl text-sm font-medium outline-offset-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                   selected
                     ? 'bg-primary text-primary-foreground'
                     : isAnchor
                       ? 'bg-primary/20 text-primary'
-                      : 'text-foreground hover:bg-muted'
+                      : isPreview
+                        ? 'bg-muted text-foreground'
+                        : 'text-foreground hover:bg-muted'
                 }`}
               >
                 {day}

@@ -610,6 +610,7 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Se agregó `setSelectedDates` al store para reemplazar el rango completo en una sola acción.
 - Si se toca un día ya seleccionado, se limpia toda la selección para empezar de nuevo.
 - El día de inicio se resalta con fondo primario/20 mientras espera el segundo toque.
+- Preview visual al pasar el mouse: los días que formarían parte del rango se muestran en gris (`bg-muted`) antes de confirmar, limitado al máximo de días permitidos.
 
 **Pendientes:**
 - Ninguno.
