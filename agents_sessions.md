@@ -619,6 +619,24 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 ---
 
+## 2026-10-25 — Ajuste UI: header y footer más compactos en mobile (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/wizard/Wizard.tsx`: header más compacto en mobile (`py-2`, logo `h-10`, `px-4`) manteniendo el tamaño desktop; main con menos padding en mobile; footer más chico en mobile.
+- `src/features/wizard/WizardNav.tsx`: botones 'Atrás' y 'Siguiente' más pequeños en mobile (`px-4 py-2.5 text-sm`) y tamaño normal en desktop.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se usaron clases responsive `md:` para no afectar la experiencia desktop, donde el espacio vertical es menos crítico.
+- Se mantuvo el safe-area-inset-bottom en el footer para iPhones con notch.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
 ## 2026-10-25 — Ajuste F11: más lugares y marcadores que crecen con el zoom (Kimi K2.7 Code)
 
 **Hecho:**

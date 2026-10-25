@@ -27,12 +27,12 @@ export function Wizard() {
 
   return (
     <div className="flex min-h-svh flex-col">
-      <header className="sticky top-0 z-10 bg-white px-6 py-4 shadow-sm">
-        <div className="mx-auto flex w-full max-w-2xl items-center gap-4">
+      <header className="sticky top-0 z-10 bg-white px-4 py-2 shadow-sm md:px-6 md:py-4">
+        <div className="mx-auto flex w-full max-w-2xl items-center gap-3 md:gap-4">
           <img
             src="/images/logo.png"
             alt="Destina"
-            className="h-14 w-14 shrink-0 rounded-full object-cover"
+            className="h-10 w-10 shrink-0 rounded-full object-cover md:h-14 md:w-14"
             width="512"
             height="512"
           />
@@ -42,7 +42,7 @@ export function Wizard() {
         </div>
       </header>
 
-      <main className="flex flex-1 flex-col px-6 py-6" aria-label={`Paso ${step.title}`}>
+      <main className="flex flex-1 flex-col px-4 py-4 md:px-6 md:py-6" aria-label={`Paso ${step.title}`}>
         <div className="mx-auto w-full max-w-2xl flex-1">
           <div
             ref={contentRef}
@@ -54,7 +54,7 @@ export function Wizard() {
         </div>
       </main>
 
-      <footer className="sticky bottom-0 bg-background/95 px-6 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 backdrop-blur-sm">
+      <footer className="sticky bottom-0 bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-sm md:px-6 md:pb-[max(1rem,env(safe-area-inset-bottom))] md:pt-4">
         <div className="mx-auto w-full max-w-2xl">
           <WizardNav isFirst={isFirst} isLast={isLast} onBack={previousStep} onNext={nextStep} />
         </div>
