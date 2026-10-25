@@ -240,7 +240,23 @@
         "Se puede agregar el destino presionando Enter o el botón de agregar destino"
       ],
       "notes": "Se agregó el campo opcional `custom?: boolean` a `Destination`. `addCustomDestination` crea un destino con id único, coordenadas neutrales, minBudget 0 y custom: true; se agrega al array de destinos y se inicializa con 1 día. El mapa no anima hacia destinos custom porque no tienen ubicación. El input filtra dígitos, muestra error visual y permite submit con Enter o botón."
+    },
+    {
+      "id": "F13",
+      "name": "editar colores y agregar logo",
+      "status": "done",
+      "description": "Se debe cambiar el color de la app actual: #0a7067 por: #6e1f3c y agregar un logo de la empresa que esta en /images",
+      "files": [
+        "src/index.css",
+        "index.html",
+        "src/features/destination/PlaceMarker.tsx",
+        "src/features/destination/DestinationMarker.tsx",
+        "src/features/wizard/Wizard.tsx",
+        "public/images/logo.png"
+      ],
+      "acceptance": ["en toda la aplicacion donde el colo era: #0a7067 ahora debe ser #6e1f3c",
+      "agregar el logo de la empresa"],
+      "notes": "Color primario y anillo pasaron de #0d9488 a #6e1f3c. Se actualizaron theme-color, marcadores del mapa y el header ahora muestra el logo de Destina en lugar del texto. El logo se optimizó a 512x512 y se ubicó en public/images/logo.png."
     }
-    
   ]
 }

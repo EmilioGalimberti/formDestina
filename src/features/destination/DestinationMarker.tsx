@@ -82,13 +82,13 @@ export function DestinationMarker({
           ref={ringRef}
           r={12}
           fill="none"
-          stroke="#0d9488"
+          stroke="#6e1f3c"
           strokeWidth={3}
           opacity={0}
         />
         <circle
           r={selected ? 11 : 9}
-          fill={selected ? '#0d9488' : '#f59e0b'}
+          fill={selected ? '#6e1f3c' : '#f59e0b'}
           stroke="#ffffff"
           strokeWidth={3}
         />

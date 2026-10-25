@@ -79,13 +79,13 @@ export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, onSelec
           ref={ringRef}
           r={style.r + 2}
           fill="none"
-          stroke="#0d9488"
+          stroke="#6e1f3c"
           strokeWidth={2.5}
           opacity={0}
         />
         <circle
           r={selected ? style.r + 1 : style.r}
-          fill={selected ? '#0d9488' : style.fill}
+          fill={selected ? '#6e1f3c' : style.fill}
           stroke="#ffffff"
           strokeWidth={selected ? 2.5 : style.strokeWidth}
         />

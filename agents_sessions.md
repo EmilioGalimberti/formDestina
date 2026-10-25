@@ -523,3 +523,26 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar deploy en Cloudflare Pages tras el push.
+
+---
+
+## 2026-10-25 — F13 Editar colores y agregar logo (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/index.css`: color primario y anillo cambiados de `#0d9488` a `#6e1f3c`.
+- `index.html`: `theme-color` actualizado a `#6e1f3c`.
+- `src/features/destination/PlaceMarker.tsx` y `DestinationMarker.tsx`: color de selección y anillo de pulso cambiados a `#6e1f3c`.
+- `src/features/wizard/Wizard.tsx`: header ahora usa fondo blanco y muestra el logo de Destina en lugar del texto "Destina".
+- Procesado el logo `DestinaLogo2.png` (redimensionado a 512x512) y guardado en `public/images/logo.png`.
+- `feature_list.json`: F13 marcada como `done` con archivos y notas actualizadas.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se usó `DestinaLogo2.png` con fondo blanco y se pintó el header de blanco puro para que el logo encaje sin recortes.
+- Se descartó hacer transparente el logo porque el color crema de la palma/texto es tan claro que al quitar el fondo blanco también se transparentaban esos elementos.
+- El logo mide 512x512 y se renderiza a `h-16` en el header; conserva el margen blanco alrededor del círculo para mantener proporciones.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar deploy en Cloudflare Pages tras el push.
