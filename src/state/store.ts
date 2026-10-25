@@ -92,13 +92,18 @@ export const useStore = create<AppState>((set, get) => ({
   setPeople: (people) =>
     set((state) => {
       const nextPeople = Math.max(1, people)
+      const nextMinors = nextPeople <= 1 ? 0 : Math.min(state.minors, nextPeople - 1)
       return {
         people: nextPeople,
-        minors: nextPeople <= 1 ? 0 : state.minors,
+        minors: nextMinors,
       }
     }),
 
-  setMinors: (minors) => set({ minors: Math.max(0, minors) }),
+  setMinors: (minors) =>
+    set((state) => {
+      const maxMinors = Math.max(0, state.people - 1)
+      return { minors: Math.max(0, Math.min(minors, maxMinors)) }
+    }),
 
   toggleCategory: (category) =>
     set((state) => {

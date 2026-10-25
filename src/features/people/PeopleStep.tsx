@@ -21,10 +21,12 @@ interface StepperProps {
   label: string
   valueRef?: React.RefObject<HTMLSpanElement | null>
   min?: number
+  max?: number
 }
 
-function Stepper({ value, onChange, label, valueRef, min = 0 }: StepperProps) {
+function Stepper({ value, onChange, label, valueRef, min = 0, max }: StepperProps) {
   const canDecrease = value > min
+  const canIncrease = max === undefined || value < max
 
   return (
     <div className="flex items-center gap-6">
@@ -48,7 +50,8 @@ function Stepper({ value, onChange, label, valueRef, min = 0 }: StepperProps) {
       <button
         type="button"
         onClick={() => onChange(value + 1)}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-2xl font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95"
+        disabled={!canIncrease}
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-2xl font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:opacity-40"
         aria-label={`Aumentar cantidad de ${label}`}
       >
         +
@@ -62,8 +65,7 @@ export function PeopleStep() {
   const adultValueRef = useRef<HTMLSpanElement>(null)
   const minorValueRef = useRef<HTMLSpanElement>(null)
 
-  const canTravelWithMinors = people > 1
-  const travelingWithMinors = canTravelWithMinors && minors > 0
+  const travelingWithMinors = people > 1 && minors > 0
 
   const updatePeople = (next: number) => {
     const nextPeople = Math.max(1, next)
@@ -100,12 +102,13 @@ export function PeopleStep() {
         min={1}
       />
 
-      <Checkbox
-        label="Viajo con menores de edad"
-        checked={travelingWithMinors}
-        onChange={(event) => toggleMinors(event.target.checked)}
-        disabled={!canTravelWithMinors}
-      />
+      {people > 1 && (
+        <Checkbox
+          label="Viajo con menores de edad"
+          checked={travelingWithMinors}
+          onChange={(event) => toggleMinors(event.target.checked)}
+        />
+      )}
 
       {travelingWithMinors && (
         <Stepper
@@ -114,6 +117,7 @@ export function PeopleStep() {
           label={minors === 1 ? 'menor' : 'menores'}
           valueRef={minorValueRef}
           min={1}
+          max={people - 1}
         />
       )}
     </div>
