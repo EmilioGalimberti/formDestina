@@ -115,7 +115,6 @@ export function PeopleStep() {
           label={minors === 1 ? 'menor' : 'menores'}
           valueRef={minorValueRef}
           min={1}
-          max={people}
         />
       )}
     </div>

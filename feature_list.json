@@ -276,7 +276,7 @@
   "Si selecciona ese checkbox se debe habilitar abajo la cantidad de menores de edad que viajan junto con los adultos",
   "Si la cantidad de adultos es 1 no se debe habilitar el checkbox",
 "Se debe reflejar en el mensaje de WhatsApp la cantidad de menores de edad que viajan junto con los adultos"],
-      "notes": "Se agregó el campo `minors` al store y se integró dentro del paso `people`. El checkbox aparece con 1 o más adultos. La cantidad de menores nunca puede superar a la de adultos (`minors <= people`); el botón `+` se deshabilita al límite y el store ajusta automáticamente al cambiar adultos. El resumen y el mensaje de WhatsApp reflejan adultos y menores."
+      "notes": "Se agregó el campo `minors` al store y se integró dentro del paso `people`. El checkbox aparece con 1 o más adultos. La cantidad de menores es independiente de la de adultos: siempre hay al menos 1 adulto y los menores se suman por separado sin límite. El resumen y el mensaje de WhatsApp reflejan adultos y menores."
     },
     {
       "id": "F15",

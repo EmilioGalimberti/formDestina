@@ -103,7 +103,7 @@ export const useStore = create<AppState>((set, get) => ({
       const nextPeople = Math.max(1, people)
       return {
         people: nextPeople,
-        minors: Math.min(state.minors, nextPeople),
+        minors: state.minors,
       }
     }),
 

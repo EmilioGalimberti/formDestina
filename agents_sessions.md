@@ -571,12 +571,12 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 **Decisiones:**
 - Se integró la selección de menores dentro del paso existente `people` en lugar de agregar un nuevo paso al wizard, porque la feature pide que sea "en la misma sección".
 - El checkbox se renderiza siempre que haya al menos 1 adulto.
-- La cantidad de menores nunca puede superar a la de adultos (`minors <= people`); el store ajusta automáticamente al cambiar adultos y el botón `+` de menores se deshabilita al límite.
-- El stepper de menores usa mínimo 1 (no tiene sentido mostrarlo con 0 si el checkbox está activo).
+- La cantidad de menores es independiente de la cantidad de adultos: siempre hay al menos 1 adulto y los menores se suman por separado sin límite.
+- El stepper de menores usa mínimo 1 cuando está visible.
 
 **Corrección (feedback del usuario):**
-- `src/state/store.ts`: `setPeople` limita `minors` a `people`; `setMinors` limita a `people`.
-- `src/features/people/PeopleStep.tsx`: el checkbox vuelve a aparecer con 1 adulto; el stepper de menores usa `max={people}` para permitir 1 adulto + 1 menor. Fix posterior: la flag `travelingWithMinors` pasó a depender solo de `minors > 0`, porque la condición previa `people > 1` impedía mostrar el stepper cuando había 1 adulto.
+- `src/state/store.ts`: `setPeople` ya no ajusta `minors`; los menores son independientes de los adultos.
+- `src/features/people/PeopleStep.tsx`: se quitó `max={people}` del stepper de menores para permitir cualquier cantidad de menores.
 
 **Pendientes:**
 - Ninguno.
@@ -686,6 +686,26 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - `src/features/days/DaysStep.tsx`: en mobile cada selector de días ahora se apila verticalmente (nombre arriba, controles abajo centrados) para evitar que el botón `+` se salga de la card con nombres de destino largos. En desktop se mantiene el layout horizontal.
 - Se redujo ligeramente el tamaño de los botones y del número en mobile; se agregó `truncate` al nombre.
 - Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-25 — F14 ajuste: menores independientes de adultos (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/people/PeopleStep.tsx`: se quitó `max={people}` del stepper de menores, permitiendo cualquier cantidad de menores sin importar cuántos adultos haya.
+- `src/state/store.ts`: `setPeople` ya no reduce `minors` al cambiar la cantidad de adultos; los menores quedan independientes.
+- `feature_list.json`: actualizada la nota de F14.
+- `agents_sessions.md`: actualizada la entrada de F14 con la nueva regla.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se mantiene el checkbox "Viajo con menores de edad" y el stepper con mínimo 1 cuando está visible.
+- Siempre hay al menos 1 adulto (`people >= 1`), pero los menores se suman por separado sin límite superior.
 
 **Pendientes:**
 - Ninguno.
