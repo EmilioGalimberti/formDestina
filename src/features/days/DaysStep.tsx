@@ -33,22 +33,22 @@ function DaysSelector({ destination, days, onChange }: DaysSelectorProps) {
   const label = days === 1 ? 'día' : 'días'
 
   return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 shadow-sm">
-      <span className="font-semibold text-foreground">{destination.name}</span>
+    <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm md:flex-row md:items-center md:justify-between md:gap-4">
+      <span className="truncate font-semibold text-foreground">{destination.name}</span>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-center gap-3 md:justify-end">
         <button
           type="button"
           onClick={() => updateDays(days - 1)}
           disabled={days <= 1}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-muted text-xl font-semibold text-foreground outline-offset-4 transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:opacity-40"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-lg font-semibold text-foreground outline-offset-4 transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:opacity-40 md:h-11 md:w-11 md:text-xl"
           aria-label={`Disminuir días en ${destination.name}`}
         >
           −
         </button>
 
-        <div className="flex min-w-[5rem] flex-col items-center" aria-live="polite" aria-atomic="true">
-          <span ref={valueRef} className="text-3xl font-bold text-primary">
+        <div className="flex min-w-[4.5rem] flex-col items-center" aria-live="polite" aria-atomic="true">
+          <span ref={valueRef} className="text-2xl font-bold text-primary md:text-3xl">
             {days}
           </span>
           <span className="text-xs font-medium text-muted-foreground">{label}</span>
@@ -58,7 +58,7 @@ function DaysSelector({ destination, days, onChange }: DaysSelectorProps) {
           type="button"
           onClick={() => updateDays(days + 1)}
           disabled={days >= MAX_DAYS}
-          className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-xl font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:opacity-40"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:opacity-40 md:h-11 md:w-11 md:text-xl"
           aria-label={`Aumentar días en ${destination.name}`}
         >
           +

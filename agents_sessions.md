@@ -677,3 +677,17 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-25 — Fix: botón + de días por destino en mobile (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/days/DaysStep.tsx`: en mobile cada selector de días ahora se apila verticalmente (nombre arriba, controles abajo centrados) para evitar que el botón `+` se salga de la card con nombres de destino largos. En desktop se mantiene el layout horizontal.
+- Se redujo ligeramente el tamaño de los botones y del número en mobile; se agregó `truncate` al nombre.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
