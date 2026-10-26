@@ -575,7 +575,7 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - El stepper de menores usa mínimo 1 cuando está visible.
 
 **Corrección (feedback del usuario):**
-- `src/state/store.ts`: `setPeople` ya no ajusta `minors`; los menores son independientes de los adultos.
+- `src/state/store.ts`: `setPeople` ya no ajusta `minors` y `setMinors` ya no limita a `people`; los menores son independientes de los adultos.
 - `src/features/people/PeopleStep.tsx`: se quitó `max={people}` del stepper de menores para permitir cualquier cantidad de menores.
 
 **Pendientes:**
@@ -706,6 +706,19 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 **Decisiones:**
 - Se mantiene el checkbox "Viajo con menores de edad" y el stepper con mínimo 1 cuando está visible.
 - Siempre hay al menos 1 adulto (`people >= 1`), pero los menores se suman por separado sin límite superior.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-25 — Fix: setMinors ya no limita a cantidad de adultos (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/state/store.ts`: se quitó `Math.min(minors, state.people)` de `setMinors`. Ahora solo limita a `>= 0`.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
 
 **Pendientes:**
 - Ninguno.

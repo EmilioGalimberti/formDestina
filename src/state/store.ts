@@ -108,9 +108,9 @@ export const useStore = create<AppState>((set, get) => ({
     }),
 
   setMinors: (minors) =>
-    set((state) => ({
-      minors: Math.max(0, Math.min(minors, state.people)),
-    })),
+    set({
+      minors: Math.max(0, minors),
+    }),
 
   toggleCategory: (category) =>
     set((state) => {
