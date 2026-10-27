@@ -140,7 +140,7 @@ export const useStore = create<AppState>((set, get) => ({
 
   setFlexible: (isFlexible) => set({ isFlexible }),
 
-  setOrigin: (origin) => set({ origin: origin?.trim() || null }),
+  setOrigin: (origin) => set({ origin: origin || null }),
 
   goToStep: (step) => set({ currentStep: step }),
 

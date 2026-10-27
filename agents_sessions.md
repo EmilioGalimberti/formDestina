@@ -765,3 +765,19 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-26 — F17 fix: permitir espacios en el input de origen (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/state/store.ts`: se quitó el `trim()` de `setOrigin` para que el input pueda contener espacios mientras el usuario escribe (por ejemplo, 'La Rioja'). La validación de campo vacío y el mensaje de WhatsApp siguen usando `trim()` en el render/mensaje.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- El store guarda el valor tal cual lo escribe el usuario; el trimming se aplica solo al momento de validar y enviar el mensaje.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
