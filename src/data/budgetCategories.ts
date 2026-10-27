@@ -4,16 +4,16 @@ export const BUDGET_CATEGORIES: BudgetCategory[] = [
   {
     id: 'low-cost',
     name: 'Low-cost',
-    description: 'Alojamientos económicos, vuelos low-cost y experiencias simples para ahorrar sin dejar de disfrutar.',
+    description: 'Alojamientos simples. Viajes eficientes, pensados para optimizar cada gasto.',
   },
   {
     id: 'quality-price',
     name: 'Calidad-precio',
-    description: 'La mejor relación costo-beneficio: opciones cómodas, buena ubicación y experiencias completas.',
+    description: 'Hoteles cómodos y bien ubicados. Experiencias completas con equilibrio entre confort y costo.',
   },
   {
     id: 'luxury',
-    name: 'Lujo',
-    description: 'Hoteles premium, experiencias exclusivas y todos los detalles para un viaje inolvidable.',
+    name: 'Premium',
+    description: 'Hoteles de diseño o boutique. Experiencias exclusivas y mayor nivel de detalle.',
   },
 ]
