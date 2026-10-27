@@ -18,8 +18,11 @@ export function DestinationStep() {
       <div>
         <h2 className="text-2xl font-semibold">¿A dónde querés viajar?</h2>
         <p className="mt-1 text-muted-foreground">
-          Arrastrá para rotar el globo. Tocá un país para elegirlo o hacé zoom sobre él para ver y
-          elegir sus ciudades.
+          Arrastrá para rotar el globo. Tocá un país para elegirlo o{' '}
+          <span className="font-semibold" style={{ color: '#702841' }}>
+            hacé zoom sobre él para ver y elegir sus ciudades
+          </span>
+          .
         </p>
       </div>
 

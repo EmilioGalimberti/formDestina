@@ -798,3 +798,19 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-27 — Ajuste UI: resaltar instrucción de zoom en step destino (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/destination/DestinationStep.tsx`: la frase 'hacé zoom sobre él para ver y elegir sus ciudades' ahora aparece en negrita y color bordo `#702841` para que los usuarios entiendan que deben acercar el globo para ver ciudades.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se usó `style` inline para el color exacto `#702841` y `font-semibold` para resaltar la acción sin romper el estilo del párrafo.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
