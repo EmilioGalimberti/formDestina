@@ -1,6 +1,6 @@
 {
   "project": "formPrimerContacto",
-  "updated": "2026-10-08",
+  "updated": "2026-10-26",
   "feature_status": ["pending", "in_progress", "blocked", "done"],
   "features": [
     {
@@ -313,6 +313,21 @@
     , "respetar el estilo del resto de la pagina y solo mostrar resultado los datos ingresados","tene en cuenta que es mobile first por lo que no puede ser horizontal el pasaje","quita el preview del mensaje de whatsapp en la pantalla",
   "refactoriza el mensaje que se envia por whatsapp para que se mas legible, emojis un saludo princpal "],
       "notes": "El resultado se renderiza como un pasaje vertical tipo boarding pass: header primario con ícono de avión, secciones con separadores punteados, datos ingresados y código de barras decorativo. Se quitó el preview del mensaje de WhatsApp. El mensaje de WhatsApp ahora tiene saludo principal con emojis, secciones con asteriscos y un cierre amigable."
+    },
+    {
+      "id":"F17",
+      "name":"Agregar DESDE donde se esta pidiendo armar el viaje ",
+      "status":"done",
+      "description": "En el step resultado aparece automaticamente desde argentina, quiero que pedias acceso a la ubicaicon al navegador y uses esa ubicacion para el desde, si el usuario no da acceso a la ubicacion, entonces que aparezca un input de texto para que el usuario pueda escribir desde donde esta pidiendo armar el viaje",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/features/result/ResultStep.tsx",
+        "src/lib/whatsapp.ts"
+      ],
+      "acceptance": ["Se debe pedir acceso a la ubicacion al navegador y usar esa ubicacion para el desde, si el usuario no da acceso a la ubicacion, entonces que aparezca un input de texto para que el usuario pueda escribir desde donde esta pidiendo armar el viaje",
+    "Si el usario no acepta la ubicaicon y tiene este input vacio que el enviar le tire error y pida ingresar la ubicacion de donde esta pidiendo armar el viaje"],
+      "notes": "Se agregó el campo `origin` al store. Al entrar al paso resultado se solicita geolocalización una sola vez; si el usuario acepta, se resuelve la ciudad/país vía BigDataCloud reverse geocode. Si niega, no hay geolocation o falla la resolución, aparece un input para escribir el origen. El botón '¡A viajar!' está deshabilitado visualmente y muestra error si se intenta enviar sin origen. El mensaje de WhatsApp incluye la línea 'Desde: ...'."
     }
   ]
 }

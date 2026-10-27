@@ -46,6 +46,8 @@ export function buildMessage(state: FormState): string {
   const lines = [
     '*Hola Destina!* Quiero armar un viaje con ustedes.',
     '',
+    `*Desde:* ${state.origin?.trim() || 'No indicado'}`,
+    '',
     '*Destinos y días*',
     `- ${formatDestinations(state.destinations, state.daysByDestination)}`,
     '',

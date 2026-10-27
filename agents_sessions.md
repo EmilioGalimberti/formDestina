@@ -724,3 +724,25 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-26 — F17 Origen del viaje (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/state/types.ts`: agregado `origin: string | null` a `FormState` y `setOrigin` a `AppState`.
+- `src/state/store.ts`: inicializado `origin: null`; agregada acción `setOrigin` que guarda el valor trimado o `null`.
+- `src/features/result/ResultStep.tsx`: al entrar al paso se solicita geolocalización del navegador una sola vez; en caso de éxito se resuelve ciudad/país con BigDataCloud reverse geocode; si el usuario niega, no hay geolocation o falla la API, aparece un input para escribir el origen. El botón '¡A viajar!' valida que haya origen y muestra error si está vacío. También se agregó un link 'Usar mi ubicación actual' para reintentar.
+- `src/lib/whatsapp.ts`: el mensaje incluye la línea `*Desde:* ...` con el origen ingresado o resuelto.
+- `feature_list.json`: F17 marcada como `done` con archivos y notas actualizados; fecha del proyecto actualizada.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se usó la API gratuita de BigDataCloud para reverse geocoding sin API key. Si falla o no devuelve datos, se muestra el input manual como fallback.
+- La geolocalización automática solo se pide al montar el paso resultado; si el usuario borra el origen no se vuelve a pedir automáticamente, evitando ser intrusivo.
+- El origen se guarda en el store como string simple para que fluya al resumen y al mensaje de WhatsApp sin cambios mayores.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.

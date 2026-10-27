@@ -35,6 +35,7 @@ export interface FormState {
   selectedDates: string[]
   calendarMonth: { year: number; month: number }
   isFlexible: boolean
+  origin: string | null
 }
 
 export type StepId =
@@ -62,6 +63,7 @@ export interface AppState extends FormState, WizardState {
   setSelectedDates: (dates: string[]) => void
   setCalendarMonth: (year: number, month: number) => void
   setFlexible: (flexible: boolean) => void
+  setOrigin: (origin: string | null) => void
   goToStep: (step: StepId) => void
   nextStep: () => void
   previousStep: () => void

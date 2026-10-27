@@ -27,6 +27,7 @@ const initialState: Omit<
   | 'setSelectedDates'
   | 'setCalendarMonth'
   | 'setFlexible'
+  | 'setOrigin'
   | 'goToStep'
   | 'nextStep'
   | 'previousStep'
@@ -41,6 +42,7 @@ const initialState: Omit<
   selectedDates: [],
   calendarMonth: { year: NOW.getFullYear(), month: NOW.getMonth() },
   isFlexible: false,
+  origin: null,
   currentStep: 'destination',
 }
 
@@ -137,6 +139,8 @@ export const useStore = create<AppState>((set, get) => ({
   setCalendarMonth: (year, month) => set({ calendarMonth: { year, month } }),
 
   setFlexible: (isFlexible) => set({ isFlexible }),
+
+  setOrigin: (origin) => set({ origin: origin?.trim() || null }),
 
   goToStep: (step) => set({ currentStep: step }),
 
