@@ -327,7 +327,7 @@
       ],
       "acceptance": ["Se debe pedir acceso a la ubicacion al navegador y usar esa ubicacion para el desde, si el usuario no da acceso a la ubicacion, entonces que aparezca un input de texto para que el usuario pueda escribir desde donde esta pidiendo armar el viaje",
     "Si el usario no acepta la ubicaicon y tiene este input vacio que el enviar le tire error y pida ingresar la ubicacion de donde esta pidiendo armar el viaje"],
-      "notes": "Se agregó el campo `origin` al store. Al entrar al paso resultado se solicita geolocalización una sola vez; si el usuario acepta, se resuelve la ciudad/país vía BigDataCloud reverse geocode. Si niega, no hay geolocation o falla la resolución, aparece un input para escribir el origen. El botón '¡A viajar!' está deshabilitado visualmente y muestra error si se intenta enviar sin origen. El mensaje de WhatsApp incluye la línea 'Desde: ...'."
+      "notes": "Se agregó el campo `origin` al store. Al entrar al paso resultado se solicita geolocalización una sola vez; si el usuario acepta, se resuelve la ciudad/país vía BigDataCloud reverse geocode priorizando `locality` sobre `city` para evitar nombres de subdivisión administrativa. Si niega, no hay geolocation o falla la resolución, aparece un input para escribir el origen. El input de origen siempre está visible y habilitado dentro de la fila 'Desde', permitiendo editar tanto la ubicación detectada como un origen manual. El botón '¡A viajar!' está deshabilitado visualmente y muestra error si se intenta enviar sin origen. El mensaje de WhatsApp incluye la línea 'Desde: ...'."
     }
   ]
 }

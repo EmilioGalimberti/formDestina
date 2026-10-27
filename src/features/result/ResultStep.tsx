@@ -113,7 +113,7 @@ export function ResultStep() {
       }
 
       const data: ReverseGeocodeResponse = await response.json()
-      const city = data.city || data.locality || data.principalSubdivision
+      const city = data.locality || data.city || data.principalSubdivision
       const country = data.countryName
 
       if (!city && !country) {
@@ -202,19 +202,6 @@ export function ResultStep() {
     return `${people} ${people === 1 ? 'adulto' : 'adultos'}`
   })()
 
-  const originValue = (() => {
-    if (origin?.trim()) return origin.trim()
-    if (isLocating) {
-      return (
-        <span className="inline-flex items-center gap-2 text-muted-foreground">
-          <LocationSpinner />
-          Detectando ubicación...
-        </span>
-      )
-    }
-    return <span className="text-muted-foreground">No indicado</span>
-  })()
-
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -242,37 +229,40 @@ export function ResultStep() {
 
         <div className="px-5 py-5 md:px-6 md:py-6">
           <div className="mb-5 grid grid-cols-2 gap-4">
-            <TicketRow label="Desde" value={originValue} />
-            <TicketRow label="Hacia" value={destinations.map((d) => d.name).join(', ') || '—'} emphasis />
-          </div>
-
-          {!isLocating && !origin?.trim() && (
-            <div className="mb-5">
-              <label htmlFor="origin-input" className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground md:text-xs">
-                ¿Desde dónde querés armar el viaje?
+            <div className="flex flex-col gap-1">
+              <label htmlFor="origin-input" className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground md:text-xs">
+                Desde
               </label>
-              <input
-                id="origin-input"
-                type="text"
-                value={origin ?? ''}
-                onChange={handleOriginChange}
-                placeholder="Ej: Buenos Aires, Argentina"
-                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              />
+              <div className="relative">
+                <input
+                  id="origin-input"
+                  type="text"
+                  value={origin ?? ''}
+                  onChange={handleOriginChange}
+                  placeholder="Ej: Buenos Aires, Argentina"
+                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
+                {isLocating && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    <LocationSpinner />
+                  </span>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={handleRequestLocation}
-                className="mt-2 text-xs font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
+                className="self-start text-xs font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
               >
                 Usar mi ubicación actual
               </button>
               {showError && !origin?.trim() && (
-                <p className="mt-2 text-sm font-medium text-red-600" role="alert">
-                  Ingresá desde dónde querés armar el viaje para continuar.
+                <p className="text-sm font-medium text-red-600" role="alert">
+                  Ingresá desde dónde querés armar el viaje.
                 </p>
               )}
             </div>
-          )}
+            <TicketRow label="Hacia" value={destinations.map((d) => d.name).join(', ') || '—'} emphasis />
+          </div>
 
           <TicketDivider />
 

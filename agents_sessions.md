@@ -746,3 +746,22 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-26 — F17 ajuste: input de origen siempre editable y mejora de resolución (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/result/ResultStep.tsx`: el input de origen ahora siempre está visible dentro de la fila 'Desde', es más compacto y permite editar tanto la ubicación detectada como un origen manual. Se corrigió el comportamiento que ocultaba el input al escribir.
+- `src/features/result/ResultStep.tsx`: la resolución de ubicación vía BigDataCloud ahora prioriza `locality` sobre `city` para evitar resultados como 'Departamento Capital, Argentina' y mostrar nombres de ciudad más representativos.
+- `feature_list.json`: actualizada la nota de F17.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- El input permanece habilitado permanentemente para que el usuario pueda corregir cualquier ubicación, ya sea detectada automáticamente o ingresada manualmente.
+- El spinner de carga aparece dentro del input a la derecha, sin tapar el campo.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
