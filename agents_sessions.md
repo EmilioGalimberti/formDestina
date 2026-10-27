@@ -781,3 +781,20 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-27 — F17 ajuste: botón '¡A viajar!' siempre habilitado y origen marcado como obligatorio (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/result/ResultStep.tsx`: el botón '¡A viajar!' ahora siempre se ve habilitado. Si se presiona sin origen, se muestra un error claro indicando que el campo 'Desde' es obligatorio.
+- `src/features/result/ResultStep.tsx`: el label 'Desde' incluye un asterisco de campo obligatorio, el input recibe borde rojo y `aria-invalid` cuando hay error, y el mensaje de error explica que debe ingresar desde dónde quiere viajar.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se prefirió mantener el CTA siempre activo para que el usuario entienda que puede interactuar, y usar la validación al enviar para guiarlo.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.

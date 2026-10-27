@@ -231,7 +231,7 @@ export function ResultStep() {
           <div className="mb-5 grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1">
               <label htmlFor="origin-input" className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground md:text-xs">
-                Desde
+                Desde <span className="text-red-600" aria-hidden="true">*</span>
               </label>
               <div className="relative">
                 <input
@@ -240,7 +240,11 @@ export function ResultStep() {
                   value={origin ?? ''}
                   onChange={handleOriginChange}
                   placeholder="Ej: Buenos Aires, Argentina"
-                  className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  aria-required="true"
+                  aria-invalid={showError && !origin?.trim()}
+                  className={`w-full rounded-lg border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                    showError && !origin?.trim() ? 'border-red-600' : 'border-border'
+                  }`}
                 />
                 {isLocating && (
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
@@ -257,7 +261,7 @@ export function ResultStep() {
               </button>
               {showError && !origin?.trim() && (
                 <p className="text-sm font-medium text-red-600" role="alert">
-                  Ingresá desde dónde querés armar el viaje.
+                  El campo Desde es obligatorio. Ingresá desde dónde querés viajar.
                 </p>
               )}
             </div>
@@ -287,16 +291,11 @@ export function ResultStep() {
       </div>
 
       <a
-        href={origin?.trim() ? waLink : undefined}
+        href={waLink}
         onClick={handleSendClick}
         target="_blank"
         rel="noopener noreferrer"
-        aria-disabled={!origin?.trim()}
-        className={`inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-lg font-semibold outline-offset-4 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 ${
-          origin?.trim()
-            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-            : 'cursor-not-allowed bg-muted text-muted-foreground'
-        }`}
+        className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-4 text-lg font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95"
         aria-label="Enviar resumen del viaje a Martina por WhatsApp"
       >
         <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
