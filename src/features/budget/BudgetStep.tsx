@@ -3,7 +3,12 @@ import { BUDGET_CATEGORIES } from '@/data/budgetCategories'
 import { BudgetCategoryCard } from '@/features/budget/BudgetCategoryCard'
 
 export function BudgetStep() {
-  const { budgetCategory, setBudgetCategory } = useStore()
+  const { budgetCategory, setBudgetCategory, stepError, setStepError } = useStore()
+
+  const handleSelect = (category: Parameters<typeof setBudgetCategory>[0]) => {
+    setStepError(null)
+    setBudgetCategory(category)
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -14,13 +19,19 @@ export function BudgetStep() {
 
       </div>
 
+      {stepError && (
+        <p className="text-sm font-medium text-red-600" role="alert">
+          {stepError}
+        </p>
+      )}
+
       <div className="flex flex-col gap-3">
         {BUDGET_CATEGORIES.map((category) => (
           <BudgetCategoryCard
             key={category.id}
             category={category}
             selected={budgetCategory?.id === category.id}
-            onSelect={setBudgetCategory}
+            onSelect={handleSelect}
           />
         ))}
       </div>

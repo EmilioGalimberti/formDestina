@@ -49,6 +49,7 @@ export type StepId =
 
 export interface WizardState {
   currentStep: StepId
+  stepError: string | null
 }
 
 export interface AppState extends FormState, WizardState {
@@ -64,6 +65,7 @@ export interface AppState extends FormState, WizardState {
   setCalendarMonth: (year: number, month: number) => void
   setFlexible: (flexible: boolean) => void
   setOrigin: (origin: string | null) => void
+  setStepError: (error: string | null) => void
   goToStep: (step: StepId) => void
   nextStep: () => void
   previousStep: () => void

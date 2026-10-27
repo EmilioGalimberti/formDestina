@@ -28,6 +28,7 @@ const initialState: Omit<
   | 'setCalendarMonth'
   | 'setFlexible'
   | 'setOrigin'
+  | 'setStepError'
   | 'goToStep'
   | 'nextStep'
   | 'previousStep'
@@ -44,6 +45,7 @@ const initialState: Omit<
   isFlexible: false,
   origin: null,
   currentStep: 'destination',
+  stepError: null,
 }
 
 export const useStore = create<AppState>((set, get) => ({
@@ -142,21 +144,50 @@ export const useStore = create<AppState>((set, get) => ({
 
   setOrigin: (origin) => set({ origin: origin || null }),
 
-  goToStep: (step) => set({ currentStep: step }),
+  setStepError: (stepError) => set({ stepError }),
+
+  goToStep: (step) => set({ currentStep: step, stepError: null }),
 
   nextStep: () => {
-    const { currentStep } = get()
-    const index = STEP_ORDER.indexOf(currentStep)
-    if (index >= 0 && index < STEP_ORDER.length - 1) {
-      set({ currentStep: STEP_ORDER[index + 1] })
+    const state = get()
+    const index = STEP_ORDER.indexOf(state.currentStep)
+    if (index < 0 || index >= STEP_ORDER.length - 1) return
+
+    switch (state.currentStep) {
+      case 'destination':
+        if (state.destinations.length === 0) {
+          set({ stepError: 'Seleccioná al menos un destino para continuar.' })
+          return
+        }
+        break
+      case 'calendar':
+        if (state.selectedDates.length === 0) {
+          set({ stepError: 'Seleccioná al menos un día para continuar.' })
+          return
+        }
+        break
+      case 'category':
+        if (state.categories.length === 0) {
+          set({ stepError: 'Seleccioná al menos una categoría para continuar.' })
+          return
+        }
+        break
+      case 'budget':
+        if (state.budgetCategory === null) {
+          set({ stepError: 'Seleccioná una opción de presupuesto para continuar.' })
+          return
+        }
+        break
     }
+
+    set({ currentStep: STEP_ORDER[index + 1], stepError: null })
   },
 
   previousStep: () => {
     const { currentStep } = get()
     const index = STEP_ORDER.indexOf(currentStep)
     if (index > 0) {
-      set({ currentStep: STEP_ORDER[index - 1] })
+      set({ currentStep: STEP_ORDER[index - 1], stepError: null })
     }
   },
 

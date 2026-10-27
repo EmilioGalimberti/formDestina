@@ -4,7 +4,7 @@ import { WorldMap } from '@/features/destination/WorldMap'
 import { CustomDestinationInput } from '@/features/destination/CustomDestinationInput'
 
 export function DestinationStep() {
-  const { destinations, toggleDestination, addCustomDestination, nextStep } = useStore()
+  const { destinations, toggleDestination, addCustomDestination, nextStep, stepError, setStepError } = useStore()
   const cardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -12,6 +12,16 @@ export function DestinationStep() {
       cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }
   }, [destinations])
+
+  const handleToggleDestination = (destination: Parameters<typeof toggleDestination>[0]) => {
+    setStepError(null)
+    toggleDestination(destination)
+  }
+
+  const handleAddCustomDestination = (name: string) => {
+    setStepError(null)
+    addCustomDestination(name)
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -26,13 +36,19 @@ export function DestinationStep() {
         </p>
       </div>
 
+      {stepError && (
+        <p className="text-sm font-medium text-red-600" role="alert">
+          {stepError}
+        </p>
+      )}
+
       <WorldMap
         selected={destinations}
-        onSelect={toggleDestination}
+        onSelect={handleToggleDestination}
         aria-label="Mapa mundi interactivo: arrastrá para rotar, hacé zoom y tocá un marcador para elegir o quitar destinos"
       />
 
-      <CustomDestinationInput onAdd={addCustomDestination} />
+      <CustomDestinationInput onAdd={handleAddCustomDestination} />
 
       {destinations.length > 0 && (
         <div ref={cardRef} className="rounded-2xl border border-primary/30 bg-primary/5 p-4">

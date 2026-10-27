@@ -814,3 +814,27 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-27 — F18 Validaciones de steps (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/state/types.ts`: agregado `stepError: string | null` a `WizardState` y `setStepError` a `AppState`.
+- `src/state/store.ts`: implementada la validación en `nextStep` según el paso actual: destination requiere al menos un destino, calendar al menos un día, category al menos una categoría y budget una categoría de presupuesto. Si falla, se guarda el error y no se avanza; si pasa, se limpia el error y se avanza. `previousStep` y `goToStep` también limpian el error.
+- `src/features/destination/DestinationStep.tsx`: muestra el mensaje de error del store y lo limpia al seleccionar o agregar un destino.
+- `src/features/calendar/CalendarStep.tsx`: muestra el error de validación y lo limpia al seleccionar un día.
+- `src/features/category/CategoryStep.tsx`: muestra el error y lo limpia al seleccionar una categoría.
+- `src/features/budget/BudgetStep.tsx`: muestra el error y lo limpia al seleccionar una categoría de presupuesto.
+- `feature_list.json`: F18 marcada como `done` con archivos y notas actualizados.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- El botón 'Siguiente' del footer siempre está habilitado; la validación ocurre al hacer click y se muestra el error en el step correspondiente, cumpliendo con lo pedido.
+- Se centralizó la lógica de validación en `nextStep` del store para evitar dispersar reglas entre componentes; el mensaje de error se guarda en el store para que cada step lo pueda renderizar donde mejor encaje visualmente.
+- Se mantiene el error local del calendario para el límite de días seleccionables, separado del error de validación de 'al menos un día'.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.

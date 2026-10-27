@@ -261,7 +261,7 @@ export function ResultStep() {
               </button>
               {showError && !origin?.trim() && (
                 <p className="text-sm font-medium text-red-600" role="alert">
-                  El campo Desde es obligatorio. Ingresá desde dónde querés viajar.
+                  Ingresá desde dónde querés viajar.
                 </p>
               )}
             </div>

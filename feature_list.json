@@ -328,6 +328,25 @@
       "acceptance": ["Se debe pedir acceso a la ubicacion al navegador y usar esa ubicacion para el desde, si el usuario no da acceso a la ubicacion, entonces que aparezca un input de texto para que el usuario pueda escribir desde donde esta pidiendo armar el viaje",
     "Si el usario no acepta la ubicaicon y tiene este input vacio que el enviar le tire error y pida ingresar la ubicacion de donde esta pidiendo armar el viaje"],
       "notes": "Se agregó el campo `origin` al store. Al entrar al paso resultado se solicita geolocalización una sola vez; si el usuario acepta, se resuelve la ciudad/país vía BigDataCloud reverse geocode priorizando `locality` sobre `city` para evitar nombres de subdivisión administrativa. Si niega, no hay geolocation o falla la resolución, aparece un input para escribir el origen. El input de origen siempre está visible y habilitado dentro de la fila 'Desde', permitiendo editar tanto la ubicación detectada como un origen manual. El botón '¡A viajar!' está deshabilitado visualmente y muestra error si se intenta enviar sin origen. El mensaje de WhatsApp incluye la línea 'Desde: ...'."
+    },
+    {
+      "id":"F18",
+      "name":"validacines",
+      "status":"done",
+      "description": "Se deben validar los steps destination,calendar, category, budget",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/features/destination/DestinationStep.tsx",
+        "src/features/calendar/CalendarStep.tsx",
+        "src/features/category/CategoryStep.tsx",
+        "src/features/budget/BudgetStep.tsx"
+      ],
+      "acceptance": ["Se debe validar que en destination haya al menos un destino seleccionado, si no hay ninguno seleccionado el boton de siguiente debe estar habilitado pero mostrar un mensaje de error, y no avanzar al siguiente step",
+    "Se debe validar que en calendar haya al menos un dia seleccionado, si no hay ninguno seleccionado el boton de siguiente debe estar habilitado pero mostrar un mensaje de error, y no avanzar al siguiente step",
+    "Se debe validar que en category haya al menos una categoria seleccionada, si no hay ninguna seleccionada el boton de siguiente debe estar habilitado pero mostrar un mensaje de error, y no avanzar al siguiente step",
+    "Se debe validar que en budget haya al menos una budget seleccionada, si no hay ninguna seleccionada el boton de siguiente debe estar habilitado pero mostrar un mensaje de error, y no avanzar al siguiente step"],
+      "notes": "El botón 'Siguiente' del footer siempre está habilitado. Al hacer click, nextStep valida el paso actual según el store: destination requiere al menos un destino, calendar al menos una fecha, category al menos una categoría y budget una categoría de presupuesto. Si falla, se guarda stepError en el store y se muestra en el step correspondiente; al seleccionar una opción se limpia el error."
     }
   ]
 }

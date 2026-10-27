@@ -65,6 +65,8 @@ export function CalendarStep() {
     setSelectedDates,
     setCalendarMonth,
     setFlexible,
+    stepError,
+    setStepError,
   } = useStore()
 
   const [anchorDate, setAnchorDate] = useState<string | null>(null)
@@ -91,6 +93,7 @@ export function CalendarStep() {
   }
 
   const handleDayClick = (day: number) => {
+    setStepError(null)
     const key = formatDateKey(calendarMonth.year, calendarMonth.month, day)
 
     if (selectedDates.includes(key)) {
@@ -145,6 +148,12 @@ export function CalendarStep() {
           Seleccioná el día de inicio y el día de fin. Hasta {maxSelectableDays} días ({totalDays} del viaje + 2 por vuelos).
         </p>
       </div>
+
+      {stepError && (
+        <p className="text-sm font-medium text-red-600" role="alert">
+          {stepError}
+        </p>
+      )}
 
       <div className="rounded-3xl border border-border bg-card p-5 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
