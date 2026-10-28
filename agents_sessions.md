@@ -879,3 +879,27 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-27 — F19 Edades de los menores de edad (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/state/types.ts`: agregado `minorAges: (number | null)[]` a `FormState` y las acciones `setMinorAges` y `setMinorAge` a `AppState`.
+- `src/state/store.ts`: inicializado `minorAges: []`; `setMinors` ajusta el array agregando `null` o truncando según la nueva cantidad; agregadas `setMinorAges` y `setMinorAge`; `nextStep` valida que, si hay menores, todas las edades estén ingresadas entre 0 y 17 antes de avanzar de `people` a `category`.
+- `src/features/people/PeopleStep.tsx`: agregada una card con inputs numéricos para cada menor, con aviso de que las edades son al momento del viaje hasta el vuelo de vuelta. Los inputs solo aceptan números enteros entre 0 y 17.
+- `src/features/result/ResultStep.tsx`: el resumen de pasajeros muestra las edades de los menores.
+- `src/lib/whatsapp.ts`: el mensaje incluye las edades de los menores junto a la cantidad de viajeros.
+- `feature_list.json`: F19 marcada como `done` con archivos y notas actualizados.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se integró la carga de edades dentro del paso existente `people` para mantener todo lo relacionado a viajeros en un mismo lugar y no agregar un paso condicional al wizard.
+- Se usó `minorAges: (number | null)[]` para distinguir entre una edad no ingresada (`null`) y una edad válida (0 a 17), facilitando la validación de campos obligatorios.
+- Se usó `type="number"` con `inputMode="numeric"` para mostrar teclado numérico en mobile y se valida el contenido contra la expresión regular `^\d+$` para rechazar letras, signos o decimales.
+- El diseño de la card sigue el lenguaje visual del proyecto: bordes redondeados, fondo blanco, inputs con focus ring y tipografía Inter.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.

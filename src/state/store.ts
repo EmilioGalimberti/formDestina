@@ -21,6 +21,8 @@ const initialState: Omit<
   | 'setDestinationDays'
   | 'setPeople'
   | 'setMinors'
+  | 'setMinorAges'
+  | 'setMinorAge'
   | 'toggleCategory'
   | 'setBudgetCategory'
   | 'toggleDate'
@@ -38,6 +40,7 @@ const initialState: Omit<
   daysByDestination: {},
   people: INITIAL_PEOPLE,
   minors: 0,
+  minorAges: [],
   categories: [],
   budgetCategory: null,
   selectedDates: [],
@@ -112,8 +115,27 @@ export const useStore = create<AppState>((set, get) => ({
     }),
 
   setMinors: (minors) =>
-    set({
-      minors: Math.max(0, minors),
+    set((state) => {
+      const nextMinors = Math.max(0, minors)
+      const minorAges = state.minorAges.slice(0, nextMinors)
+      while (minorAges.length < nextMinors) {
+        minorAges.push(null)
+      }
+      return {
+        minors: nextMinors,
+        minorAges,
+      }
+    }),
+
+  setMinorAges: (minorAges) => set({ minorAges }),
+
+  setMinorAge: (index, age) =>
+    set((state) => {
+      const minorAges = [...state.minorAges]
+      if (index >= 0 && index < minorAges.length) {
+        minorAges[index] = age
+      }
+      return { minorAges }
     }),
 
   toggleCategory: (category) =>
@@ -164,6 +186,17 @@ export const useStore = create<AppState>((set, get) => ({
         if (state.selectedDates.length === 0) {
           set({ stepError: 'Seleccioná al menos un día para continuar.' })
           return
+        }
+        break
+      case 'people':
+        if (state.minors > 0) {
+          const allAgesFilled =
+            state.minorAges.length === state.minors &&
+            state.minorAges.every((age) => age !== null && age >= 0 && age <= 17)
+          if (!allAgesFilled) {
+            set({ stepError: 'Ingresá la edad de todos los menores al momento del viaje.' })
+            return
+          }
         }
         break
       case 'category':

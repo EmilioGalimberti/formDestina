@@ -17,9 +17,17 @@ function formatCategories(categories: FormState['categories']) {
   return categories.map((c) => c.name).join(', ')
 }
 
-function formatTravelers(people: number, minors: number) {
+function formatTravelers(
+  people: number,
+  minors: number,
+  minorAges: FormState['minorAges'],
+) {
   if (minors > 0) {
-    return `${people} ${people === 1 ? 'adulto' : 'adultos'} y ${minors} ${minors === 1 ? 'menor' : 'menores'}`
+    const agesLabel = minorAges
+      .filter((age): age is number => age !== null)
+      .map((age) => `${age} ${age === 1 ? 'año' : 'años'}`)
+      .join(', ')
+    return `${people} ${people === 1 ? 'adulto' : 'adultos'} y ${minors} ${minors === 1 ? 'menor' : 'menores'}${agesLabel ? ` (${agesLabel})` : ''}`
   }
   return `${people} ${people === 1 ? 'adulto' : 'adultos'}`
 }
@@ -52,7 +60,7 @@ export function buildMessage(state: FormState): string {
     `- ${formatDestinations(state.destinations, state.daysByDestination)}`,
     '',
     `*Fechas:* ${formatDates(state.selectedDates)}`,
-    `*Viajeros:* ${formatTravelers(state.people, state.minors)}`,
+    `*Viajeros:* ${formatTravelers(state.people, state.minors, state.minorAges)}`,
     `*Estilo:* ${formatCategories(state.categories)}`,
     `*Categoría:* ${state.budgetCategory?.name ?? 'No seleccionado'}`,
   ]

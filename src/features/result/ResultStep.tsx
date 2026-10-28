@@ -83,6 +83,7 @@ export function ResultStep() {
     daysByDestination,
     people,
     minors,
+    minorAges,
     categories,
     budgetCategory,
     selectedDates,
@@ -197,7 +198,11 @@ export function ResultStep() {
 
   const travelersLabel = (() => {
     if (minors > 0) {
-      return `${people} ${people === 1 ? 'adulto' : 'adultos'} + ${minors} ${minors === 1 ? 'menor' : 'menores'}`
+      const agesLabel = minorAges
+        .filter((age): age is number => age !== null)
+        .map((age) => `${age} ${age === 1 ? 'año' : 'años'}`)
+        .join(', ')
+      return `${people} ${people === 1 ? 'adulto' : 'adultos'} + ${minors} ${minors === 1 ? 'menor' : 'menores'}${agesLabel ? ` (${agesLabel})` : ''}`
     }
     return `${people} ${people === 1 ? 'adulto' : 'adultos'}`
   })()

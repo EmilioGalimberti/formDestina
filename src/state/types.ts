@@ -30,6 +30,7 @@ export interface FormState {
   daysByDestination: Record<string, number>
   people: number
   minors: number
+  minorAges: (number | null)[]
   categories: Category[]
   budgetCategory: BudgetCategory | null
   selectedDates: string[]
@@ -58,6 +59,8 @@ export interface AppState extends FormState, WizardState {
   setDestinationDays: (destinationId: string, days: number) => void
   setPeople: (people: number) => void
   setMinors: (minors: number) => void
+  setMinorAges: (ages: (number | null)[]) => void
+  setMinorAge: (index: number, age: number | null) => void
   toggleCategory: (category: Category) => void
   setBudgetCategory: (budgetCategory: BudgetCategory | null) => void
   toggleDate: (date: string) => void
