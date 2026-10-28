@@ -365,7 +365,7 @@
       "Se debe validar que la edad ingresada sea un numero entre 0 y 17, si no es asi se debe mostrar un mensaje de error y no permitir avanzar al siguiente step",
       "debe ser un input numerico y no permitir ingresar letras o caracteres especiales",
       "debe ser un input obligatorio si se selecciono que viaja con menores de edad y no permitir avanzar al siguiente step si no se ingreso la edad de todos los menores de edad que viajan junto con los adultos"],
-      "notes": "Se agregó el campo `minorAges: (number | null)[]` al store. Al cambiar la cantidad de menores, el array se ajusta rellenando con `null`. En el paso 'people' aparece una card con inputs numéricos para cada menor, validando rango 0-17 y rechazando letras/caracteres. Se muestra un aviso indicando que las edades son al momento del viaje hasta el vuelo de vuelta. La validación de `nextStep` impide avanzar si hay menores y falta alguna edad. Las edades se muestran en el resumen y en el mensaje de WhatsApp."
+      "notes": "Se agregó el campo `minorAges: (number | null)[]` al store. Al cambiar la cantidad de menores, el array se ajusta rellenando con `null`. En el paso 'people' aparece una card con inputs numéricos para cada menor, validando rango 1-17 y rechazando letras, signos o punto. Se muestra un mensaje de error visual si el usuario ingresa un valor inválido o deja el campo vacío. Se muestra un aviso indicando que las edades son al momento del viaje hasta el vuelo de vuelta. La validación de `nextStep` impide avanzar si hay menores y falta alguna edad válida. Las edades se muestran en el resumen y en el mensaje de WhatsApp."
     }
   ]
 }

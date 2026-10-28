@@ -190,11 +190,11 @@ export const useStore = create<AppState>((set, get) => ({
         break
       case 'people':
         if (state.minors > 0) {
-          const allAgesFilled =
+          const allAgesValid =
             state.minorAges.length === state.minors &&
-            state.minorAges.every((age) => age !== null && age >= 0 && age <= 17)
-          if (!allAgesFilled) {
-            set({ stepError: 'Ingresá la edad de todos los menores al momento del viaje.' })
+            state.minorAges.every((age) => age !== null && age >= 1 && age <= 17)
+          if (!allAgesValid) {
+            set({ stepError: 'Ingresá una edad válida (entre 1 y 17 años) para todos los menores.' })
             return
           }
         }

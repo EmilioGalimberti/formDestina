@@ -899,6 +899,14 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Se usó `type="number"` con `inputMode="numeric"` para mostrar teclado numérico en mobile y se valida el contenido contra la expresión regular `^\d+$` para rechazar letras, signos o decimales.
 - El diseño de la card sigue el lenguaje visual del proyecto: bordes redondeados, fondo blanco, inputs con focus ring y tipografía Inter.
 
+**Corrección (feedback del usuario):**
+- `src/features/people/PeopleStep.tsx`: el rango válido ahora es 1 a 17 años; no se permite 0.
+- `src/features/people/PeopleStep.tsx`: agregado mensaje de error visual que se muestra cuando el input está vacío, contiene un punto/signo u otro carácter no numérico, o está fuera de rango.
+- `src/features/people/PeopleStep.tsx`: `onKeyDown` previene teclas no numéricas y muestra el mensaje de error.
+- `src/state/store.ts`: `nextStep` valida que las edades sean entre 1 y 17.
+- `feature_list.json`: nota de F19 actualizada.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
 **Pendientes:**
 - Ninguno.
 

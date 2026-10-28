@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useStore } from '@/state/store'
 import { Checkbox } from '@/ui/Checkbox'
 import { gsap } from '@/lib/gsap'
@@ -64,6 +64,7 @@ export function PeopleStep() {
   const { people, minors, minorAges, setPeople, setMinors, setMinorAge, setStepError } = useStore()
   const adultValueRef = useRef<HTMLSpanElement>(null)
   const minorValueRef = useRef<HTMLSpanElement>(null)
+  const [ageError, setAgeError] = useState<string | null>(null)
 
   const travelingWithMinors = minors > 0
 
@@ -87,18 +88,44 @@ export function PeopleStep() {
     animateValue(minorValueRef.current)
   }
 
+  const showAgeError = (message: string) => {
+    setAgeError(message)
+    window.setTimeout(() => setAgeError(null), 3000)
+  }
+
   const handleAgeChange = (index: number, value: string) => {
     setStepError(null)
+    setAgeError(null)
     const trimmed = value.trim()
+
     if (trimmed.length === 0) {
+      setMinorAge(index, null)
+      showAgeError('La edad es obligatoria. Ingresá un número entre 1 y 17.')
+      return
+    }
+
+    if (!/^\d+$/.test(trimmed)) {
+      showAgeError('La edad solo puede contener números enteros.')
       setMinorAge(index, null)
       return
     }
+
     const age = Number(trimmed)
-    if (Number.isNaN(age) || age < 0 || age > 17 || !/^\d+$/.test(trimmed)) {
+    if (age < 1 || age > 17) {
+      showAgeError('La edad debe estar entre 1 y 17 años.')
+      setMinorAge(index, null)
       return
     }
+
     setMinorAge(index, age)
+  }
+
+  const handleAgeKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowed = /^[0-9]$|Backspace|Tab|ArrowLeft|ArrowRight|Delete|Enter/
+    if (!allowed.test(event.key)) {
+      event.preventDefault()
+      showAgeError('La edad solo puede contener números.')
+    }
   }
 
   return (
@@ -153,16 +180,24 @@ export function PeopleStep() {
                     id={`minor-age-${index}`}
                     type="number"
                     inputMode="numeric"
-                    min={0}
+                    min={1}
                     max={17}
                     value={minorAges[index] ?? ''}
                     onChange={(event) => handleAgeChange(index, event.target.value)}
+                    onKeyDown={handleAgeKeyDown}
                     placeholder="Edad"
+                    aria-invalid={minorAges[index] === null}
                     className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-center text-sm text-foreground outline-offset-4 transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   />
                 </div>
               ))}
             </div>
+
+            {ageError && (
+              <p className="mt-3 text-sm font-medium text-red-600" role="alert">
+                {ageError}
+              </p>
+            )}
           </div>
         </div>
       )}
