@@ -860,3 +860,22 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-27 — Ajuste calendario: quitar input, dejar solo calendario (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/calendar/CalendarStep.tsx`: eliminado el input de texto `DD-MM-AAAA`; el usuario selecciona la fecha de ida directamente desde el calendario.
+- `src/features/calendar/CalendarStep.tsx`: actualizada la descripción para indicar que debe tocar el día del vuelo de ida en el calendario.
+- `feature_list.json`: actualizada la nota de F15 para reflejar que la selección se hace solo por calendario.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se prefirió la interacción directa con el calendario para simplificar la UI y evitar duplicar controles.
+- Se mantiene el rango automático, el resaltado del día de ida y el resto del viaje, y el checkbox de flexibilidad.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.

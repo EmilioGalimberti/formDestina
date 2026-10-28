@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useStore } from '@/state/store'
 import { Checkbox } from '@/ui/Checkbox'
 
@@ -37,26 +36,6 @@ function parseDateKey(date: string) {
   return { year, month: month - 1, day }
 }
 
-function formatDisplayDate(dateKey: string) {
-  const { year, month, day } = parseDateKey(dateKey)
-  return `${String(day).padStart(2, '0')}-${String(month + 1).padStart(2, '0')}-${year}`
-}
-
-function parseDisplayDate(value: string) {
-  const match = value.match(/^(\d{2})-(\d{2})-(\d{4})$/)
-  if (!match) return null
-  const [, day, month, year] = match.map(Number)
-  const date = new Date(year, month - 1, day)
-  if (
-    date.getFullYear() !== year ||
-    date.getMonth() !== month - 1 ||
-    date.getDate() !== day
-  ) {
-    return null
-  }
-  return date
-}
-
 function getDateRange(start: string, days: number) {
   const dates: string[] = []
   const current = new Date(start + 'T00:00:00')
@@ -87,45 +66,11 @@ export function CalendarStep() {
 
   const totalTripDays = totalDays + 2
 
-  const [inputValue, setInputValue] = useState(() =>
-    selectedDates.length > 0 ? formatDisplayDate(selectedDates[0]) : '',
-  )
-  const [inputError, setInputError] = useState<string | null>(null)
-
-  const applyStartDate = (dateKey: string) => {
-    setStepError(null)
-    setInputError(null)
-    setInputValue(formatDisplayDate(dateKey))
-    const range = getDateRange(dateKey, totalTripDays)
-    setSelectedDates(range)
-  }
-
   const handleDayClick = (day: number) => {
-    const key = formatDateKey(calendarMonth.year, calendarMonth.month, day)
-    applyStartDate(key)
-  }
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-    setInputValue(value)
     setStepError(null)
-
-    if (value.length === 0) {
-      setInputError(null)
-      setSelectedDates([])
-      return
-    }
-
-    const parsed = parseDisplayDate(value)
-    if (!parsed) {
-      setInputError('Usá el formato DD-MM-AAAA (ej: 15-01-2027).')
-      return
-    }
-
-    setInputError(null)
-    const key = formatDateKey(parsed.getFullYear(), parsed.getMonth(), parsed.getDate())
-    applyStartDate(key)
-    setCalendarMonth(parsed.getFullYear(), parsed.getMonth())
+    const key = formatDateKey(calendarMonth.year, calendarMonth.month, day)
+    const range = getDateRange(key, totalTripDays)
+    setSelectedDates(range)
   }
 
   const changeMonth = (delta: number) => {
@@ -161,32 +106,9 @@ export function CalendarStep() {
       <div>
         <h2 className="text-2xl font-semibold">¿Qué días querés viajar?</h2>
         <p className="mt-1 text-muted-foreground">
-          Seleccioná el día en que pensás tomar el vuelo de ida. El calendario marca automáticamente
-          los {totalTripDays} días de tu viaje ({totalDays} en destinos + 2 por vuelos).
-        </p>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <label htmlFor="departure-date" className="text-sm font-medium text-foreground">
-          Fecha del vuelo de ida
-        </label>
-        <input
-          id="departure-date"
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="DD-MM-AAAA"
-          aria-describedby={inputError ? 'departure-date-error' : undefined}
-          aria-invalid={inputError ? 'true' : 'false'}
-          className="w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground outline-offset-4 transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        />
-        {inputError && (
-          <p id="departure-date-error" className="text-sm font-medium text-red-600" role="alert">
-            {inputError}
-          </p>
-        )}
-        <p className="text-xs text-muted-foreground">
-          También podés tocar el día directamente en el calendario.
+          Seleccioná en el calendario el día en que pensás tomar el vuelo de ida. Se marcarán
+          automáticamente los {totalTripDays} días de tu viaje ({totalDays} en destinos + 2 por
+          vuelos).
         </p>
       </div>
 

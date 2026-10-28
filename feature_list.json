@@ -298,7 +298,7 @@
       "No se debe poder seleccionar 2 dias mas que los dias totales seleccionados en la seccion de cuantos dias en cada destino, si el usuario intenta seleccionar mas de 2 dias adicionales se debe mostrar un mensaje de error y no permitir la seleccion de esos dias adicionales",
       "Se debe agrear un checkbox que diga `flexible con los dias de viaje` que si el usuario lo selecciona  avise en el mensaje de whatsasp, permitiendo a destina mover un poco las fechas para encotrar vuelos mas baratos"
     ],
-      "notes": "Nuevo step 'Fechas' después de 'Días'. El usuario selecciona solo el día del vuelo de ida; el calendario completa automáticamente el rango de total de días por destino + 2 (ida/vuelta). Incluye un input de texto con formato DD-MM-AAAA sincronizado con el calendario: al escribir una fecha válida el calendario navega a ese mes y resalta el rango, y al tocar una fecha en el calendario se actualiza el input. Checkbox 'Soy flexible con los días de viaje'. Las fechas y la flexibilidad se reflejan en el resumen y en el mensaje de WhatsApp."
+      "notes": "Nuevo step 'Fechas' después de 'Días'. El usuario selecciona solo el día del vuelo de ida en el calendario; el sistema completa automáticamente el rango de total de días por destino + 2 (ida/vuelta). El día de ida se resalta con el color primario y el resto del rango con `bg-primary/20`. Checkbox 'Soy flexible con los días de viaje'. Las fechas y la flexibilidad se reflejan en el resumen y en el mensaje de WhatsApp."
     },
     {
       "id": "F16",
