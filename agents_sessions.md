@@ -838,3 +838,25 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-10-27 — Ajuste calendario: selección de fecha de ida + rango automático (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/calendar/CalendarStep.tsx`: reescrito para que el usuario seleccione solo la fecha del vuelo de ida; el calendario completa automáticamente el rango de días según `total de días por destino + 2` (vuelos de ida y vuelta).
+- `src/features/calendar/CalendarStep.tsx`: agregado un input de texto arriba del calendario con formato `DD-MM-AAAA`, sincronizado en ambos sentidos: escribir una fecha válida navega el calendario a ese mes y resalta el rango; tocar una fecha en el calendario actualiza el input.
+- `src/features/calendar/CalendarStep.tsx`: actualizada la descripción para indicar que se debe seleccionar el día del vuelo de ida.
+- `src/features/calendar/CalendarStep.tsx`: el día de ida se resalta con el color primario sólido y el resto del rango calculado con `bg-primary/20`, para que el usuario distinga la fecha de partida.
+- `feature_list.json`: actualizada la nota de F15 para reflejar la nueva experiencia del calendario.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se eliminó la selección de rango con dos toques porque no tiene sentido permitir menos días de los configurados en el paso 'Días'.
+- El input y el calendario comparten la misma fuente de verdad (`selectedDates`), con estado local para el input que se inicializa desde el store y se actualiza en cada interacción.
+- Se mantuvo el checkbox 'Soy flexible con los días de viaje' y el mensaje de error de validación de F18 (al menos un día seleccionado).
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
