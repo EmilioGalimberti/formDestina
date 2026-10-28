@@ -907,6 +907,10 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - `feature_list.json`: nota de F19 actualizada.
 - Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
 
+**Ajuste posterior (feedback del usuario):**
+- `src/state/store.ts`: al intentar avanzar desde `people` sin completar todas las edades de los menores, ahora se muestra una alerta nativa (`window.alert`) con un mensaje claro: 'Ingresá la edad de todos los menores para continuar.' si falta alguna edad, o 'La edad de los menores debe estar entre 1 y 17 años.' si hay un valor inválido. También se sigue guardando el mensaje en `stepError` para mostrarlo en la UI.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
 **Pendientes:**
 - Ninguno.
 

@@ -194,7 +194,12 @@ export const useStore = create<AppState>((set, get) => ({
             state.minorAges.length === state.minors &&
             state.minorAges.every((age) => age !== null && age >= 1 && age <= 17)
           if (!allAgesValid) {
-            set({ stepError: 'Ingresá una edad válida (entre 1 y 17 años) para todos los menores.' })
+            const hasEmptyAge = state.minorAges.some((age) => age === null)
+            const message = hasEmptyAge
+              ? 'Ingresá la edad de todos los menores para continuar.'
+              : 'La edad de los menores debe estar entre 1 y 17 años.'
+            window.alert(message)
+            set({ stepError: message })
             return
           }
         }
