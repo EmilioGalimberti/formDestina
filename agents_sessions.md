@@ -911,6 +911,11 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - `src/state/store.ts`: al intentar avanzar desde `people` sin completar todas las edades de los menores, ahora se muestra una alerta nativa (`window.alert`) con un mensaje claro: 'Ingresá la edad de todos los menores para continuar.' si falta alguna edad, o 'La edad de los menores debe estar entre 1 y 17 años.' si hay un valor inválido. También se sigue guardando el mensaje en `stepError` para mostrarlo en la UI.
 - Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
 
+**Ajuste de alerta a mensaje de error visual (feedback del usuario):**
+- `src/state/store.ts`: eliminada la alerta nativa (`window.alert`) en la validación del paso `people`; ahora solo se guarda el mensaje en `stepError`.
+- `src/features/people/PeopleStep.tsx`: agregada la visualización del `stepError` como texto rojo (`text-red-600`), consistente con el resto de validaciones del wizard.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
 **Pendientes:**
 - Ninguno.
 

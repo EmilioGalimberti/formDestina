@@ -61,7 +61,7 @@ function Stepper({ value, onChange, label, valueRef, min = 0, max }: StepperProp
 }
 
 export function PeopleStep() {
-  const { people, minors, minorAges, setPeople, setMinors, setMinorAge, setStepError } = useStore()
+  const { people, minors, minorAges, setPeople, setMinors, setMinorAge, setStepError, stepError } = useStore()
   const adultValueRef = useRef<HTMLSpanElement>(null)
   const minorValueRef = useRef<HTMLSpanElement>(null)
   const [ageError, setAgeError] = useState<string | null>(null)
@@ -134,6 +134,12 @@ export function PeopleStep() {
         <h2 className="text-2xl font-semibold">¿Cuántos viajan?</h2>
         <p className="mt-1 text-muted-foreground">Incluí a todos los pasajeros.</p>
       </div>
+
+      {stepError && (
+        <p className="text-sm font-medium text-red-600" role="alert">
+          {stepError}
+        </p>
+      )}
 
       <Stepper
         value={people}
