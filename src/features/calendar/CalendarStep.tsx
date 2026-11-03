@@ -102,10 +102,9 @@ export function CalendarStep() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold">¿Qué días querés viajar?</h2>
+        <h2 className="text-2xl font-semibold">¿Qué día querés pasar tu primera noche en destino?</h2>
         <p className="mt-1 text-muted-foreground">
-          Seleccioná en el calendario el día en que pensás tomar el vuelo de ida. Se marcarán
-          automáticamente los {totalNights} días de tu viaje ({totalNights} noches en destinos).
+          La fecha que elijas será la primera noche de tu estadía. Los vuelos y traslados no se cuentan; organizaremos las noches en cada destino a partir de esa fecha.
         </p>
       </div>
 
@@ -186,7 +185,7 @@ export function CalendarStep() {
           <span className="text-sm text-muted-foreground">Fechas seleccionadas</span>
           <p className="text-lg font-semibold text-primary">{formattedRange}</p>
           <p className="text-xs text-muted-foreground">
-            {selectedDates.length} {selectedDates.length === 1 ? 'noche' : 'noches'} en destinos
+            {selectedDates.length} {selectedDates.length === 1 ? 'noche' : 'noches'} en destinos ({destinations.map((d) => d.name).join(', ') || '—'})
           </p>
         </div>
       )}
