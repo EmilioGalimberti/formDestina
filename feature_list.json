@@ -366,6 +366,21 @@
       "debe ser un input numerico y no permitir ingresar letras o caracteres especiales",
       "debe ser un input obligatorio si se selecciono que viaja con menores de edad y no permitir avanzar al siguiente step si no se ingreso la edad de todos los menores de edad que viajan junto con los adultos"],
       "notes": "Se agregó el campo `minorAges: (number | null)[]` al store. Al cambiar la cantidad de menores, el array se ajusta rellenando con `null`. En el paso 'people' aparece una card con inputs numéricos para cada menor, validando rango 1-17 y rechazando letras, signos o punto. Se muestra un mensaje de error visual si el usuario ingresa un valor inválido o deja el campo vacío. Se muestra un aviso indicando que las edades son al momento del viaje hasta el vuelo de vuelta. La validación de `nextStep` impide avanzar si hay menores y falta alguna edad válida. Las edades se muestran en el resumen y en el mensaje de WhatsApp."
+    },
+    {
+      "id":"F20",
+      "name":"cambio step days y calendar",
+      "status":"done",
+      "description": "Se debe cambiar cuantos dias en cada destino por cuantas noches en cada destino, y en el step calendar solo debe reflejar eso y scar los (+2 por vuelos)",
+      "files": [
+        "src/features/days/DaysStep.tsx",
+        "src/features/calendar/CalendarStep.tsx",
+        "src/features/result/ResultStep.tsx",
+        "src/features/wizard/useWizardStep.ts",
+        "src/lib/whatsapp.ts"
+      ],
+      "acceptance": ["Se debe cambiar cuantos dias en cada destino por cuantas noches en cada destino, y en el step calendar solo debe reflejar eso y sacar los (+2 por vuelos)"],
+      "notes": "En el paso 'Días' ahora se pregunta '¿Cuántas noches en cada destino?' y todas las etiquetas muestran 'noches'. El título del paso en el wizard pasó a 'Noches'. En el calendario se eliminó el cálculo de +2 días por vuelos: el rango automático coincide con el total de noches configuradas. El resumen y el mensaje de WhatsApp ahora muestran 'Destinos y noches' y las estancias en noches."
     }
   ]
 }

@@ -15,7 +15,7 @@ export interface StepConfig {
 
 export const STEPS: StepConfig[] = [
   { id: 'destination', title: 'Destino', component: DestinationStep },
-  { id: 'days', title: 'Días', component: DaysStep },
+  { id: 'days', title: 'Noches', component: DaysStep },
   { id: 'calendar', title: 'Fechas', component: CalendarStep },
   { id: 'people', title: 'Viajeros', component: PeopleStep },
   { id: 'category', title: 'Estilo', component: CategoryStep },

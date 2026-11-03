@@ -30,7 +30,7 @@ function DaysSelector({ destination, days, onChange }: DaysSelectorProps) {
     )
   }
 
-  const label = days === 1 ? 'día' : 'días'
+  const label = days === 1 ? 'noche' : 'noches'
 
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm md:flex-row md:items-center md:justify-between md:gap-4">
@@ -42,7 +42,7 @@ function DaysSelector({ destination, days, onChange }: DaysSelectorProps) {
           onClick={() => updateDays(days - 1)}
           disabled={days <= 1}
           className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-lg font-semibold text-foreground outline-offset-4 transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:opacity-40 md:h-11 md:w-11 md:text-xl"
-          aria-label={`Disminuir días en ${destination.name}`}
+          aria-label={`Disminuir noches en ${destination.name}`}
         >
           −
         </button>
@@ -59,7 +59,7 @@ function DaysSelector({ destination, days, onChange }: DaysSelectorProps) {
           onClick={() => updateDays(days + 1)}
           disabled={days >= MAX_DAYS}
           className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground outline-offset-4 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95 disabled:opacity-40 md:h-11 md:w-11 md:text-xl"
-          aria-label={`Aumentar días en ${destination.name}`}
+          aria-label={`Aumentar noches en ${destination.name}`}
         >
           +
         </button>
@@ -78,7 +78,7 @@ export function DaysStep() {
   if (destinations.length === 0) {
     return (
       <div className="flex flex-col gap-4 text-center">
-        <h2 className="text-2xl font-semibold">¿Cuántos días en cada destino?</h2>
+        <h2 className="text-2xl font-semibold">¿Cuántas noches en cada destino?</h2>
         <p className="text-muted-foreground">Primero elegí al menos un destino para definir la duración del viaje.</p>
       </div>
     )
@@ -87,7 +87,7 @@ export function DaysStep() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-semibold">¿Cuántos días en cada destino?</h2>
+        <h2 className="text-2xl font-semibold">¿Cuántas noches en cada destino?</h2>
         <p className="mt-1 text-muted-foreground">Ajustá la duración de tu estadía en cada lugar.</p>
       </div>
 
@@ -103,9 +103,9 @@ export function DaysStep() {
       </div>
 
       <div className="flex items-center justify-between rounded-2xl border border-primary/30 bg-primary/5 p-4">
-        <span className="font-semibold text-foreground">Total de días</span>
+        <span className="font-semibold text-foreground">Total de noches</span>
         <span className="text-2xl font-bold text-primary">
-          {totalDays} {totalDays === 1 ? 'día' : 'días'}
+          {totalDays} {totalDays === 1 ? 'noche' : 'noches'}
         </span>
       </div>
     </div>

@@ -920,3 +920,25 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-11-03 — F20 Cambio de días a noches en step days y calendar (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/days/DaysStep.tsx`: cambiado el título a '¿Cuántas noches en cada destino?', las etiquetas de cada selector a 'noche'/'noches', los `aria-label` a 'Disminuir/Aumentar noches', y el resumen inferior a 'Total de noches'.
+- `src/features/calendar/CalendarStep.tsx`: eliminado el cálculo `totalTripDays = totalDays + 2`; ahora el rango automático se calcula sobre `totalNights` (la suma de noches por destino). Se actualizó la descripción para reflejar que se marcan las noches en destinos sin sumar días por vuelos.
+- `src/features/result/ResultStep.tsx`: la fila de destinos muestra 'Destinos y noches' y cada destino se formatea con la cantidad de noches.
+- `src/lib/whatsapp.ts`: la sección del mensaje cambió a '*Destinos y noches*' y cada destino se formatea con noches.
+- `src/features/wizard/useWizardStep.ts`: el título del paso en la barra de progreso cambió de 'Días' a 'Noches'.
+- `feature_list.json`: F20 marcada como `done` con archivos y notas actualizados.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se mantuvo el nombre interno del estado `daysByDestination` para no propagar un refactor masivo, pero conceptualmente ahora representa noches en toda la UI y en los mensajes.
+- El rango del calendario se mantiene como días seleccionados sobre la grilla, pero la cantidad coincide exactamente con el total de noches configurado, cumpliendo con el requerimiento de 'solo reflejar eso y sacar +2'.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.

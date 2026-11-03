@@ -60,16 +60,14 @@ export function CalendarStep() {
     setStepError,
   } = useStore()
 
-  const totalDays = destinations.reduce((sum, destination) => {
+  const totalNights = destinations.reduce((sum, destination) => {
     return sum + (daysByDestination[destination.id] ?? 1)
   }, 0)
-
-  const totalTripDays = totalDays + 2
 
   const handleDayClick = (day: number) => {
     setStepError(null)
     const key = formatDateKey(calendarMonth.year, calendarMonth.month, day)
-    const range = getDateRange(key, totalTripDays)
+    const range = getDateRange(key, totalNights)
     setSelectedDates(range)
   }
 
@@ -107,8 +105,7 @@ export function CalendarStep() {
         <h2 className="text-2xl font-semibold">¿Qué días querés viajar?</h2>
         <p className="mt-1 text-muted-foreground">
           Seleccioná en el calendario el día en que pensás tomar el vuelo de ida. Se marcarán
-          automáticamente los {totalTripDays} días de tu viaje ({totalDays} en destinos + 2 por
-          vuelos).
+          automáticamente los {totalNights} días de tu viaje ({totalNights} noches en destinos).
         </p>
       </div>
 
@@ -189,7 +186,7 @@ export function CalendarStep() {
           <span className="text-sm text-muted-foreground">Fechas seleccionadas</span>
           <p className="text-lg font-semibold text-primary">{formattedRange}</p>
           <p className="text-xs text-muted-foreground">
-            {selectedDates.length} {selectedDates.length === 1 ? 'día' : 'días'}
+            {selectedDates.length} {selectedDates.length === 1 ? 'noche' : 'noches'} en destinos
           </p>
         </div>
       )}

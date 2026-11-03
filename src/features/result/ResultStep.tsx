@@ -172,8 +172,8 @@ export function ResultStep() {
   }
 
   const formatDestination = (destination: (typeof destinations)[number]) => {
-    const days = daysByDestination[destination.id] ?? 1
-    return `${destination.name} (${days} ${days === 1 ? 'día' : 'días'})`
+    const nights = daysByDestination[destination.id] ?? 1
+    return `${destination.name} (${nights} ${nights === 1 ? 'noche' : 'noches'})`
   }
 
   const destinationLabel = destinations.map(formatDestination).join(', ') || '—'
@@ -286,7 +286,7 @@ export function ResultStep() {
           <TicketDivider />
 
           <div className="pt-4">
-            <TicketRow label="Destinos y días" value={destinationLabel} />
+            <TicketRow label="Destinos y noches" value={destinationLabel} />
           </div>
 
           <div className="mt-6 rounded-xl bg-muted p-3">

@@ -2,9 +2,9 @@ import type { FormState } from '@/state/types'
 
 const WHATSAPP_NUMBER = '543513213398'
 
-function formatDestinationName(destination: FormState['destinations'][number], days: number | undefined) {
-  if (!days || days <= 0) return destination.name
-  return `${destination.name} (${days} ${days === 1 ? 'día' : 'días'})`
+function formatDestinationName(destination: FormState['destinations'][number], nights: number | undefined) {
+  if (!nights || nights <= 0) return destination.name
+  return `${destination.name} (${nights} ${nights === 1 ? 'noche' : 'noches'})`
 }
 
 function formatDestinations(destinations: FormState['destinations'], daysByDestination: FormState['daysByDestination']) {
@@ -56,7 +56,7 @@ export function buildMessage(state: FormState): string {
     '',
     `*Desde:* ${state.origin?.trim() || 'No indicado'}`,
     '',
-    '*Destinos y días*',
+    '*Destinos y noches*',
     `- ${formatDestinations(state.destinations, state.daysByDestination)}`,
     '',
     `*Fechas:* ${formatDates(state.selectedDates)}`,
