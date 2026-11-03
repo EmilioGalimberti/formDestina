@@ -103,7 +103,7 @@ export function DaysStep() {
       </div>
 
       <div className="flex items-center justify-between rounded-2xl border border-primary/30 bg-primary/5 p-4">
-        <span className="font-semibold text-foreground">Total de noches</span>
+        <span className="font-semibold text-foreground">Total</span>
         <span className="text-2xl font-bold text-primary">
           {totalDays} {totalDays === 1 ? 'noche' : 'noches'}
         </span>
