@@ -26,7 +26,7 @@ export function DestinationMarker({
   dragging = false,
 }: DestinationMarkerProps) {
   const innerRef = useRef<SVGGElement>(null)
-  const prevVisibleRef = useRef(visible)
+  const prevVisibleRef = useRef<boolean | null>(null)
 
   useLayoutEffect(() => {
     const el = innerRef.current

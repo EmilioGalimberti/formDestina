@@ -1179,6 +1179,7 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - `src/features/destination/DestinationMarker.tsx`:
   - Nueva prop `dragging`: mientras se arrastra el globo, los cambios de visibilidad de los marcadores se aplican instantáneamente con `gsap.set` en lugar de animarse con `gsap.to`.
   - Se evita ejecutar el efecto de visibilidad si el valor no cambió, reduciendo trabajo durante el drag.
+- **Corrección:** se arregló un bug por el cual los marcadores de países no aparecían al cargar: `prevVisibleRef` se inicializaba con `visible`, por lo que el efecto de entrada se saltaba y el marcador quedaba con `opacity: 0`. Ahora se inicializa en `null` para forzar la primera animación.
 - `bun run build` ✅ y `bun run lint` ✅.
 
 **Decisiones:**
