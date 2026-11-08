@@ -923,6 +923,25 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 ---
 
+## 2026-11-07 — Actualización de logo a SVG (Kimi K2.7 Code)
+
+**Hecho:**
+- `public/images/logo.svg`: agregado nuevo logo de Destina en formato SVG proporcionado por el usuario.
+- `src/features/wizard/Wizard.tsx`: actualizada la referencia del logo de `/images/logo.png` a `/images/logo.svg`; se ajustó el estilo a `h-10 md:h-12 w-auto object-contain` y se eliminó el recorte circular (`rounded-full`) para respetar la forma original del SVG.
+- `feature_list.json`: actualizada la nota de F13 para reflejar el nuevo archivo SVG.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se mantuvo el logo existente en `public/images/logo.png` por si se necesita fallback, pero la app ahora usa el SVG.
+- El SVG tiene fondo blanco propio, por lo que no hace falta forzar un recorte circular ni fondo adicional en el header.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar visualmente en el navegador y hacer push a `main` para deploy automático.
+
+---
+
 ## 2026-11-03 — F20 Cambio de días a noches en step days y calendar (Kimi K2.7 Code)
 
 **Hecho:**

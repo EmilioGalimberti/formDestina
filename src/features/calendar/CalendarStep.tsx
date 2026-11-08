@@ -191,7 +191,7 @@ export function CalendarStep() {
       )}
 
       <Checkbox
-        label="Soy flexible con los días de viaje"
+        label="¿Tenés flexibilidad con las fechas? ¡Así podemos buscarte vuelos más baratos!"
         checked={isFlexible}
         onChange={(event) => setFlexible(event.target.checked)}
       />
