@@ -13,6 +13,7 @@ interface PlaceMarkerProps {
   y: number
   selected: boolean
   scale: number
+  dragging?: boolean
   onSelect: () => void
 }
 
@@ -24,7 +25,7 @@ const KIND_STYLE: Record<
   city: { r: 4, fill: '#64748b', strokeWidth: 2, fontSize: 10, fontWeight: 500, labelY: -12 },
 }
 
-export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, scale, onSelect }: PlaceMarkerProps) {
+export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, scale, dragging = false, onSelect }: PlaceMarkerProps) {
   const innerRef = useRef<SVGGElement>(null)
   const baseStyle = KIND_STYLE[kind]
   const zoomFactor = Math.max(1, 1 + (scale - 2.3) * 0.16)
@@ -88,7 +89,7 @@ export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, scale, 
           fill="#ffffff"
           opacity={0.85}
         />
-        {showLabel && (
+        {showLabel && !dragging && (
           <text
             y={style.labelY}
             textAnchor="middle"

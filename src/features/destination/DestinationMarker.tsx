@@ -84,7 +84,7 @@ export function DestinationMarker({
           strokeWidth={3 * zoomFactor}
         />
         <circle cx={-3 * zoomFactor} cy={-3 * zoomFactor} r={2.5 * zoomFactor} fill="#ffffff" opacity={0.85} />
-        {showLabel && (
+        {showLabel && !dragging && (
           <text
             y={(selected ? -20 : -17) * zoomFactor}
             textAnchor="middle"

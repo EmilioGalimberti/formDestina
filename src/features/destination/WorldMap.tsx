@@ -46,6 +46,77 @@ const landFeature = feature(worldTopology, countriesObject) as FeatureCollection
 const borderLines = mesh(worldTopology, countriesObject, (a, b) => a !== b)
 const graticule = geoGraticule10()
 
+function createGlobeProjection(rotation: Rotation, scale: number) {
+  return geoOrthographic().scale(scale * 250).translate([250, 250]).rotate([rotation.lambda, rotation.phi, 0])
+}
+
+function drawGlobe(ctx: CanvasRenderingContext2D, rotation: Rotation, scale: number) {
+  const projection = createGlobeProjection(rotation, scale)
+  const pathGenerator = geoPath(projection, ctx)
+  const globeRadius = scale * 250
+
+  ctx.clearRect(0, 0, 500, 500)
+
+  ctx.beginPath()
+  ctx.arc(250, 250, globeRadius + 7, 0, Math.PI * 2)
+  ctx.fillStyle = '#a8dcf7'
+  ctx.globalAlpha = 0.6
+  ctx.fill()
+  ctx.globalAlpha = 1
+
+  const oceanGradient = ctx.createRadialGradient(
+    250 - globeRadius * 0.12,
+    250 - globeRadius * 0.18,
+    0,
+    250,
+    250,
+    globeRadius,
+  )
+  oceanGradient.addColorStop(0, '#a3e2ff')
+  oceanGradient.addColorStop(0.55, '#57b6f0')
+  oceanGradient.addColorStop(1, '#1f82cc')
+  ctx.beginPath()
+  ctx.arc(250, 250, globeRadius, 0, Math.PI * 2)
+  ctx.fillStyle = oceanGradient
+  ctx.fill()
+
+  ctx.beginPath()
+  pathGenerator(graticule)
+  ctx.strokeStyle = '#ffffff'
+  ctx.lineWidth = 0.6
+  ctx.globalAlpha = 0.3
+  ctx.stroke()
+  ctx.globalAlpha = 1
+
+  ctx.beginPath()
+  pathGenerator(landFeature)
+  ctx.fillStyle = '#5ecf7c'
+  ctx.fill()
+
+  ctx.beginPath()
+  pathGenerator(borderLines)
+  ctx.strokeStyle = '#2f9e53'
+  ctx.lineWidth = 0.7
+  ctx.globalAlpha = 0.65
+  ctx.stroke()
+  ctx.globalAlpha = 1
+
+  const shadeGradient = ctx.createRadialGradient(
+    250,
+    250,
+    globeRadius * 0.72,
+    250,
+    250,
+    globeRadius,
+  )
+  shadeGradient.addColorStop(0, 'rgba(11, 74, 111, 0)')
+  shadeGradient.addColorStop(1, 'rgba(11, 74, 111, 0.28)')
+  ctx.beginPath()
+  ctx.arc(250, 250, globeRadius, 0, Math.PI * 2)
+  ctx.fillStyle = shadeGradient
+  ctx.fill()
+}
+
 const COUNTRY_BY_ID = new Map<string, Destination>()
 for (const country of COUNTRY_DESTINATIONS) {
   COUNTRY_BY_ID.set(country.id, country)
@@ -61,6 +132,7 @@ for (const destination of DESTINATIONS) {
 
 export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldMapProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const [rotation, setRotation] = useState<Rotation>({ lambda: 60, phi: 15 })
   const [scale, setScale] = useState(INITIAL_SCALE)
   const scaleRef = useRef(scale)
@@ -115,6 +187,14 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       mountedRef.current = false
     }
   }, [])
+
+  useLayoutEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    drawGlobe(ctx, rotation, scale)
+  }, [rotation, scale])
 
   useEffect(() => {
     if (hasSeenMapIntro || introStartedRef.current) return
@@ -243,13 +323,9 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     const prevent = (event: Event) => {
       event.preventDefault()
     }
-    el.addEventListener('touchstart', prevent, { passive: false })
-    el.addEventListener('touchmove', prevent, { passive: false })
     el.addEventListener('gesturestart', prevent)
     el.addEventListener('gesturechange', prevent)
     return () => {
-      el.removeEventListener('touchstart', prevent)
-      el.removeEventListener('touchmove', prevent)
       el.removeEventListener('gesturestart', prevent)
       el.removeEventListener('gesturechange', prevent)
     }
@@ -408,16 +484,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     }
   }
 
-  const projection = geoOrthographic()
-    .scale(scale * 250)
-    .translate([250, 250])
-    .rotate([rotation.lambda, rotation.phi, 0])
-
-  const pathGenerator = geoPath(projection)
-  const landPath = pathGenerator(landFeature)
-  const bordersPath = pathGenerator(borderLines)
-  const graticulePath = pathGenerator(graticule)
-  const globeRadius = scale * 250
+  const projection = createGlobeProjection(rotation, scale)
 
   const orderedDestinations = [...DESTINATIONS].sort(
     (a, b) => Number(selected.some((d) => d.id === a.id)) - Number(selected.some((d) => d.id === b.id)),
@@ -504,30 +571,14 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       onPointerCancel={handlePointerUp}
       onPointerLeave={handlePointerUp}
     >
-      <svg className="h-full w-full" viewBox="0 0 500 500">
-        <defs>
-          <radialGradient id="ocean-gradient" cx="38%" cy="32%" r="80%">
-            <stop offset="0%" stopColor="#a3e2ff" />
-            <stop offset="55%" stopColor="#57b6f0" />
-            <stop offset="100%" stopColor="#1f82cc" />
-          </radialGradient>
-          <radialGradient id="globe-shade" cx="50%" cy="50%" r="50%">
-            <stop offset="72%" stopColor="#0b4a6f" stopOpacity="0" />
-            <stop offset="100%" stopColor="#0b4a6f" stopOpacity="0.28" />
-          </radialGradient>
-        </defs>
-
-        <circle cx={250} cy={250} r={globeRadius + 7} fill="#a8dcf7" opacity={0.6} />
-        <circle cx={250} cy={250} r={globeRadius} fill="url(#ocean-gradient)" />
-        {graticulePath && (
-          <path d={graticulePath} fill="none" stroke="#ffffff" strokeWidth={0.6} opacity={0.3} />
-        )}
-        {landPath && <path d={landPath} fill="#5ecf7c" stroke="none" />}
-        {bordersPath && (
-          <path d={bordersPath} fill="none" stroke="#2f9e53" strokeWidth={0.7} opacity={0.65} />
-        )}
-        <circle cx={250} cy={250} r={globeRadius} fill="url(#globe-shade)" />
-
+      <canvas
+        ref={canvasRef}
+        width={500}
+        height={500}
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        aria-hidden="true"
+      />
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 500 500">
         {countryMarkers.map(({ destination, x, y, showLabel }) => (
           <DestinationMarker
             key={destination.id}
@@ -556,6 +607,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
               y={y}
               selected={selected.some((d) => d.id === place.id)}
               scale={scale}
+              dragging={isDragging}
               onSelect={() => {
                 if (destination) handleSelect(destination)
               }}
@@ -576,6 +628,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
               y={y}
               selected={isSelected}
               scale={scale}
+              dragging={isDragging}
               onSelect={() => handleSelect(destination)}
             />
           ))}

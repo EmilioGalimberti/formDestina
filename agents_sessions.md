@@ -1182,6 +1182,17 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - **Corrección:** se arregló un bug por el cual los marcadores de países no aparecían al cargar: `prevVisibleRef` se inicializaba con `visible`, por lo que el efecto de entrada se saltaba y el marcador quedaba con `opacity: 0`. Ahora se inicializa en `null` para forzar la primera animación.
 - `bun run build` ✅ y `bun run lint` ✅.
 
+**Refactor a Canvas para el fondo del globo (mejora de rendimiento en Safari/iOS):**
+- `src/features/destination/WorldMap.tsx`:
+  - El fondo del globo (océano, tierra, fronteras, graticule y sombra) ahora se dibuja en un `<canvas>` en lugar de en elementos SVG.
+  - Los marcadores interactivos se mantienen en un `<svg>` superpuesto, preservando accesibilidad, teclado y tap.
+  - Se creó `createGlobeProjection()` y `drawGlobe()` para compartir la proyección y dibujar el canvas en `useLayoutEffect` cada vez que cambian rotación/zoom.
+  - Se eliminaron los listeners `touchstart`/`touchmove` con `preventDefault()` porque en Safari/iOS pueden interferir con la entrega de `pointermove`; se mantuvieron `gesturestart`/`gesturechange` para evitar el zoom nativo de página.
+  - Durante el drag se ocultan los labels de los marcadores (`DestinationMarker` y `PlaceMarker`) para reducir la carga de render del SVG overlay.
+- `src/features/destination/DestinationMarker.tsx` y `PlaceMarker.tsx`: nueva prop `dragging` para ocultar labels mientras se arrastra y evitar animaciones de entrada/salida durante el gesto.
+- Screenshot de verificación en viewport iPhone: el globo, países y marcadores se renderizan correctamente.
+- `bun run build` ✅ y `bun run lint` ✅.
+
 **Decisiones:**
 - Se mantuvo la proyección ortográfica y el dibujo SVG exacto; la optimización es puramente de frecuencia de render y de prevención de comportamientos nativos de Safari.
 - La inercia y las animaciones de selección siguen funcionando igual; solo se acelera la fase activa del gesto.
