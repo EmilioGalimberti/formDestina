@@ -73,6 +73,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   const lastMove = useRef({ x: 0, y: 0, t: 0 })
   const motionTween = useRef<gsap.core.Animation | null>(null)
   const skipIntroRef = useRef(false)
+  const introStartedRef = useRef(false)
   const selectedCountRef = useRef(selected.length)
   const { hasSeenMapIntro, setHasSeenMapIntro } = useStore()
 
@@ -85,14 +86,18 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   }, [rotation])
 
   useEffect(() => {
-    if (hasSeenMapIntro) return
-    setHasSeenMapIntro(true)
+    if (hasSeenMapIntro || introStartedRef.current) return
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion) return
+    if (prefersReducedMotion) {
+      setHasSeenMapIntro(true)
+      return
+    }
 
     let introTween: gsap.core.Timeline | null = null
     const timeout = setTimeout(() => {
-      if (skipIntroRef.current) return
+      setHasSeenMapIntro(true)
+      if (skipIntroRef.current || introStartedRef.current) return
+      introStartedRef.current = true
       const proxy = { scale: scaleRef.current }
       motionTween.current?.kill()
       introTween = gsap
