@@ -92,6 +92,7 @@ export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, scale, 
           stroke="#6e1f3c"
           strokeWidth={2.5}
           opacity={0}
+          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
         />
         <circle
           r={selected ? style.r + 1 : style.r}

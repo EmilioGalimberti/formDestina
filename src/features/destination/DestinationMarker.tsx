@@ -89,6 +89,7 @@ export function DestinationMarker({
           stroke="#6e1f3c"
           strokeWidth={3 * zoomFactor}
           opacity={0}
+          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
         />
         <circle
           r={(selected ? 11 : 9) * zoomFactor}

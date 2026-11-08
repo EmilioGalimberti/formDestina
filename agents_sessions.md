@@ -1067,3 +1067,21 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador (especialmente en mobile) y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-11-08 — Fix: anillo de selección centrado en marcadores del mapa (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/destination/DestinationMarker.tsx`: agregado `transform-box: fill-box` y `transform-origin: center` al círculo de anillo pulsante (`ringRef`) para que la animación de `scale` de GSAP se origine desde el centro del marcador y no desde el viewport del SVG.
+- `src/features/destination/PlaceMarker.tsx`: mismo ajuste en el círculo de anillo pulsante para los destinos destacados, capitales y provincias.
+- Verificaciones: `bun run build` ✅.
+
+**Decisiones:**
+- El anillo parpadeante usaba `scale` animado por GSAP sin un origen de transformación explícito; en SVG el origen por defecto es el sistema de coordenadas del viewport, lo que desplazaba visualmente el pulso respecto al punto del mapa. Con `fill-box` + `center` el origen queda en el centro del círculo, que coincide con la proyección del destino.
+- Se aplicó el fix en ambos tipos de marcador (`DestinationMarker` para países y `PlaceMarker` para ciudades/destinos destacados) para mantener consistencia visual.
+
+**Pendientes:**
+- Validar en el navegador que el círculo parpadeante quede perfectamente centrado alrededor del marcador seleccionado.
+
+**Siguiente:** Validar visualmente y hacer push a `main` para deploy automático.
