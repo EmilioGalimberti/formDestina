@@ -13,7 +13,7 @@ import { PlaceMarker } from '@/features/destination/PlaceMarker'
 import worldData from 'world-atlas/countries-110m.json'
 
 const MIN_SCALE = 1
-const MAX_SCALE = 12.1
+const MAX_SCALE = 13.31
 const ZOOM_STEP = 0.3
 const INITIAL_SCALE = 1.15
 const PHI_CLAMP = 80
@@ -367,7 +367,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       ref={containerRef}
       role="application"
       aria-label={ariaLabel}
-      className="relative h-[22rem] w-full cursor-grab touch-none overflow-hidden rounded-2xl border border-border bg-[#dff2fd] select-none [-webkit-tap-highlight-color:transparent] active:cursor-grabbing md:h-[30rem]"
+      className="relative h-[24rem] w-full cursor-grab touch-none overflow-hidden rounded-2xl border border-border bg-[#dff2fd] select-none [-webkit-tap-highlight-color:transparent] active:cursor-grabbing md:h-[33rem]"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}

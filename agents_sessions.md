@@ -1056,6 +1056,13 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Se mantuvieron los tamaños base de los marcadores para no saturar la vista inicial; el cambio impacta principalmente en el zoom, que es donde el usuario reportó que se veían chicos en mobile.
 - El incremento del 10% se aplicó tanto al rango de zoom como al crecimiento de los marcadores y al contenedor, logrando una mejora general sin romper la proporción del globo.
 
+**Ajuste posterior (feedback del usuario):**
+- `src/features/destination/WorldMap.tsx`: zoom máximo de `12.1` a `13.31` (otro 10% más).
+- `src/features/destination/WorldMap.tsx`: contenedor del mapa de `h-[22rem]` a `h-[24rem]` en mobile y de `md:h-[30rem]` a `md:h-[33rem]` en desktop.
+- `src/features/destination/DestinationMarker.tsx`: `zoomFactor` de `0.10` a `0.12` y fuente de `0.05` a `0.06`.
+- `src/features/destination/PlaceMarker.tsx`: `zoomFactor` de `0.14` a `0.16` y fuente de `0.07` a `0.08`.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
 **Pendientes:**
 - Ninguno.
 

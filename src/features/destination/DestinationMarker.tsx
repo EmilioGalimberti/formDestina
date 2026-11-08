@@ -62,7 +62,7 @@ export function DestinationMarker({
     }
   }, [selected])
 
-  const zoomFactor = Math.max(1, 1 + (scale - 1) * 0.10)
+  const zoomFactor = Math.max(1, 1 + (scale - 1) * 0.12)
 
   return (
     <g
@@ -102,7 +102,7 @@ export function DestinationMarker({
             y={(selected ? -20 : -17) * zoomFactor}
             textAnchor="middle"
             fill="#1c1917"
-            fontSize={(selected ? 15 : 13) * Math.max(1, 1 + (scale - 1) * 0.05)}
+            fontSize={(selected ? 15 : 13) * Math.max(1, 1 + (scale - 1) * 0.06)}
             fontWeight={700}
             stroke="#ffffff"
             strokeWidth={4}
