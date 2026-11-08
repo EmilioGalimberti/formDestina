@@ -745,18 +745,17 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       onPointerCancel={handlePointerUp}
       onPointerLeave={handlePointerUp}
     >
-      <canvas
-        ref={canvasRef}
-        width={500}
-        height={500}
-        className="pointer-events-none absolute inset-0 h-full w-full object-contain"
-        aria-hidden="true"
-      />
-      <svg
-        className="absolute inset-0 h-full w-full"
-        viewBox="0 0 500 500"
-        preserveAspectRatio="xMidYMid meet"
-      >
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative aspect-square h-full max-w-full">
+          <canvas
+            ref={canvasRef}
+            width={500}
+            height={500}
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            aria-hidden="true"
+          />
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 500 500">
+
         {countryMarkers.map(({ destination, x, y, showLabel }) => (
           <DestinationMarker
             key={destination.id}
@@ -811,6 +810,8 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
             />
           ))}
       </svg>
+        </div>
+      </div>
 
       <div className="absolute bottom-3 right-3 flex flex-col gap-2">
         <button
