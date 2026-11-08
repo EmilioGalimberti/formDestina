@@ -31,6 +31,7 @@ const initialState: Omit<
   | 'setFlexible'
   | 'setOrigin'
   | 'setStepError'
+  | 'setHasSeenMapIntro'
   | 'goToStep'
   | 'nextStep'
   | 'previousStep'
@@ -49,6 +50,7 @@ const initialState: Omit<
   origin: null,
   currentStep: 'destination',
   stepError: null,
+  hasSeenMapIntro: false,
 }
 
 export const useStore = create<AppState>((set, get) => ({
@@ -167,6 +169,8 @@ export const useStore = create<AppState>((set, get) => ({
   setOrigin: (origin) => set({ origin: origin || null }),
 
   setStepError: (stepError) => set({ stepError }),
+
+  setHasSeenMapIntro: (hasSeenMapIntro) => set({ hasSeenMapIntro }),
 
   goToStep: (step) => set({ currentStep: step, stepError: null }),
 

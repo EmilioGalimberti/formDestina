@@ -392,6 +392,19 @@
       ],
       "acceptance": ["footer de atras o siguiente debe quedar fijo en el final de la pagina y no seguir la screen del celular"],
       "notes": "El footer queda al final de la página (no fixed ni sticky), de modo que el usuario scrollea todo el contenido del paso actual y recién al final ve los botones 'Atrás' y 'Siguiente'. Se mantiene el fondo con transparencia/blur y el padding respectando `safe-area-inset-bottom`."
+    },
+    {
+      "id" : "F22",
+      "name" : "Animacion WorldMap",
+      "status" : "done",
+      "description" : "Se debe agregar una animacion al mundito apenas se carga la pagina, que haga un zoom in y zoom out en los destinos dese donde arranque, es principalmente para que se puedan ver los destinos que estan en el mundito y que el usuario se de cuenta que puede hacer zoom y ver mas destinos porque no se ven todos de entrada y la gente no hace zoom",
+      "files": [
+        "src/state/types.ts",
+        "src/state/store.ts",
+        "src/features/destination/WorldMap.tsx"
+      ],
+      "acceptance" : ["Al cargar la pagina se debe hacer un zoom in y zoom out en los destinos dese donde arranque, es principalmente para que se puedan ver los destinos que estan en el mundito y que el usuario se de cuenta que puede hacer zoom y ver mas destinos porque no se ven todos de entrada y la gente no hace zoom"],
+      "notes": "Al montar el WorldMap se reproduce una sola vez una animación de intro: espera 500ms, hace zoom in a escala 3.5 durante 1.4s y vuelve a la escala inicial en 1.2s. Se guarda `hasSeenMapIntro` en el store para no repetirla en la sesión. Se respeta `prefers-reduced-motion` y se cancela si el usuario interactúa con el mapa antes o durante la animación."
     }
     ]
 }

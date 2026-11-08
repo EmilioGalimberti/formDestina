@@ -1105,3 +1105,25 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Validar en el navegador que el círculo parpadeante quede centrado alrededor del marcador seleccionado.
 
 **Siguiente:** Validar visualmente y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-11-08 — F22 Animación de intro en el WorldMap (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/state/types.ts`: agregado `hasSeenMapIntro: boolean` a `WizardState` y `setHasSeenMapIntro` a `AppState`.
+- `src/state/store.ts`: inicializado `hasSeenMapIntro: false`; agregada la acción `setHasSeenMapIntro`.
+- `src/features/destination/WorldMap.tsx`: agregada animación de introducción que se ejecuta una sola vez al montar el mapa: espera 500ms, hace zoom in a escala 3.5 en 1.4s y vuelve a la escala inicial en 1.2s. La animación se guarda en `motionTween` para poder ser cancelada por interacción del usuario, y se setea `hasSeenMapIntro` para no repetirla en la sesión.
+- `feature_list.json`: F22 marcada como `done` con archivos y notas actualizados.
+- Verificaciones: `bun run build` ✅.
+
+**Decisiones:**
+- Se usó GSAP `timeline` para el zoom in/out, manteniendo la rotación inicial del globo para no desorientar al usuario.
+- Se agregó un flag en el store (`hasSeenMapIntro`) para que la animación se reproduzca una sola vez por sesión, evitando repetirla si el usuario vuelve al paso destino.
+- Se respeta `prefers-reduced-motion`: si está activo, no se reproduce la animación.
+- Si el usuario toca, arrastra o hace zoom antes o durante la animación, esta se cancela inmediatamente (a través de `skipIntroRef` y `motionTween.current?.kill()`).
+
+**Pendientes:**
+- Validar en el navegador que el zoom in/out sea suave y no interfiera con la interacción táctil.
+
+**Siguiente:** Validar visualmente y hacer push a `main` para deploy automático.

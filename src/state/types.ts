@@ -51,6 +51,7 @@ export type StepId =
 export interface WizardState {
   currentStep: StepId
   stepError: string | null
+  hasSeenMapIntro: boolean
 }
 
 export interface AppState extends FormState, WizardState {
@@ -69,6 +70,7 @@ export interface AppState extends FormState, WizardState {
   setFlexible: (flexible: boolean) => void
   setOrigin: (origin: string | null) => void
   setStepError: (error: string | null) => void
+  setHasSeenMapIntro: (value: boolean) => void
   goToStep: (step: StepId) => void
   nextStep: () => void
   previousStep: () => void

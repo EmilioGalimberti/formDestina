@@ -6,6 +6,7 @@ import type { FeatureCollection, Geometry } from 'geojson'
 import { gsap } from '@/lib/gsap'
 import { DESTINATIONS } from '@/data/destinations'
 import type { Destination } from '@/state/types'
+import { useStore } from '@/state/store'
 import { COUNTRY_DESTINATIONS, PLACE_DESTINATIONS, PLACES } from '@/data/places'
 import { isVisible, project, type Rotation } from '@/lib/projection'
 import { DestinationMarker } from '@/features/destination/DestinationMarker'
@@ -16,6 +17,10 @@ const MIN_SCALE = 1
 const MAX_SCALE = 13.31
 const ZOOM_STEP = 0.3
 const INITIAL_SCALE = 1.15
+const INTRO_ZOOM_IN_SCALE = 3.5
+const INTRO_DELAY_MS = 500
+const INTRO_ZOOM_IN_DURATION = 1.4
+const INTRO_ZOOM_OUT_DURATION = 1.2
 const PHI_CLAMP = 80
 const DRAG_DEGREES = 120
 const TAP_THRESHOLD_PX = 10
@@ -66,8 +71,10 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   const pinchStart = useRef({ distance: 0, scale: 1 })
   const velocity = useRef({ x: 0, y: 0 })
   const lastMove = useRef({ x: 0, y: 0, t: 0 })
-  const motionTween = useRef<gsap.core.Tween | null>(null)
+  const motionTween = useRef<gsap.core.Animation | null>(null)
+  const skipIntroRef = useRef(false)
   const selectedCountRef = useRef(selected.length)
+  const { hasSeenMapIntro, setHasSeenMapIntro } = useStore()
 
   useEffect(() => {
     scaleRef.current = scale
@@ -76,6 +83,44 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   useEffect(() => {
     rotationRef.current = rotation
   }, [rotation])
+
+  useEffect(() => {
+    if (hasSeenMapIntro) return
+    setHasSeenMapIntro(true)
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) return
+
+    let introTween: gsap.core.Timeline | null = null
+    const timeout = setTimeout(() => {
+      if (skipIntroRef.current) return
+      const proxy = { scale: scaleRef.current }
+      motionTween.current?.kill()
+      introTween = gsap
+        .timeline({
+          onComplete: () => {
+            motionTween.current = null
+          },
+        })
+        .to(proxy, {
+          scale: INTRO_ZOOM_IN_SCALE,
+          duration: INTRO_ZOOM_IN_DURATION,
+          ease: 'power2.inOut',
+          onUpdate: () => setScale(proxy.scale),
+        })
+        .to(proxy, {
+          scale: INITIAL_SCALE,
+          duration: INTRO_ZOOM_OUT_DURATION,
+          ease: 'power2.inOut',
+          onUpdate: () => setScale(proxy.scale),
+        })
+      motionTween.current = introTween
+    }, INTRO_DELAY_MS)
+
+    return () => {
+      clearTimeout(timeout)
+      introTween?.kill()
+    }
+  }, [hasSeenMapIntro, setHasSeenMapIntro])
 
   const getContainerWidth = useCallback(() => {
     return containerRef.current?.getBoundingClientRect().width ?? 1
@@ -169,6 +214,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
 
   const handlePointerDown = (e: React.PointerEvent) => {
     if (e.button !== 0) return
+    skipIntroRef.current = true
     motionTween.current?.kill()
     updatePointer(e.pointerId, e.clientX, e.clientY)
 
