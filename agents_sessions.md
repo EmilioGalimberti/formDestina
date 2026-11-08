@@ -959,6 +959,24 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 ---
 
+## 2026-11-07 — Logo como favicon en pestaña del navegador (Kimi K2.7 Code)
+
+**Hecho:**
+- `index.html`: agregado `<link rel="icon" type="image/svg+xml" href="/images/logo.svg" />` para usar el mismo logo de Destina como favicon en la pestaña del navegador. Se mantuvo el `<link rel="icon" type="image/png" href="/favicon.png" />` como fallback para navegadores que no soportan SVG favicons.
+- `feature_list.json`: actualizada la nota de F13 para reflejar que el mismo SVG se usa como favicon.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se prefirió reutilizar `public/images/logo.svg` en lugar de generar un favicon separado, ya que el usuario pidió "el mismo" logo.
+- El fallback PNG sigue siendo el icono anterior; si se quiere que el fallback también sea el logo de Destina, habría que generar un PNG nuevo a partir del SVG.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar visualmente en el navegador y hacer push a `main` para deploy automático.
+
+---
+
 ## 2026-11-03 — F20 Cambio de días a noches en step days y calendar (Kimi K2.7 Code)
 
 **Hecho:**
