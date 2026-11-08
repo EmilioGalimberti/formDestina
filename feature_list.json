@@ -256,7 +256,7 @@
       ],
       "acceptance": ["en toda la aplicacion donde el colo era: #0a7067 ahora debe ser #6e1f3c",
       "agregar el logo de la empresa"],
-      "notes": "Color primario y anillo pasaron de #0d9488 a #6e1f3c. Se actualizaron theme-color, marcadores del mapa y el header ahora muestra el logo de Destina en lugar del texto. El logo se ubicó en public/images/logo.svg y se renderiza con altura fija y ancho automático, sin recorte circular. El mismo SVG se usa como favicon en la pestaña del navegador, con fallback al PNG existente."
+      "notes": "Color primario y anillo pasaron de #0d9488 a #6e1f3c. Se actualizaron theme-color, marcadores del mapa y el header ahora muestra el logo de Destina en lugar del texto. El logo se ubicó en public/images/logo.svg y se renderiza con altura fija y ancho automático, sin recorte circular. El icono del logo se extrajo a public/favicon.svg para usarlo como favicon en la pestaña del navegador, con fallback al PNG existente."
     },
     {
       "id": "F14",

@@ -977,6 +977,25 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 ---
 
+## 2026-11-07 — Favicon con icono de Destina recortado (Kimi K2.7 Code)
+
+**Hecho:**
+- `public/favicon.svg`: creado nuevo favicon a partir del icono (flor/dalia) del logo de Destina, recortado y centrado, sin fondo blanco, para que se distinga en la pestaña del navegador.
+- `index.html`: actualizada la referencia del favicon SVG a `/favicon.svg`.
+- `feature_list.json`: actualizada la nota de F13 para reflejar el favicon recortado.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- El logo completo con texto no se leía como favicon porque el fondo blanco dominaba el cuadrado pequeño. Se extrajo solo el icono del logo para que ocupe todo el espacio del favicon.
+- Se mantuvo el fallback PNG para compatibilidad con navegadores que no soportan SVG favicons.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar visualmente en el navegador y hacer push a `main` para deploy automático.
+
+---
+
 ## 2026-11-03 — F20 Cambio de días a noches en step days y calendar (Kimi K2.7 Code)
 
 **Hecho:**
