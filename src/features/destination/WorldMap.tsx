@@ -355,11 +355,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     }
   }, [scheduleFrame])
 
-  const updatePointer = (pointerId: number, x: number, y: number) => {
-    activePointers.current.set(pointerId, { x, y })
-  }
-
-  const startInertia = () => {
+  const startInertia = useCallback(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     if (performance.now() - lastMove.current.t > 80) return
     const speed = Math.hypot(velocity.current.x, velocity.current.y)
@@ -373,9 +369,158 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       ease: 'power3.out',
       onUpdate: () => setRotation({ lambda: proxy.lambda, phi: proxy.phi }),
     })
+  }, [getContainerWidth])
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const getMarkerIdFromElement = (element: Element | null) =>
+      element?.closest('[data-marker-id]')?.getAttribute('data-marker-id') ?? null
+
+    const handleTouchStart = (event: TouchEvent) => {
+      event.preventDefault()
+      const target = event.target as Element | null
+      if (target?.closest('button')) return
+
+      const touches = event.touches
+      if (touches.length === 1) {
+        skipIntroRef.current = true
+        motionTween.current?.kill()
+        if (rafRef.current !== null) {
+          cancelAnimationFrame(rafRef.current)
+          rafRef.current = null
+        }
+        draggingRef.current = true
+        setIsInteracting(true)
+        setIsDragging(true)
+
+        const touch = touches[0]
+        const markerId = getMarkerIdFromElement(target)
+        dragStart.current = {
+          x: touch.clientX,
+          y: touch.clientY,
+          lambda: rotationRef.current.lambda,
+          phi: rotationRef.current.phi,
+          markerId,
+        }
+        velocity.current = { x: 0, y: 0 }
+        lastMove.current = { x: touch.clientX, y: touch.clientY, t: performance.now() }
+      } else if (touches.length === 2) {
+        setIsDragging(false)
+        draggingRef.current = true
+        setIsInteracting(true)
+        dragStart.current.markerId = null
+        const t1 = touches[0]
+        const t2 = touches[1]
+        pinchStart.current = {
+          distance: Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY),
+          scale: scaleRef.current,
+        }
+      }
+    }
+
+    const handleTouchMove = (event: TouchEvent) => {
+      event.preventDefault()
+      if (!draggingRef.current) return
+      const touches = event.touches
+      if (touches.length === 2) {
+        if (gestureActiveRef.current) return
+        const t1 = touches[0]
+        const t2 = touches[1]
+        const distance = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY)
+        if (distance > 0 && pinchStart.current.distance > 0) {
+          const newScale = clamp(
+            pinchStart.current.scale * (distance / pinchStart.current.distance),
+            MIN_SCALE,
+            MAX_SCALE,
+          )
+          if (newScale !== scaleRef.current) {
+            scaleRef.current = newScale
+            scheduleFrame()
+          }
+        }
+        return
+      }
+      if (touches.length !== 1) return
+
+      const touch = touches[0]
+      const now = performance.now()
+      const dt = now - lastMove.current.t
+      if (dt > 4) {
+        const instantX = ((touch.clientX - lastMove.current.x) / dt) * 1000
+        const instantY = ((touch.clientY - lastMove.current.y) / dt) * 1000
+        velocity.current = {
+          x: velocity.current.x * 0.6 + instantX * 0.4,
+          y: velocity.current.y * 0.6 + instantY * 0.4,
+        }
+      }
+      lastMove.current = { x: touch.clientX, y: touch.clientY, t: now }
+
+      const factor = DRAG_DEGREES / (scaleRef.current * getContainerWidth())
+      const dx = touch.clientX - dragStart.current.x
+      const dy = touch.clientY - dragStart.current.y
+      rotationRef.current = {
+        lambda: dragStart.current.lambda + dx * factor,
+        phi: clamp(dragStart.current.phi - dy * factor, -PHI_CLAMP, PHI_CLAMP),
+      }
+      scheduleFrame()
+    }
+
+    const handleTouchEnd = (event: TouchEvent) => {
+      event.preventDefault()
+      const touches = event.touches
+      const changed = event.changedTouches[0]
+
+      if (touches.length === 0) {
+        const wasDragging = draggingRef.current
+        draggingRef.current = false
+        const start = dragStart.current
+        const isTap =
+          start.markerId &&
+          changed &&
+          Math.hypot(changed.clientX - start.x, changed.clientY - start.y) < TAP_THRESHOLD_PX
+        if (isTap) {
+          const destination = DESTINATION_BY_ID.get(start.markerId as string)
+          if (destination) handleSelect(destination)
+        } else if (wasDragging) {
+          startInertia()
+        }
+        setIsDragging(false)
+        setIsInteracting(false)
+      } else if (touches.length === 1) {
+        const touch = touches[0]
+        dragStart.current = {
+          x: touch.clientX,
+          y: touch.clientY,
+          lambda: rotationRef.current.lambda,
+          phi: rotationRef.current.phi,
+          markerId: null,
+        }
+        velocity.current = { x: 0, y: 0 }
+        lastMove.current = { x: touch.clientX, y: touch.clientY, t: performance.now() }
+        setIsDragging(true)
+      }
+    }
+
+    el.addEventListener('touchstart', handleTouchStart, { passive: false })
+    el.addEventListener('touchmove', handleTouchMove, { passive: false })
+    el.addEventListener('touchend', handleTouchEnd, { passive: false })
+    el.addEventListener('touchcancel', handleTouchEnd, { passive: false })
+    return () => {
+      el.removeEventListener('touchstart', handleTouchStart)
+      el.removeEventListener('touchmove', handleTouchMove)
+      el.removeEventListener('touchend', handleTouchEnd)
+      el.removeEventListener('touchcancel', handleTouchEnd)
+    }
+  }, [scheduleFrame, getContainerWidth, startInertia, handleSelect])
+
+  const updatePointer = (pointerId: number, x: number, y: number) => {
+    activePointers.current.set(pointerId, { x, y })
   }
 
   const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === 'touch') return
     if (e.button !== 0) return
     skipIntroRef.current = true
     motionTween.current?.kill()
@@ -421,6 +566,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   }
 
   const handlePointerMove = (e: React.PointerEvent) => {
+    if (e.pointerType === 'touch') return
     if (!activePointers.current.has(e.pointerId)) return
     updatePointer(e.pointerId, e.clientX, e.clientY)
 
@@ -467,6 +613,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   }
 
   const handlePointerUp = (e: React.PointerEvent) => {
+    if (e.pointerType === 'touch') return
     const wasSinglePointer = activePointers.current.size === 1
     const start = dragStart.current
     activePointers.current.delete(e.pointerId)
@@ -602,10 +749,14 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
         ref={canvasRef}
         width={500}
         height={500}
-        className="pointer-events-none absolute inset-0 h-full w-full"
+        className="pointer-events-none absolute inset-0 h-full w-full object-contain"
         aria-hidden="true"
       />
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 500 500">
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 500 500"
+        preserveAspectRatio="xMidYMid meet"
+      >
         {countryMarkers.map(({ destination, x, y, showLabel }) => (
           <DestinationMarker
             key={destination.id}

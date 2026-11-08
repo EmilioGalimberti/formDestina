@@ -1200,6 +1200,16 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
   - El pinch por pointer events se desactiva mientras está activo un gesture de Safari para que no compitan.
 - `bun run build` ✅ y `bun run lint` ✅.
 
+**Fix de alineación canvas/SVG y drag nativo táctil para iOS:**
+- `src/features/destination/WorldMap.tsx`:
+  - Se agregó `object-contain` al `<canvas>` y `preserveAspectRatio="xMidYMid meet"` al `<svg>` para que ambos escalen uniformemente dentro del contenedor y los marcadores no se deslicen respecto del fondo del globo.
+  - Se implementaron handlers nativos `touchstart`/`touchmove`/`touchend`/`touchcancel` en el contenedor para el drag de un dedo y el pinch de respaldo en iOS Safari, con `preventDefault()` para evitar scroll y la generación de pointer events táctiles.
+  - Los handlers de React `onPointerDown`/`onPointerMove`/`onPointerUp` ahora ignoran `pointerType === 'touch'` para no competir con los touch handlers nativos.
+  - Se corrigió el lanzamiento de inercia al soltar un dedo en touch: se guarda el estado de drag antes de limpiarlo.
+  - Los toques sobre marcadores se detectan leyendo `data-marker-id` en `touchstart` y `touchend`, manteniendo el tap para seleccionar destinos.
+- `bun run build` ✅ y `bun run lint` ✅.
+- Screenshots de verificación en viewports iPhone (390×844) y ancho (800×400): canvas y marcadores se mantienen alineados.
+
 **Decisiones:**
 - Se mantuvo la proyección ortográfica y el dibujo SVG exacto; la optimización es puramente de frecuencia de render y de prevención de comportamientos nativos de Safari.
 - La inercia y las animaciones de selección siguen funcionando igual; solo se acelera la fase activa del gesto.
