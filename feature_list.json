@@ -391,7 +391,7 @@
         "src/features/wizard/Wizard.tsx"
       ],
       "acceptance": ["footer de atras o siguiente debe quedar fijo en el final de la pagina y no seguir la screen del celular"],
-      "notes": "El footer pasó de `sticky bottom-0` a `fixed bottom-0 left-0 right-0 z-20`, de modo que los botones 'Atrás' y 'Siguiente' permanecen siempre visibles al final de la pantalla. Se agregó padding-bottom extra al `<main>` para evitar que el contenido del paso actual quede tapado por el footer fijo, respetando el `safe-area-inset-bottom` en dispositivos con notch/home indicator."
+      "notes": "El footer queda al final de la página (no fixed ni sticky), de modo que el usuario scrollea todo el contenido del paso actual y recién al final ve los botones 'Atrás' y 'Siguiente'. Se mantiene el fondo con transparencia/blur y el padding respectando `safe-area-inset-bottom`."
     }
     ]
 }

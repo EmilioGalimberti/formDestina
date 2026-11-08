@@ -1030,6 +1030,12 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Se prefirió `fixed` sobre `sticky` porque garantiza que los botones de navegación estén siempre anclados al borde inferior del viewport, independientemente de la altura del contenido del paso.
 - El padding-bottom del main compensa la altura del footer + `safe-area-inset-bottom` en iPhone/Android con notch/home indicator.
 
+**Ajuste posterior (feedback del usuario):**
+- `src/features/wizard/Wizard.tsx`: el footer volvió a ser un elemento de flujo normal (se quitó `fixed bottom-0 left-0 right-0 z-20`) para que quede al final de la página, de modo que el usuario debe scrollear todo el contenido del paso actual para ver los botones 'Atrás' y 'Siguiente'.
+- `src/features/wizard/Wizard.tsx`: se eliminó el padding-bottom extra del `<main>` porque ya no hay un footer fijo que tape el contenido.
+- `feature_list.json`: nota de F21 actualizada.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
 **Pendientes:**
 - Ninguno.
 

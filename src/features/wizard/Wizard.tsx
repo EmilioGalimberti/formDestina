@@ -40,7 +40,7 @@ export function Wizard() {
         </div>
       </header>
 
-      <main className="flex flex-1 flex-col px-4 py-4 pb-[max(6rem,env(safe-area-inset-bottom))] md:px-6 md:py-6 md:pb-[max(7rem,env(safe-area-inset-bottom))]" aria-label={`Paso ${step.title}`}>
+      <main className="flex flex-1 flex-col px-4 py-4 md:px-6 md:py-6" aria-label={`Paso ${step.title}`}>
         <div className="mx-auto w-full max-w-2xl flex-1">
           <div
             ref={contentRef}
@@ -52,7 +52,7 @@ export function Wizard() {
         </div>
       </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 z-20 bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-sm md:px-6 md:pb-[max(1rem,env(safe-area-inset-bottom))] md:pt-4">
+      <footer className="bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-sm md:px-6 md:pb-[max(1rem,env(safe-area-inset-bottom))] md:pt-4">
         <div className="mx-auto w-full max-w-2xl">
           <WizardNav isFirst={isFirst} isLast={isLast} onBack={previousStep} onNext={nextStep} />
         </div>
