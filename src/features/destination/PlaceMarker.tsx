@@ -28,12 +28,12 @@ export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, scale, 
   const innerRef = useRef<SVGGElement>(null)
   const ringRef = useRef<SVGCircleElement>(null)
   const baseStyle = KIND_STYLE[kind]
-  const zoomFactor = Math.max(1, 1 + (scale - 2.3) * 0.12)
+  const zoomFactor = Math.max(1, 1 + (scale - 2.3) * 0.14)
   const style = {
     r: baseStyle.r * zoomFactor,
     fill: baseStyle.fill,
     strokeWidth: baseStyle.strokeWidth * zoomFactor,
-    fontSize: baseStyle.fontSize * Math.max(1, 1 + (scale - 2.3) * 0.06),
+    fontSize: baseStyle.fontSize * Math.max(1, 1 + (scale - 2.3) * 0.07),
     fontWeight: baseStyle.fontWeight,
     labelY: baseStyle.labelY * zoomFactor,
   }

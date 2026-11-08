@@ -1040,3 +1040,23 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador (especialmente en mobile) y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-11-08 — Ajuste de zoom y tamaño de marcadores en el mapa (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/destination/WorldMap.tsx`: aumentado el zoom máximo de `11` a `12.1` para permitir acercarse un 10% más.
+- `src/features/destination/WorldMap.tsx`: agrandado el contenedor del mapa en mobile de `h-80` (320px) a `h-[22rem]` (352px) y en desktop de `md:h-[28rem]` a `md:h-[30rem]`.
+- `src/features/destination/DestinationMarker.tsx`: aumentado el `zoomFactor` de `0.08` a `0.10` y el crecimiento de la fuente de `0.04` a `0.05`.
+- `src/features/destination/PlaceMarker.tsx`: aumentado el `zoomFactor` de `0.12` a `0.14` y el crecimiento de la fuente de `0.06` a `0.07`, para que provincias y ciudades se vean más grandes al hacer zoom.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se mantuvieron los tamaños base de los marcadores para no saturar la vista inicial; el cambio impacta principalmente en el zoom, que es donde el usuario reportó que se veían chicos en mobile.
+- El incremento del 10% se aplicó tanto al rango de zoom como al crecimiento de los marcadores y al contenedor, logrando una mejora general sin romper la proporción del globo.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador (especialmente en mobile) y hacer push a `main` para deploy automático.
