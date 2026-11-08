@@ -1015,3 +1015,22 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Ninguno.
 
 **Siguiente:** Validar en el navegador y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-11-07 — F21 Footer fijo en el final de la pantalla (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/wizard/Wizard.tsx`: el footer con los botones 'Atrás' y 'Siguiente' pasó de `sticky bottom-0` a `fixed bottom-0 left-0 right-0 z-20`, de modo que siempre permanece visible al final de la pantalla sin seguir el scroll.
+- `src/features/wizard/Wizard.tsx`: se agregó padding-bottom extra al `<main>` (`pb-[max(6rem,env(safe-area-inset-bottom))]` en mobile y `md:pb-[max(7rem,env(safe-area-inset-bottom))]` en desktop) para evitar que el contenido del paso actual quede tapado por el footer fijo.
+- `feature_list.json`: F21 marcada como `done` con archivos y notas actualizados.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se prefirió `fixed` sobre `sticky` porque garantiza que los botones de navegación estén siempre anclados al borde inferior del viewport, independientemente de la altura del contenido del paso.
+- El padding-bottom del main compensa la altura del footer + `safe-area-inset-bottom` en iPhone/Android con notch/home indicator.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar en el navegador (especialmente en mobile) y hacer push a `main` para deploy automático.

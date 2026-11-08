@@ -381,6 +381,17 @@
       ],
       "acceptance": ["Se debe cambiar cuantos dias en cada destino por cuantas noches en cada destino, y en el step calendar solo debe reflejar eso y sacar los (+2 por vuelos)"],
       "notes": "En el paso 'Días' ahora se pregunta '¿Cuántas noches en cada destino?' y todas las etiquetas muestran 'noches'. El título del paso en el wizard pasó a 'Noches'. En el calendario se eliminó el cálculo de +2 días por vuelos: el rango automático coincide con el total de noches configuradas. El resumen y el mensaje de WhatsApp ahora muestran 'Destinos y noches' y las estancias en noches."
+    },
+    {
+      "id" : "F21",
+      "name" : "Modificar footer",
+      "status" : "done",
+      "description" : "Se debe modificar el footer, ahora sigue la screen del celular, quiero que quede fija en el final de la pagina para que el usuario no salte al siguiente step y pueda ver todo el paso actual",
+      "files" : [
+        "src/features/wizard/Wizard.tsx"
+      ],
+      "acceptance": ["footer de atras o siguiente debe quedar fijo en el final de la pagina y no seguir la screen del celular"],
+      "notes": "El footer pasó de `sticky bottom-0` a `fixed bottom-0 left-0 right-0 z-20`, de modo que los botones 'Atrás' y 'Siguiente' permanecen siempre visibles al final de la pantalla. Se agregó padding-bottom extra al `<main>` para evitar que el contenido del paso actual quede tapado por el footer fijo, respetando el `safe-area-inset-bottom` en dispositivos con notch/home indicator."
     }
-  ]
+    ]
 }
