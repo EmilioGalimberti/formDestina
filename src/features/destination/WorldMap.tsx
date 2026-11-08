@@ -76,7 +76,30 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   const introStartedRef = useRef(false)
   const mountedRef = useRef(false)
   const selectedCountRef = useRef(selected.length)
+  const rafRef = useRef<number | null>(null)
+  const draggingRef = useRef(false)
   const { hasSeenMapIntro, setHasSeenMapIntro } = useStore()
+
+  const commitFrame = useCallback(() => {
+    rafRef.current = null
+    if (!mountedRef.current) return
+    setRotation({ lambda: rotationRef.current.lambda, phi: rotationRef.current.phi })
+    setScale(scaleRef.current)
+  }, [])
+
+  const scheduleFrame = useCallback(() => {
+    if (rafRef.current !== null) return
+    rafRef.current = requestAnimationFrame(commitFrame)
+  }, [commitFrame])
+
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+    }
+  }, [])
 
   useEffect(() => {
     scaleRef.current = scale
@@ -214,6 +237,24 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     return () => el.removeEventListener('wheel', handleNativeWheel)
   }, [zoomBy])
 
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const prevent = (event: Event) => {
+      event.preventDefault()
+    }
+    el.addEventListener('touchstart', prevent, { passive: false })
+    el.addEventListener('touchmove', prevent, { passive: false })
+    el.addEventListener('gesturestart', prevent)
+    el.addEventListener('gesturechange', prevent)
+    return () => {
+      el.removeEventListener('touchstart', prevent)
+      el.removeEventListener('touchmove', prevent)
+      el.removeEventListener('gesturestart', prevent)
+      el.removeEventListener('gesturechange', prevent)
+    }
+  }, [])
+
   const updatePointer = (pointerId: number, x: number, y: number) => {
     activePointers.current.set(pointerId, { x, y })
   }
@@ -238,6 +279,11 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     if (e.button !== 0) return
     skipIntroRef.current = true
     motionTween.current?.kill()
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
+    draggingRef.current = true
     updatePointer(e.pointerId, e.clientX, e.clientY)
 
     if (activePointers.current.size === 1) {
@@ -281,8 +327,15 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       const pointers = Array.from(activePointers.current.values())
       const distance = getDistance(pointers[0], pointers[1])
       if (distance > 0 && pinchStart.current.distance > 0) {
-        const newScale = pinchStart.current.scale * (distance / pinchStart.current.distance)
-        setScale(clamp(newScale, MIN_SCALE, MAX_SCALE))
+        const newScale = clamp(
+          pinchStart.current.scale * (distance / pinchStart.current.distance),
+          MIN_SCALE,
+          MAX_SCALE,
+        )
+        if (newScale !== scaleRef.current) {
+          scaleRef.current = newScale
+          scheduleFrame()
+        }
       }
       return
     }
@@ -304,16 +357,24 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     const factor = DRAG_DEGREES / (scaleRef.current * getContainerWidth())
     const dx = e.clientX - dragStart.current.x
     const dy = e.clientY - dragStart.current.y
-    setRotation({
+    rotationRef.current = {
       lambda: dragStart.current.lambda + dx * factor,
       phi: clamp(dragStart.current.phi - dy * factor, -PHI_CLAMP, PHI_CLAMP),
-    })
+    }
+    scheduleFrame()
   }
 
   const handlePointerUp = (e: React.PointerEvent) => {
     const wasSinglePointer = activePointers.current.size === 1
     const start = dragStart.current
     activePointers.current.delete(e.pointerId)
+
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
+    commitFrame()
+    draggingRef.current = false
 
     if (
       wasSinglePointer &&
@@ -436,6 +497,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       role="application"
       aria-label={ariaLabel}
       className="relative h-[24rem] w-full cursor-grab touch-none overflow-hidden rounded-2xl border border-border bg-[#dff2fd] select-none [-webkit-tap-highlight-color:transparent] active:cursor-grabbing md:h-[33rem]"
+      style={{ touchAction: 'none', WebkitUserSelect: 'none', willChange: 'transform' }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
@@ -477,6 +539,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
             scale={scale}
             onSelect={handleSelect}
             showLabel={showLabel}
+            dragging={isDragging}
           />
         ))}
 

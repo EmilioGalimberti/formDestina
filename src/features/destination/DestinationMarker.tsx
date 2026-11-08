@@ -11,6 +11,7 @@ interface DestinationMarkerProps {
   scale: number
   onSelect: (destination: Destination) => void
   showLabel?: boolean
+  dragging?: boolean
 }
 
 export function DestinationMarker({
@@ -22,14 +23,18 @@ export function DestinationMarker({
   scale,
   onSelect,
   showLabel = true,
+  dragging = false,
 }: DestinationMarkerProps) {
   const innerRef = useRef<SVGGElement>(null)
+  const prevVisibleRef = useRef(visible)
 
   useLayoutEffect(() => {
     const el = innerRef.current
     if (!el) return
+    if (prevVisibleRef.current === visible) return
+    prevVisibleRef.current = visible
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || dragging) {
       gsap.set(el, { opacity: visible ? 1 : 0, scale: visible ? 1 : 0.4 })
       return
     }
@@ -40,7 +45,7 @@ export function DestinationMarker({
       ease: visible ? 'back.out(2.2)' : 'power2.in',
       overwrite: 'auto',
     })
-  }, [visible])
+  }, [visible, dragging])
 
   const zoomFactor = Math.max(1, 1 + (scale - 1) * 0.12)
 

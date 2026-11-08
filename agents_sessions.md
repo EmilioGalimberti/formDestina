@@ -1166,3 +1166,26 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Validar en el navegador que la duración se sienta cómoda y no sea demasiado lenta.
 
 **Siguiente:** Validar visualmente y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-11-08 — Fix: rendimiento táctil del WorldMap en Safari/iOS (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/destination/WorldMap.tsx`:
+  - El drag y el pinch ahora actualizan `rotationRef`/`scaleRef` en cada `pointermove` pero solo piden un `requestAnimationFrame` para reflejar el cambio en React. Esto evita saturar el render del SVG con decenas de re-renders por segundo mientras se arrastra.
+  - Se agregaron listeners nativos `touchstart`/`touchmove` con `preventDefault()` y `passive: false`, y `gesturestart`/`gesturechange` con `preventDefault()`, para que Safari/iOS no intercepte los gestos como scroll o zoom de página.
+  - Se reforzó `touch-action: none`, `-webkit-user-select: none` y `will-change: transform` en el contenedor para ayudar al compositor de iOS.
+- `src/features/destination/DestinationMarker.tsx`:
+  - Nueva prop `dragging`: mientras se arrastra el globo, los cambios de visibilidad de los marcadores se aplican instantáneamente con `gsap.set` en lugar de animarse con `gsap.to`.
+  - Se evita ejecutar el efecto de visibilidad si el valor no cambió, reduciendo trabajo durante el drag.
+- `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Se mantuvo la proyección ortográfica y el dibujo SVG exacto; la optimización es puramente de frecuencia de render y de prevención de comportamientos nativos de Safari.
+- La inercia y las animaciones de selección siguen funcionando igual; solo se acelera la fase activa del gesto.
+
+**Pendientes:**
+- Validar en un iPhone real con Safari que el giro y el pinch sean suaves.
+
+**Siguiente:** Validar en iPhone/Safari y hacer push a `main` para deploy automático.
