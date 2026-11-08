@@ -942,6 +942,23 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 ---
 
+## 2026-11-07 — Ajuste de tamaño del logo en header (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/wizard/Wizard.tsx`: aumentado el tamaño del logo a `h-16 md:h-20` y reducido el padding vertical del header a `py-1 md:py-2` para mantener el header compacto y que siga mostrando principalmente el progreso.
+- `src/features/wizard/Wizard.tsx`: reducido ligeramente el gap entre logo y barra de progreso a `gap-2 md:gap-3`.
+- Verificaciones: `bun run build` ✅ y `bun run lint` ✅.
+
+**Decisiones:**
+- Al agrandar el logo se redujo el padding del header para que la altura total no crezca demasiado y el progreso siga siendo el elemento principal del header.
+
+**Pendientes:**
+- Ninguno.
+
+**Siguiente:** Validar visualmente en el navegador y hacer push a `main` para deploy automático.
+
+---
+
 ## 2026-11-03 — F20 Cambio de días a noches en step days y calendar (Kimi K2.7 Code)
 
 **Hecho:**
