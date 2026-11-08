@@ -50,7 +50,7 @@ function createGlobeProjection(rotation: Rotation, scale: number) {
   return geoOrthographic().scale(scale * 250).translate([250, 250]).rotate([rotation.lambda, rotation.phi, 0])
 }
 
-function drawGlobe(ctx: CanvasRenderingContext2D, rotation: Rotation, scale: number) {
+function drawGlobe(ctx: CanvasRenderingContext2D, rotation: Rotation, scale: number, simplified = false) {
   const projection = createGlobeProjection(rotation, scale)
   const pathGenerator = geoPath(projection, ctx)
   const globeRadius = scale * 250
@@ -80,26 +80,30 @@ function drawGlobe(ctx: CanvasRenderingContext2D, rotation: Rotation, scale: num
   ctx.fillStyle = oceanGradient
   ctx.fill()
 
-  ctx.beginPath()
-  pathGenerator(graticule)
-  ctx.strokeStyle = '#ffffff'
-  ctx.lineWidth = 0.6
-  ctx.globalAlpha = 0.3
-  ctx.stroke()
-  ctx.globalAlpha = 1
+  if (!simplified) {
+    ctx.beginPath()
+    pathGenerator(graticule)
+    ctx.strokeStyle = '#ffffff'
+    ctx.lineWidth = 0.6
+    ctx.globalAlpha = 0.3
+    ctx.stroke()
+    ctx.globalAlpha = 1
+  }
 
   ctx.beginPath()
   pathGenerator(landFeature)
   ctx.fillStyle = '#5ecf7c'
   ctx.fill()
 
-  ctx.beginPath()
-  pathGenerator(borderLines)
-  ctx.strokeStyle = '#2f9e53'
-  ctx.lineWidth = 0.7
-  ctx.globalAlpha = 0.65
-  ctx.stroke()
-  ctx.globalAlpha = 1
+  if (!simplified) {
+    ctx.beginPath()
+    pathGenerator(borderLines)
+    ctx.strokeStyle = '#2f9e53'
+    ctx.lineWidth = 0.7
+    ctx.globalAlpha = 0.65
+    ctx.stroke()
+    ctx.globalAlpha = 1
+  }
 
   const shadeGradient = ctx.createRadialGradient(
     250,
@@ -138,6 +142,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   const scaleRef = useRef(scale)
   const rotationRef = useRef(rotation)
   const [isDragging, setIsDragging] = useState(false)
+  const [isInteracting, setIsInteracting] = useState(false)
   const activePointers = useRef(new Map<number, { x: number; y: number }>())
   const dragStart = useRef({ x: 0, y: 0, lambda: 0, phi: 0, markerId: null as string | null })
   const pinchStart = useRef({ distance: 0, scale: 1 })
@@ -150,6 +155,8 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   const selectedCountRef = useRef(selected.length)
   const rafRef = useRef<number | null>(null)
   const draggingRef = useRef(false)
+  const gestureActiveRef = useRef(false)
+  const gestureStartScale = useRef(1)
   const { hasSeenMapIntro, setHasSeenMapIntro } = useStore()
 
   const commitFrame = useCallback(() => {
@@ -193,8 +200,8 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
-    drawGlobe(ctx, rotation, scale)
-  }, [rotation, scale])
+    drawGlobe(ctx, rotation, scale, isInteracting)
+  }, [rotation, scale, isInteracting])
 
   useEffect(() => {
     if (hasSeenMapIntro || introStartedRef.current) return
@@ -320,16 +327,33 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
-    const prevent = (event: Event) => {
+    const handleGestureStart = (event: Event) => {
       event.preventDefault()
+      gestureActiveRef.current = true
+      gestureStartScale.current = scaleRef.current
     }
-    el.addEventListener('gesturestart', prevent)
-    el.addEventListener('gesturechange', prevent)
+    const handleGestureChange = (event: Event) => {
+      event.preventDefault()
+      const gestureEvent = event as unknown as { scale: number }
+      const newScale = clamp(gestureStartScale.current * gestureEvent.scale, MIN_SCALE, MAX_SCALE)
+      if (newScale !== scaleRef.current) {
+        scaleRef.current = newScale
+        scheduleFrame()
+      }
+    }
+    const handleGestureEnd = (event: Event) => {
+      event.preventDefault()
+      gestureActiveRef.current = false
+    }
+    el.addEventListener('gesturestart', handleGestureStart)
+    el.addEventListener('gesturechange', handleGestureChange)
+    el.addEventListener('gestureend', handleGestureEnd)
     return () => {
-      el.removeEventListener('gesturestart', prevent)
-      el.removeEventListener('gesturechange', prevent)
+      el.removeEventListener('gesturestart', handleGestureStart)
+      el.removeEventListener('gesturechange', handleGestureChange)
+      el.removeEventListener('gestureend', handleGestureEnd)
     }
-  }, [])
+  }, [scheduleFrame])
 
   const updatePointer = (pointerId: number, x: number, y: number) => {
     activePointers.current.set(pointerId, { x, y })
@@ -360,6 +384,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       rafRef.current = null
     }
     draggingRef.current = true
+    setIsInteracting(true)
     updatePointer(e.pointerId, e.clientX, e.clientY)
 
     if (activePointers.current.size === 1) {
@@ -400,6 +425,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
     updatePointer(e.pointerId, e.clientX, e.clientY)
 
     if (activePointers.current.size === 2) {
+      if (gestureActiveRef.current) return
       const pointers = Array.from(activePointers.current.values())
       const distance = getDistance(pointers[0], pointers[1])
       if (distance > 0 && pinchStart.current.distance > 0) {
@@ -465,6 +491,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
 
     if (activePointers.current.size === 0) {
       setIsDragging(false)
+      setIsInteracting(false)
     } else if (activePointers.current.size === 1) {
       const [remaining] = Array.from(activePointers.current.values())
       dragStart.current = {
@@ -590,7 +617,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
             scale={scale}
             onSelect={handleSelect}
             showLabel={showLabel}
-            dragging={isDragging}
+            dragging={isInteracting}
           />
         ))}
 
@@ -607,7 +634,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
               y={y}
               selected={selected.some((d) => d.id === place.id)}
               scale={scale}
-              dragging={isDragging}
+              dragging={isInteracting}
               onSelect={() => {
                 if (destination) handleSelect(destination)
               }}
@@ -628,7 +655,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
               y={y}
               selected={isSelected}
               scale={scale}
-              dragging={isDragging}
+              dragging={isInteracting}
               onSelect={() => handleSelect(destination)}
             />
           ))}

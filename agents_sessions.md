@@ -1193,6 +1193,13 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Screenshot de verificación en viewport iPhone: el globo, países y marcadores se renderizan correctamente.
 - `bun run build` ✅ y `bun run lint` ✅.
 
+**Optimización adicional tras ver el video del usuario:**
+- `src/features/destination/WorldMap.tsx`:
+  - El estado `isInteracting` ahora es `true` tanto durante drag de un dedo como durante pinch de dos dedos; mientras está activo se ocultan los labels y se dibuja el canvas simplificado (sin graticule ni fronteras) para aligerar cada frame.
+  - Se agregó manejo nativo de `gesturestart`/`gesturechange`/`gestureend` de Safari/iOS para el pinch-to-zoom, usando `event.scale` directamente en lugar de calcular la distancia entre dos pointers. Esto evita la latencia del cálculo manual y se adapta mejor al gesto nativo de Safari.
+  - El pinch por pointer events se desactiva mientras está activo un gesture de Safari para que no compitan.
+- `bun run build` ✅ y `bun run lint` ✅.
+
 **Decisiones:**
 - Se mantuvo la proyección ortográfica y el dibujo SVG exacto; la optimización es puramente de frecuencia de render y de prevención de comportamientos nativos de Safari.
 - La inercia y las animaciones de selección siguen funcionando igual; solo se acelera la fase activa del gesto.
