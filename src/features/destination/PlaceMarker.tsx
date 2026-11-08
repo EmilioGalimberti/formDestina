@@ -26,7 +26,6 @@ const KIND_STYLE: Record<
 
 export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, scale, onSelect }: PlaceMarkerProps) {
   const innerRef = useRef<SVGGElement>(null)
-  const ringRef = useRef<SVGCircleElement>(null)
   const baseStyle = KIND_STYLE[kind]
   const zoomFactor = Math.max(1, 1 + (scale - 2.3) * 0.16)
   const style = {
@@ -49,25 +48,6 @@ export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, scale, 
     gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power1.out' })
   }, [])
 
-  useLayoutEffect(() => {
-    const ring = ringRef.current
-    if (!ring) return
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!selected || prefersReducedMotion) {
-      gsap.killTweensOf(ring)
-      gsap.set(ring, { opacity: 0 })
-      return
-    }
-    const tween = gsap.fromTo(
-      ring,
-      { scale: 0.7, opacity: 0.8 },
-      { scale: 2.6, opacity: 0, duration: 1.2, repeat: -1, ease: 'power1.out' },
-    )
-    return () => {
-      tween.kill()
-    }
-  }, [selected])
-
   return (
     <g
       transform={`translate(${x}, ${y})`}
@@ -85,15 +65,16 @@ export function PlaceMarker({ id, name, kind, showLabel, x, y, selected, scale, 
     >
       <g ref={innerRef} opacity={0}>
         <circle r={style.r + 12} fill="transparent" />
-        <circle
-          ref={ringRef}
-          r={style.r + 2}
-          fill="none"
-          stroke="#6e1f3c"
-          strokeWidth={2.5}
-          opacity={0}
-          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-        />
+        {selected && (
+          <g className="marker-pulse">
+            <circle
+              r={style.r + 2}
+              fill="none"
+              stroke="#6e1f3c"
+              strokeWidth={2.5}
+            />
+          </g>
+        )}
         <circle
           r={selected ? style.r + 1 : style.r}
           fill={selected ? '#6e1f3c' : style.fill}

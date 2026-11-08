@@ -1085,3 +1085,23 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - Validar en el navegador que el círculo parpadeante quede perfectamente centrado alrededor del marcador seleccionado.
 
 **Siguiente:** Validar visualmente y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-11-08 — Fix v2: anillo de selección con CSS keyframes para origen estable (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/index.css`: agregada animación `marker-pulse` con `@keyframes` y clases `.marker-pulse` / `prefers-reduced-motion`, usando `transform-box: fill-box` y `transform-origin: center`.
+- `src/features/destination/DestinationMarker.tsx`: eliminado el `ringRef` y el `useLayoutEffect` que animaba `scale` con GSAP; el anillo pulsante ahora se renderiza como un `<g className="marker-pulse">` que envuelve el círculo del anillo.
+- `src/features/destination/PlaceMarker.tsx`: mismo cambio que en `DestinationMarker`: anillo pulsante con CSS puro en lugar de GSAP `scale`.
+- Verificaciones: `bun run build` ✅.
+
+**Decisiones:**
+- El fix anterior (`style={{ transformBox: 'fill-box', transformOrigin: 'center' }}` sobre el círculo animado por GSAP) no logró centrar el anillo porque GSAP sigue manejando el `scale` inline y el origen de transformación en SVG con GSAP resulta inestable cuando el elemento ya tiene un origen declarado.
+- Al mover la animación de pulso a CSS puro sobre un `<g>` dedicado, el origen de transformación es realmente explícito y estable: `transform-box: fill-box` + `transform-origin: center` sobre un grupo cuyo único contenido es el círculo centrado en `(0,0)`. El grupo no tiene translate propio, así que su centro coincide exactamente con la proyección del destino.
+- Se respetó `prefers-reduced-motion` ocultando el anillo cuando el usuario lo solicita.
+
+**Pendientes:**
+- Validar en el navegador que el círculo parpadeante quede centrado alrededor del marcador seleccionado.
+
+**Siguiente:** Validar visualmente y hacer push a `main` para deploy automático.

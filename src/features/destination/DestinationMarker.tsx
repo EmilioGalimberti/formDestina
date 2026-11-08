@@ -24,7 +24,6 @@ export function DestinationMarker({
   showLabel = true,
 }: DestinationMarkerProps) {
   const innerRef = useRef<SVGGElement>(null)
-  const ringRef = useRef<SVGCircleElement>(null)
 
   useLayoutEffect(() => {
     const el = innerRef.current
@@ -42,25 +41,6 @@ export function DestinationMarker({
       overwrite: 'auto',
     })
   }, [visible])
-
-  useLayoutEffect(() => {
-    const ring = ringRef.current
-    if (!ring) return
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!selected || prefersReducedMotion) {
-      gsap.killTweensOf(ring)
-      gsap.set(ring, { opacity: 0 })
-      return
-    }
-    const tween = gsap.fromTo(
-      ring,
-      { scale: 0.7, opacity: 0.8 },
-      { scale: 2.4, opacity: 0, duration: 1.2, repeat: -1, ease: 'power1.out' },
-    )
-    return () => {
-      tween.kill()
-    }
-  }, [selected])
 
   const zoomFactor = Math.max(1, 1 + (scale - 1) * 0.12)
 
@@ -82,15 +62,16 @@ export function DestinationMarker({
     >
       <g ref={innerRef} opacity={0}>
         <circle r={26 * zoomFactor} fill="transparent" />
-        <circle
-          ref={ringRef}
-          r={12 * zoomFactor}
-          fill="none"
-          stroke="#6e1f3c"
-          strokeWidth={3 * zoomFactor}
-          opacity={0}
-          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-        />
+        {selected && (
+          <g className="marker-pulse">
+            <circle
+              r={12 * zoomFactor}
+              fill="none"
+              stroke="#6e1f3c"
+              strokeWidth={3 * zoomFactor}
+            />
+          </g>
+        )}
         <circle
           r={(selected ? 11 : 9) * zoomFactor}
           fill={selected ? '#6e1f3c' : '#f59e0b'}
