@@ -1202,13 +1202,19 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 
 **Fix de alineación canvas/SVG y drag nativo táctil para iOS:**
 - `src/features/destination/WorldMap.tsx`:
-  - Se envolvió el `<canvas>` y el `<svg>` en un contenedor cuadrado centrado (`aspect-square h-full max-w-full`) para que el globo ocupe todo el espacio disponible sin franjas internas y los marcadores se mantengan perfectamente alineados con el fondo.
   - Se implementaron handlers nativos `touchstart`/`touchmove`/`touchend`/`touchcancel` en el contenedor para el drag de un dedo y el pinch de respaldo en iOS Safari, con `preventDefault()` para evitar scroll y la generación de pointer events táctiles.
   - Los handlers de React `onPointerDown`/`onPointerMove`/`onPointerUp` ahora ignoran `pointerType === 'touch'` para no competir con los touch handlers nativos.
   - Se corrigió el lanzamiento de inercia al soltar un dedo en touch: se guarda el estado de drag antes de limpiarlo.
   - Los toques sobre marcadores se detectan leyendo `data-marker-id` en `touchstart` y `touchend`, manteniendo el tap para seleccionar destinos.
 - `bun run build` ✅ y `bun run lint` ✅.
-- Screenshots de verificación en viewports iPhone (390×844) y ancho (800×400): canvas y marcadores se mantienen alineados sin franjas celestes internas.
+
+**Ajuste del contenedor del mapa a relación de aspecto cuadrada:**
+- `src/features/destination/WorldMap.tsx`:
+  - El contenedor del mapa pasó de tener altura fija (`h-[24rem] md:h-[33rem]`) a ser cuadrado (`aspect-square`) con ancho `w-full` y altura máxima `max-h-[24rem] md:max-h-[33rem]`.
+  - Esto elimina las franjas celestes internas y hace que el globo ocupe todo el área del mapa, igual que cuando todo se dibujaba en SVG.
+  - El `<canvas>` y el `<svg>` vuelven a ocupar todo el contenedor (`h-full w-full`) y se mantienen alineados porque el contenedor es cuadrado.
+- `bun run build` ✅ y `bun run lint` ✅.
+- Screenshots de verificación en viewports iPhone (390×844) y ancho (800×400): el globo se ve circular, llena el área y los marcadores están alineados.
 
 **Decisiones:**
 - Se mantuvo la proyección ortográfica y el dibujo SVG exacto; la optimización es puramente de frecuencia de render y de prevención de comportamientos nativos de Safari.

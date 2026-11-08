@@ -737,7 +737,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       ref={containerRef}
       role="application"
       aria-label={ariaLabel}
-      className="relative h-[24rem] w-full cursor-grab touch-none overflow-hidden rounded-2xl border border-border bg-[#dff2fd] select-none [-webkit-tap-highlight-color:transparent] active:cursor-grabbing md:h-[33rem]"
+      className="relative aspect-square w-full max-w-full cursor-grab touch-none overflow-hidden rounded-2xl border border-border bg-[#dff2fd] select-none [-webkit-tap-highlight-color:transparent] active:cursor-grabbing max-h-[24rem] md:max-h-[33rem]"
       style={{ touchAction: 'none', WebkitUserSelect: 'none', willChange: 'transform' }}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -745,16 +745,14 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       onPointerCancel={handlePointerUp}
       onPointerLeave={handlePointerUp}
     >
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative aspect-square h-full max-w-full">
-          <canvas
-            ref={canvasRef}
-            width={500}
-            height={500}
-            className="pointer-events-none absolute inset-0 h-full w-full"
-            aria-hidden="true"
-          />
-          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 500 500">
+      <canvas
+        ref={canvasRef}
+        width={500}
+        height={500}
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        aria-hidden="true"
+      />
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 500 500">
 
         {countryMarkers.map(({ destination, x, y, showLabel }) => (
           <DestinationMarker
@@ -810,8 +808,6 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
             />
           ))}
       </svg>
-        </div>
-      </div>
 
       <div className="absolute bottom-3 right-3 flex flex-col gap-2">
         <button
