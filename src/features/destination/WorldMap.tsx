@@ -19,8 +19,8 @@ const ZOOM_STEP = 0.3
 const INITIAL_SCALE = 1.15
 const INTRO_ZOOM_IN_SCALE = 3.5
 const INTRO_DELAY_MS = 500
-const INTRO_ZOOM_IN_DURATION = 1.4
-const INTRO_ZOOM_OUT_DURATION = 1.2
+const INTRO_ZOOM_IN_DURATION = 2.5
+const INTRO_ZOOM_OUT_DURATION = 2.5
 const PHI_CLAMP = 80
 const DRAG_DEGREES = 120
 const TAP_THRESHOLD_PX = 10
@@ -74,6 +74,7 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   const motionTween = useRef<gsap.core.Animation | null>(null)
   const skipIntroRef = useRef(false)
   const introStartedRef = useRef(false)
+  const mountedRef = useRef(false)
   const selectedCountRef = useRef(selected.length)
   const { hasSeenMapIntro, setHasSeenMapIntro } = useStore()
 
@@ -84,6 +85,13 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
   useEffect(() => {
     rotationRef.current = rotation
   }, [rotation])
+
+  useEffect(() => {
+    mountedRef.current = true
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
 
   useEffect(() => {
     if (hasSeenMapIntro || introStartedRef.current) return
@@ -103,27 +111,36 @@ export function WorldMap({ selected, onSelect, 'aria-label': ariaLabel }: WorldM
       introTween = gsap
         .timeline({
           onComplete: () => {
-            motionTween.current = null
+            if (mountedRef.current) {
+              motionTween.current = null
+            }
           },
         })
         .to(proxy, {
           scale: INTRO_ZOOM_IN_SCALE,
           duration: INTRO_ZOOM_IN_DURATION,
           ease: 'power2.inOut',
-          onUpdate: () => setScale(proxy.scale),
+          onUpdate: () => {
+            if (mountedRef.current) {
+              setScale(proxy.scale)
+            }
+          },
         })
         .to(proxy, {
           scale: INITIAL_SCALE,
           duration: INTRO_ZOOM_OUT_DURATION,
           ease: 'power2.inOut',
-          onUpdate: () => setScale(proxy.scale),
+          onUpdate: () => {
+            if (mountedRef.current) {
+              setScale(proxy.scale)
+            }
+          },
         })
       motionTween.current = introTween
     }, INTRO_DELAY_MS)
 
     return () => {
       clearTimeout(timeout)
-      introTween?.kill()
     }
   }, [hasSeenMapIntro, setHasSeenMapIntro])
 

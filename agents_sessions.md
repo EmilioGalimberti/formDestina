@@ -1136,14 +1136,33 @@ final con: fecha, agente, feature(s), qué se hizo, decisiones y pendientes.
 - `src/features/destination/WorldMap.tsx`: corregida la lógica de inicio de la animación de intro.
   - Se movió `setHasSeenMapIntro(true)` dentro del `setTimeout`, justo antes de iniciar la animación, para evitar que React StrictMode marque la intro como vista antes de que realmente empiece.
   - Se agregó `introStartedRef` para garantizar que solo una instancia del timeout inicie la animación, incluso si el efecto se ejecuta dos veces.
-  - Ahora se marca la intro como vista incluso si el usuario interactúa durante el delay y se salta la animación, evitando que se vuelva a intentar al regresar al paso.
+  - Se agregó `mountedRef` para evitar llamar `setScale` si el componente se desmonta realmente.
+  - El cleanup del efecto ya no mata el tween de GSAP, porque React StrictMode ejecuta el cleanup al re-renderizar y eso cancelaba la animación antes de que se viera.
+  - Se limpiaron los `console.log` de depuración.
 - Verificaciones: `bun run build` ✅.
 
 **Decisiones:**
-- El bug se manifestaba principalmente en desarrollo con React StrictMode: el primer efecto seteaba `hasSeenMapIntro` inmediatamente y su cleanup cancelaba el timeout; el segundo efecto veía el flag en true y nunca iniciaba la animación.
-- Al retrasar el flag hasta el inicio real de la animación y usar una ref de guarda, StrictMode ya no rompe el flujo y la animación se reproduce correctamente.
+- El bug se manifestaba principalmente en desarrollo con React StrictMode: el primer efecto seteaba `hasSeenMapIntro` inmediatamente y su cleanup cancelaba el timeout; el segundo efecto veía el flag en true y nunca iniciaba la animación. Incluso cuando arrancaba, el re-render por `setHasSeenMapIntro` mataba el tween en el cleanup.
+- Al retrasar el flag hasta el inicio real de la animación, usar refs de guarda y no matar el tween en el cleanup, StrictMode ya no rompe el flujo y la animación se reproduce correctamente.
 
 **Pendientes:**
-- Validar en `http://localhost:5173/` que la animación se vea al cargar el paso destino. Si no se ve, reiniciar `bun run dev` y recargar la página para descartar estado viejo en memoria.
+- Validar en `http://localhost:5173/` que la animación se vea al cargar el paso destino.
+
+**Siguiente:** Validar visualmente y hacer push a `main` para deploy automático.
+
+---
+
+## 2026-11-08 — F22 ajuste: duración de animación de intro a 5 segundos (Kimi K2.7 Code)
+
+**Hecho:**
+- `src/features/destination/WorldMap.tsx`: la animación de intro ahora dura 5 segundos en total (2.5s de zoom in y 2.5s de zoom out, más 500ms de delay inicial).
+- Verificaciones: `bun run build` ✅.
+
+**Decisiones:**
+- Se mantuvo el delay inicial de 500ms para que el usuario vea el globo en su posición base antes de que empiece el movimiento.
+- Se repartió el tiempo por igual entre zoom in y zoom out para que la transición se sienta pausada y natural.
+
+**Pendientes:**
+- Validar en el navegador que la duración se sienta cómoda y no sea demasiado lenta.
 
 **Siguiente:** Validar visualmente y hacer push a `main` para deploy automático.
